@@ -1,0 +1,93 @@
+/*
+ * ESTEQO design tokens.
+ *
+ * The scale, spacing rhythm and pastel accent set follow the Silver Mirror
+ * system (90vw container capped at 1600px, 12-column grid, 40px gap, a
+ * serif display face over a geometric sans). Brand colours are ESTEQO's own.
+ */
+
+:root {
+  /* Neutrals */
+  --white: #fff;
+  --off-white: #f9f9f9;
+  --light-gray: #f5f5f5;
+  --mid-gray: #b3b3b3;
+  --gray-idle: #707070;
+  --dark-gray: #404040;
+  --black: #000;
+
+  /* Pastel accents — used to tint alternating sections and category cards */
+  --light-blue: #d6ebff;
+  --bright-blue: #50aaf2;
+  --cta-blue: #318cd4;
+  --dark-blue: #257bbf;
+  --light-green: #dffbec;
+  --light-purple: #f3e5f9;
+  --light-pink: #ffebf1;
+  --bright-pink: #ffc6d5;
+  --light-brown: #eee4e8;
+  --cream: #fcf7f2;
+  --light-yellow: #fff4d0;
+  --bright-yellow: #ffe276;
+
+  /* ESTEQO brand */
+  --ink: #1f1b18;
+  --ink-soft: #4a423c;
+  --sand: #e4dbd3;
+  --gold: #a8874f;
+  --gold-deep: #8a6d3a;
+
+  /* Typography */
+  --body-font: 'Jost', 'Averta', Arial, Helvetica, sans-serif;
+  --heading-font: 'Playfair Display', 'Freight Display Pro', Georgia, serif;
+
+  /* Layout */
+  --container-width: 90vw;
+  --container-max-width: 1600px;
+  --container-outer-padding: 50px;
+  --container-outer-margin: calc((100vw - var(--container-width)) / 2);
+  --gap: 40px;
+  --grid: repeat(12, 1fr);
+  --radius: 2px;
+  --radius-lg: 4px;
+
+  /* Vertical rhythm */
+  --module-spacing-x-small: 36px;
+  --module-spacing-small: 48px;
+  --module-spacing-medium: 60px;
+  --module-spacing-large: 75px;
+  --module-spacing-x-large: 90px;
+
+  --header-height: 92px;
+  --marquee-speed: 45s;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+@media (min-width: 1780px) {
+  :root {
+    --container-width: var(--container-max-width);
+  }
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --container-width: 92vw;
+    --container-outer-padding: 24px;
+    --gap: 28px;
+    --module-spacing-large: 60px;
+    --module-spacing-x-large: 68px;
+    --header-height: 74px;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --container-width: 100%;
+    --container-outer-margin: 0px;
+    --container-outer-padding: 20px;
+    --gap: 20px;
+    --module-spacing-medium: 44px;
+    --module-spacing-large: 48px;
+    --module-spacing-x-large: 56px;
+  }
+}

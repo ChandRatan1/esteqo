@@ -1,0 +1,177 @@
+/*
+ * Mobile refinements.
+ *
+ * Most ESTEQO visitors arrive on a phone, so this file fixes the things that
+ * only bite on touch devices: iOS zooming into undersized inputs, tap targets
+ * below the 44px guideline, and the iPhone home-indicator overlapping the
+ * sticky action bar.
+ */
+
+/* ------------------------------------------------------------------ */
+/* 1. Stop iOS Safari zooming on focus                                 */
+/*                                                                     */
+/* Safari zooms the viewport whenever a focused field renders below     */
+/* 16px. The design uses 15px, so bump it back up on touch screens.     */
+/* ------------------------------------------------------------------ */
+
+@media (max-width: 900px) {
+  .field input,
+  .field select,
+  .field textarea,
+  input[type='search'],
+  input[type='text'],
+  input[type='email'],
+  input[type='tel'],
+  input[type='date'],
+  input[type='time'],
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* 2. Tap targets                                                      */
+/* ------------------------------------------------------------------ */
+
+@media (pointer: coarse), (max-width: 900px) {
+  /* Keep the burger's 30×22 look, give it a 44×44 hit area. */
+  .burger {
+    width: 44px;
+    height: 44px;
+    padding: 11px 7px;
+  }
+
+  .burger span {
+    left: 7px;
+    width: 30px;
+  }
+
+  .burger span:nth-child(1) {
+    top: 11px;
+  }
+  .burger span:nth-child(2) {
+    top: 21px;
+  }
+  .burger span:nth-child(3) {
+    top: 31px;
+  }
+
+  /* Footer navigation — space the rows out so each is comfortably tappable. */
+  .footer__list a,
+  .footer__legal a,
+  .footer__contact a {
+    display: inline-block;
+    padding-block: 8px;
+  }
+
+  .footer__list li + li {
+    margin-top: 4px;
+  }
+
+  .footer__social a {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* Inline text actions ("Enter a time manually", "Read article"). */
+  .link-underline {
+    display: inline-block;
+    padding-block: 10px;
+  }
+
+  .link-underline::after {
+    bottom: 4px;
+  }
+
+  /* Filter chips and the services jump bar. */
+  .chip {
+    padding: 12px 20px;
+  }
+
+  .crumbs a {
+    display: inline-block;
+    padding-block: 4px;
+  }
+
+  /* Announcement bar and the footer copyright line. */
+  .announce a,
+  .footer__bottom a {
+    display: inline-block;
+    padding-block: 9px;
+  }
+
+  .announce__inner {
+    min-height: 44px;
+  }
+
+  .footer__bottom {
+    gap: 6px 16px;
+  }
+}
+
+/* Softer default highlight when tapping. */
+@media (pointer: coarse) {
+  a,
+  button {
+    -webkit-tap-highlight-color: rgba(31, 27, 24, 0.08);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* 3. Sticky action bar and the iPhone home indicator                  */
+/* ------------------------------------------------------------------ */
+
+@media (max-width: 720px) {
+  .sticky-bar {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  body {
+    padding-bottom: calc(52px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .sticky-bar a {
+    padding-block: 17px;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* 4. Space reclaimed on small screens                                 */
+/* ------------------------------------------------------------------ */
+
+@media (max-width: 640px) {
+  /* The panel reserved 60px on the right for a desktop layout. */
+  .accordion__panel {
+    padding-right: 0;
+  }
+
+  .accordion__trigger {
+    padding-block: 22px;
+  }
+
+  .map {
+    height: 300px;
+  }
+
+  /* Three stats side by side is too tight — let them breathe. */
+  .hero__stats {
+    gap: 22px 32px;
+  }
+
+  .testimonial {
+    padding: 30px 26px;
+  }
+
+  /* Full-width primary actions read better than half-width buttons. */
+  .btn-row > .btn {
+    flex: 1 1 auto;
+    min-width: 200px;
+  }
+}
+
+/* Drawer scrolling should not chain to the page behind it. */
+.drawer {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
