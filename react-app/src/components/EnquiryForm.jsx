@@ -50,7 +50,15 @@ const EMPTY = {
   website: '', // honeypot
 };
 
-export default function EnquiryForm({ variant = 'appointment', presetService = '', onSuccess }) {
+export default function EnquiryForm({
+  variant = 'appointment',
+  presetService = '',
+  onSuccess,
+  // When present, a read-only "Offer applied" field is shown and the code is
+  // sent with the enquiry. See src/data/site.js -> offer.
+  offer = null,
+  offerSource = 'page',
+}) {
   const [form, setForm] = useState(EMPTY);
   const [timeMode, setTimeMode] = useState('slot'); // 'slot' | 'manual'
   const [status, setStatus] = useState({ state: 'idle' });
@@ -142,6 +150,9 @@ export default function EnquiryForm({ variant = 'appointment', presetService = '
     const payload = {
       ...form,
       serviceName: selected ? selected.name : 'Not sure yet — please advise',
+      ...(offer
+        ? { offerCode: offer.code, offerSource, offerPrice: `₹${offer.amount} off (${offer.code})` }
+        : {}),
       servicePrice: selected ? priceLabel(selected) : '',
       // Send "2:00 pm" rather than "14:00", and note the day's hours.
       preferredTime: form.preferredTime
@@ -400,6 +411,24 @@ export default function EnquiryForm({ variant = 'appointment', presetService = '
             />
           </Field>
         </>
+      )}
+
+      {offer && (
+        <Field
+          id={`${variant}-offer`}
+          label="Offer applied"
+          hint="Applied automatically when we confirm your appointment."
+        >
+          <input
+            id={`${variant}-offer`}
+            type="text"
+            readOnly
+            className="field__readonly"
+            value={`₹${offer.amount} OFF — ${offer.code}`}
+            tabIndex={-1}
+            aria-readonly="true"
+          />
+        </Field>
       )}
 
       <Captcha

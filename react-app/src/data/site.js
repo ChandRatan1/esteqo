@@ -51,6 +51,19 @@ export const enquiryCc = ['neetukumarseo00@gmail.com','provadoindia@gmail.com'];
 /** Every inbox that receives enquiries. */
 export const enquiryRecipients = [enquirySender, ...enquiryCc];
 
+/**
+ * The ₹500-off promotion behind the left-hand badge and the one-time popup.
+ *
+ * `code` is what gets sent to the backend; the amount stored in the database is
+ * looked up server-side from that code, so the browser cannot claim a different
+ * discount. Change the amount in BOTH places to run a different offer.
+ */
+export const offer = {
+  code: 'WELCOME500',
+  amount: 500,
+  label: '₹500 off your first treatment',
+};
+
 /** Location dropdown for the enquiry forms — Noida sectors first, then nearby. */
 export const locationGroups = [
   {

@@ -4,9 +4,10 @@ import { useApi, usePageMeta } from '../hooks/useApi';
 import Accordion from '../components/Accordion';
 import Media from '../components/Media';
 import { ServiceCard } from '../components/Cards';
-import { Breadcrumbs, CtaBand, FactList, TickList } from '../components/Sections';
+import { Breadcrumbs, CtaBand, FactList, IdealFor, ProcessSteps, TickList } from '../components/Sections';
 import { useContactLinks, useSite } from '../context/SiteContext';
 import { Loading, ErrorState } from '../components/States';
+import Seo, { serviceSchema } from '../seo/Seo';
 
 export default function ServiceDetail() {
   const { serviceSlug } = useParams();
@@ -38,6 +39,18 @@ export default function ServiceDetail() {
 
   return (
     <>
+      <Seo
+        title={service.name}
+        description={service.summary}
+        image={service.image}
+        breadcrumbs={[
+          { name: 'Services', path: '/services' },
+          { name: service.category.name, path: `/services/${service.category.slug}` },
+          { name: service.name, path: `/treatments/${service.slug}` },
+        ]}
+        schema={serviceSchema(service)}
+      />
+
       <section className={`page-hero accent-${accent}`}>
         <div className="container">
           <Breadcrumbs
@@ -84,6 +97,23 @@ export default function ServiceDetail() {
                   </>
                 )}
 
+                <IdealFor items={service.idealForList} />
+
+                <ProcessSteps steps={service.process} />
+
+                {service.aftercare?.length > 0 && (
+                  <>
+                    <h2 style={{ margin: '44px 0 20px' }}>Aftercare</h2>
+                    <TickList items={service.aftercare} />
+                  </>
+                )}
+
+                {service.note && (
+                  <p className="alert" style={{ marginTop: 28, background: 'var(--light-yellow)', borderColor: 'var(--gold)' }}>
+                    {service.note}
+                  </p>
+                )}
+
                 <h2 style={{ margin: '44px 0 8px' }}>Duration &amp; pricing</h2>
                 <FactList
                   facts={[
@@ -99,6 +129,7 @@ export default function ServiceDetail() {
                           ? `₹${service.price.toLocaleString('en-IN')}`
                           : 'On consultation'),
                     },
+                    { label: 'Results last', value: service.resultsLast },
                     { label: 'Department', value: service.category.name },
                   ]}
                 />

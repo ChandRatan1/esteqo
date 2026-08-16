@@ -5,6 +5,7 @@ import { useSite } from '../context/SiteContext';
 import { TeamCard } from '../components/Cards';
 import { CtaBand, PageHero } from '../components/Sections';
 import Media from '../components/Media';
+import Seo from '../seo/Seo';
 
 const OFFERINGS = [
   {
@@ -36,6 +37,12 @@ export default function About() {
 
   return (
     <>
+      <Seo
+        title="About"
+        description="ESTEQO blends advanced dermatological science with the artistry of beauty. Founded by Seema Nanda in Sector 25, Noida."
+        breadcrumbs={[{ name: 'About', path: '/about' }]}
+      />
+
       <PageHero
         eyebrow="About ESTEQO"
         title="Where innovation meets indulgence"

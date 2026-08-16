@@ -2,6 +2,7 @@ import { usePageMeta } from '../hooks/useApi';
 import { useContactLinks, useSite } from '../context/SiteContext';
 import EnquiryForm from '../components/EnquiryForm';
 import { PageHero } from '../components/Sections';
+import Seo from '../seo/Seo';
 
 export default function Contact() {
   const { contact, social } = useSite();
@@ -14,6 +15,12 @@ export default function Contact() {
 
   return (
     <>
+      <Seo
+        title="Contact"
+        description="ESTEQO, Shop No. 209, First Floor, Modi Mall, Sector 25, Noida. Call +91 8010135135 or send us a message."
+        breadcrumbs={[{ name: 'Contact', path: '/contact' }]}
+      />
+
       <PageHero
         eyebrow="Contact"
         title="Come and see us"

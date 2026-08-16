@@ -1,0 +1,14 @@
+# ESTEQO — https://esteqo.co.in
+# Update the Sitemap line if the site is served from a different domain.
+
+User-agent: *
+Allow: /
+
+# Nothing here is private, but these add no SEO value.
+Disallow: /*?service=
+Disallow: /*?page=
+
+# Well-behaved crawlers only need a short pause.
+Crawl-delay: 1
+
+Sitemap: https://esteqo.co.in/sitemap.xml

@@ -880,3 +880,285 @@
     height: 44px;
   }
 }
+
+/* ------------------------------------------------------------------ */
+/* Treatment process — numbered consultation-to-aftercare walkthrough  */
+/* ------------------------------------------------------------------ */
+
+.process {
+  margin-top: 48px;
+}
+
+.process__title {
+  margin-bottom: 30px;
+}
+
+.process__list {
+  counter-reset: process;
+  border-top: 1px solid rgba(31, 27, 24, 0.14);
+}
+
+.process__step {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 20px;
+  padding: 26px 0;
+  border-bottom: 1px solid rgba(31, 27, 24, 0.14);
+}
+
+.process__num {
+  font-family: var(--heading-font);
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.1;
+  color: var(--gold);
+}
+
+.process__step-title {
+  margin-bottom: 8px;
+  font-size: 1.2rem;
+}
+
+.process__text {
+  color: var(--ink-soft);
+  line-height: 1.8;
+}
+
+@media (max-width: 560px) {
+  .process__step {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+}
+
+/* Ideal-for block */
+
+.idealfor {
+  margin-top: 48px;
+  padding: 32px 30px;
+  background: var(--cream);
+}
+
+.idealfor__title {
+  margin-bottom: 10px;
+  font-size: clamp(1.4rem, 2vw, 1.8rem);
+}
+
+.idealfor__lead {
+  margin-bottom: 18px;
+  color: var(--ink-soft);
+}
+
+/* ------------------------------------------------------------------ */
+/* Offer badge (left edge) and its popup                               */
+/* ------------------------------------------------------------------ */
+
+.offer-badge {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  z-index: 58;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px 14px 14px;
+  background: var(--ink);
+  color: var(--cream);
+  border-radius: 0 6px 6px 0;
+  box-shadow: 0 10px 30px rgba(31, 27, 24, 0.28);
+  transform: translateY(-50%);
+  transition: background-color 0.3s var(--ease), padding-right 0.3s var(--ease);
+  animation: offer-in 0.6s var(--ease) 1.2s both;
+}
+
+.offer-badge:hover {
+  background: var(--gold-deep);
+  padding-right: 24px;
+}
+
+@keyframes offer-in {
+  from {
+    opacity: 0;
+    transform: translate(-100%, -50%);
+  }
+}
+
+.offer-badge__icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(252, 247, 242, 0.35);
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+
+.offer-badge__text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+  text-align: left;
+}
+
+.offer-badge__text strong {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+}
+
+.offer-badge__text span {
+  font-size: 0.625rem;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+/* Icon only on small screens, and clear of the sticky action bar. */
+@media (max-width: 720px) {
+  .offer-badge {
+    top: auto;
+    bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+    transform: none;
+    padding: 12px;
+    animation-name: offer-in-sm;
+  }
+
+  .offer-badge:hover {
+    padding-right: 12px;
+  }
+
+  .offer-badge__text strong {
+    font-size: 0.8125rem;
+  }
+
+  .offer-badge__text span {
+    display: none;
+  }
+
+  @keyframes offer-in-sm {
+    from {
+      opacity: 0;
+      transform: translateX(-100%);
+    }
+  }
+}
+
+/* Modal */
+
+.offer-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(31, 27, 24, 0.55);
+  backdrop-filter: blur(2px);
+  animation: fade-in 0.25s var(--ease);
+  overflow-y: auto;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.offer-modal__panel {
+  position: relative;
+  width: min(620px, 100%);
+  max-height: 92vh;
+  overflow-y: auto;
+  background: var(--white);
+  box-shadow: 0 30px 80px rgba(31, 27, 24, 0.3);
+  animation: panel-in 0.3s var(--ease);
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+.offer-modal__close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 44px;
+  height: 44px;
+  font-size: 1.75rem;
+  line-height: 1;
+  color: var(--ink);
+  z-index: 2;
+}
+
+.offer-modal__close:hover {
+  color: var(--gold-deep);
+}
+
+.offer-modal__head {
+  padding: 34px 34px 26px;
+  background: var(--cream);
+  text-align: center;
+}
+
+.offer-modal__flag {
+  display: inline-block;
+  margin-bottom: 14px;
+  padding: 6px 14px;
+  background: var(--ink);
+  color: var(--cream);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.offer-modal__title {
+  margin-bottom: 12px;
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+}
+
+.offer-modal__text {
+  max-width: 46ch;
+  margin-inline: auto;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+
+.offer-modal__body {
+  padding: 30px 34px 36px;
+}
+
+@media (max-width: 560px) {
+  .offer-modal {
+    padding: 0;
+    place-items: end center;
+  }
+
+  .offer-modal__panel {
+    max-height: 94vh;
+    width: 100%;
+  }
+
+  .offer-modal__head {
+    padding: 30px 22px 22px;
+  }
+
+  .offer-modal__body {
+    padding: 24px 22px 30px;
+  }
+}
+
+/* Read-only offer field */
+
+.field__readonly,
+.field input.field__readonly {
+  background: var(--light-yellow);
+  border-color: var(--gold);
+  font-weight: 500;
+  letter-spacing: 1px;
+  cursor: default;
+}

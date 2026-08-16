@@ -1,4 +1,5 @@
-import { categoryImages, serviceImages } from './service-images';
+import { categoryImages, serviceImages } from './service-images.js';
+import { browsCategory, browServices } from './brows.js';
 
 /**
  * ESTEQO treatment menu — transcribed from "Esteqo revised menu 2.pdf".
@@ -10,6 +11,7 @@ import { categoryImages, serviceImages } from './service-images';
  */
 
 export const categories = [
+  browsCategory,
   {
     slug: 'medi-facials',
     name: 'Medi-Facials',
@@ -140,6 +142,8 @@ export const categories = [
  * `variants` lists the alternative prices exactly as the menu quotes them.
  */
 export const services = [
+  ...browServices,
+
   // ---------------------------------------------------------------- Medi-Facials
   {
     slug: 'hydra-clean-up',

@@ -132,3 +132,40 @@ export function CtaBand({
     </section>
   );
 }
+
+/**
+ * Numbered "Treatment process" list — the consultation-to-aftercare walkthrough
+ * described in the ESTEQO content document.
+ */
+export function ProcessSteps({ steps = [], title = 'Treatment process' }) {
+  if (!steps.length) return null;
+
+  return (
+    <section className="process">
+      <h2 className="process__title">{title}</h2>
+      <ol className="process__list">
+        {steps.map((step, index) => (
+          <li className="process__step" key={step.title}>
+            <span className="process__num">{String(index + 1).padStart(2, '0')}</span>
+            <div className="process__body">
+              <h3 className="process__step-title">{step.title}</h3>
+              <p className="process__text">{step.text}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+  );
+}
+
+/** "Ideal for" checklist. */
+export function IdealFor({ items = [], title = 'Ideal for' }) {
+  if (!items.length) return null;
+  return (
+    <div className="idealfor">
+      <h2 className="idealfor__title">{title}</h2>
+      <p className="idealfor__lead">This treatment suits clients who:</p>
+      <TickList items={items} />
+    </div>
+  );
+}

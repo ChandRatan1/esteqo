@@ -38,6 +38,9 @@ const WEB3FORMS_URL = 'https://api.web3forms.com/submit';
 const FORMSUBMIT_ID = import.meta.env.VITE_FORMSUBMIT_ID || enquirySender;
 const FORMSUBMIT_URL = `https://formsubmit.co/ajax/${encodeURIComponent(FORMSUBMIT_ID)}`;
 
+// Backend origin for saving submissions to the `contacts` table. Optional.
+const CONTACT_API = (import.meta.env.VITE_CONTACT_API || '').replace(/\/$/, '');
+
 const CONTACT_LINE = 'Please call or WhatsApp us on +91 8010135135 instead.';
 
 const LABELS = {
@@ -52,6 +55,7 @@ const LABELS = {
   contactMethod: 'Preferred contact method',
   subject: 'Subject',
   message: 'Message',
+  offerPrice: 'Offer applied',
 };
 
 const SUBJECTS = {
@@ -184,6 +188,50 @@ async function sendViaFormSubmit(kind, values, ref) {
 }
 
 /**
+ * Saves the submission to the `contacts` table via the backend.
+ *
+ * Set VITE_CONTACT_API to the API origin (e.g. https://api.esteqo.co.in, or
+ * http://localhost:4000 in development) to turn this on. With it unset the site
+ * simply emails, exactly as before — nothing breaks.
+ *
+ * @returns {Promise<boolean>} true when the row was stored
+ */
+async function storeInDatabase(kind, values, ref, emailSent) {
+  if (!CONTACT_API) return false;
+
+  try {
+    const response = await fetch(`${CONTACT_API}/api/contacts`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({
+        formType: kind,
+        fullName: values.fullName || '',
+        email: values.email || '',
+        phone: values.phone || '',
+        location: values.location || '',
+        serviceSlug: values.serviceSlug || '',
+        serviceName: values.serviceName || '',
+        servicePrice: values.servicePrice || '',
+        preferredDate: values.preferredDate || '',
+        preferredTime: values.preferredTime || '',
+        contactMethod: values.contactMethod || 'call',
+        subject: values.subject || '',
+        message: values.message || '',
+        sourcePage: window.location.href,
+        offerCode: values.offerCode || '',
+        offerSource: values.offerSource || 'page',
+        reference: ref || '',
+        emailSent,
+      }),
+    });
+    return response.ok;
+  } catch {
+    // The database is a bonus destination; never fail the visitor over it.
+    return false;
+  }
+}
+
+/**
  * @param {'appointment'|'contact'|'newsletter'} kind
  * @param {object} values
  */
@@ -198,11 +246,25 @@ export async function submitEnquiry(kind, values) {
 
   const ref = kind === 'appointment' ? reference() : null;
 
-  if (WEB3FORMS_KEY) {
-    await sendViaWeb3Forms(kind, values, ref);
-  } else {
-    await sendViaFormSubmit(kind, values, ref);
+  let emailSent = false;
+  let emailError = null;
+  try {
+    if (WEB3FORMS_KEY) {
+      await sendViaWeb3Forms(kind, values, ref);
+    } else {
+      await sendViaFormSubmit(kind, values, ref);
+    }
+    emailSent = true;
+  } catch (error) {
+    // Hold the error: if the database save succeeds the enquiry is not lost,
+    // so there is no reason to show the visitor a failure.
+    emailError = error;
   }
+
+  const stored = await storeInDatabase(kind, values, ref, emailSent);
+
+  // Only surface a failure when the enquiry reached neither destination.
+  if (!emailSent && !stored) throw emailError;
 
   return {
     data: {

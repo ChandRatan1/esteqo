@@ -1,6 +1,7 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
+import OfferPopup from './OfferPopup';
 import { useContactLinks } from '../context/SiteContext';
 import { useScrollToTop } from '../hooks/useApi';
 
@@ -32,6 +33,7 @@ export default function Layout() {
       </main>
       <Footer />
       <StickyBar />
+      <OfferPopup />
     </>
   );
 }

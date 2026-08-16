@@ -6,6 +6,7 @@ import { CategoryCard, PostCard, ServiceCard } from '../components/Cards';
 import { CtaBand, Marquee } from '../components/Sections';
 import Media from '../components/Media';
 import { CardSkeletons } from '../components/States';
+import Seo from '../seo/Seo';
 
 const VALUES = [
   {
@@ -46,6 +47,10 @@ export default function Home() {
 
   return (
     <>
+      <Seo
+        description="Clinically planned skin, brow and laser treatments in Sector 25, Noida. Hydra facials, carbon laser, peels, body polish, threading, waxing and massages."
+      />
+
       {/* Hero */}
       <section className="hero">
         <div className="hero__body">

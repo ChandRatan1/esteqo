@@ -14,6 +14,8 @@ const servicesRouter = require('./routes/services');
 const blogRouter = require('./routes/blog');
 const siteRouter = require('./routes/site');
 const enquiriesRouter = require('./routes/enquiries');
+const contactsRouter = require('./routes/contacts');
+const blogAdminRouter = require('./routes/blogAdmin');
 
 const app = express();
 
@@ -49,6 +51,8 @@ app.use('/api', servicesRouter);
 app.use('/api', blogRouter);
 app.use('/api', siteRouter);
 app.use('/api', enquiriesRouter);
+app.use('/api', contactsRouter);
+app.use('/api', blogAdminRouter);
 
 app.use(notFound);
 app.use(errorHandler);

@@ -3,6 +3,7 @@ import { usePageMeta } from '../hooks/useApi';
 import { useContactLinks, useSite } from '../context/SiteContext';
 import EnquiryForm from '../components/EnquiryForm';
 import { PageHero } from '../components/Sections';
+import Seo from '../seo/Seo';
 
 export default function Appointment() {
   const [searchParams] = useSearchParams();
@@ -16,6 +17,12 @@ export default function Appointment() {
 
   return (
     <>
+      <Seo
+        title="Book an Appointment"
+        description="Request an appointment at ESTEQO, Sector 25 Noida. Every service begins with a detailed skin consultation."
+        breadcrumbs={[{ name: 'Appointment', path: '/appointment' }]}
+      />
+
       <PageHero
         eyebrow="Appointments"
         title="Book your consultation"

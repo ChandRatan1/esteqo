@@ -5,6 +5,7 @@ import { useSite } from '../context/SiteContext';
 import Accordion from '../components/Accordion';
 import { CtaBand, PageHero } from '../components/Sections';
 import { Loading, ErrorState } from '../components/States';
+import Seo, { faqSchema } from '../seo/Seo';
 
 const PRINCIPLES = [
   {
@@ -48,6 +49,13 @@ export default function Values() {
 
   return (
     <>
+      <Seo
+        title="Our Values & FAQ"
+        description="How ESTEQO works — analysis before treatment, realistic timelines, and answers to the questions we are asked most."
+        breadcrumbs={[{ name: 'Values', path: '/values' }]}
+        schema={faqSchema(faqs?.general || [])}
+      />
+
       <PageHero
         eyebrow="Our values"
         title="What you can expect from us"

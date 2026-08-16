@@ -7,6 +7,7 @@ import { PostCard } from '../components/Cards';
 import { Breadcrumbs, CtaBand } from '../components/Sections';
 import { Loading, ErrorState } from '../components/States';
 import { formatDate, parseMarkdown, splitBold } from '../utils/format';
+import Seo, { articleSchema } from '../seo/Seo';
 
 function Rich({ text }) {
   return splitBold(text).map((part, index) =>
@@ -66,6 +67,18 @@ export default function BlogPost() {
 
   return (
     <>
+      <Seo
+        title={post.title}
+        description={post.excerpt}
+        image={post.coverImage}
+        type="article"
+        breadcrumbs={[
+          { name: 'Blog', path: '/blog' },
+          { name: post.title, path: `/blog/${post.slug}` },
+        ]}
+        schema={articleSchema(post)}
+      />
+
       <section className="page-hero accent-cream">
         <div className="container">
           <Breadcrumbs trail={[{ label: 'Blog', to: '/blog' }, { label: post.title }]} />

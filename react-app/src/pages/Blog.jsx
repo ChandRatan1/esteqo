@@ -4,6 +4,7 @@ import { useApi, usePageMeta } from '../hooks/useApi';
 import { PostCard } from '../components/Cards';
 import { CtaBand, PageHero } from '../components/Sections';
 import { CardSkeletons, EmptyState, ErrorState } from '../components/States';
+import Seo from '../seo/Seo';
 
 const PER_PAGE = 9;
 
@@ -40,6 +41,12 @@ export default function Blog() {
 
   return (
     <>
+      <Seo
+        title="Blog"
+        description="Treatment guides, skin science and aftercare from the ESTEQO team in Noida."
+        breadcrumbs={[{ name: 'Blog', path: '/blog' }]}
+      />
+
       <PageHero
         eyebrow="Journal"
         title="Skin science, without the marketing"

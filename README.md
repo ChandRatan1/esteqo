@@ -149,9 +149,54 @@ the same schema without Node migrations.
 
 ### Tables
 
-`service_categories`, `services`, `blog_categories`, `blog_posts`,
-`testimonials`, `faqs`, `team_members`, `site_settings`, `appointments`,
-`contact_messages`, `newsletter_subscribers`.
+**Content:** `service_categories`, `services`, `blog_categories`, `blog_posts`,
+`testimonials`, `faqs`, `team_members`, `site_settings`
+
+**Submissions:** `contacts`, `appointments`, `contact_messages`,
+`newsletter_subscribers`
+
+#### `contacts` — every website form lands here
+
+One row per submission, one column per field, so the data is queryable rather
+than stuffed into a blob. `form_type` separates contact / appointment /
+newsletter.
+
+| Group | Columns |
+| --- | --- |
+| Who | `full_name`, `email`, `phone`, `location` |
+| What | `service_slug`, `service_name`, `service_price`, `category_slug`, `preferred_date`, `preferred_time`, `contact_method` |
+| Text | `subject`, `message` |
+| Origin | `source_page`, `referrer`, `ip_address`, `user_agent` |
+| Workflow | `reference`, `status` (new/read/responded/booked/closed), `is_spam`, `captcha_passed`, `email_sent`, `admin_notes` |
+| Timestamps | `created_at`, `updated_at` |
+
+Indexed on `form_type + status`, `created_at`, `email` and `phone`.
+
+#### `blog_posts`
+
+`id`, `slug`, `title`, `excerpt`, `content` (LONGTEXT), `image_url`,
+`image_alt`, `cover_image`, `og_image`, `author`, `category_id`,
+`read_minutes`, `tags` (JSON), `is_featured`, `status` (draft/published),
+`published_at`, plus SEO columns `meta_title`, `meta_description`,
+`focus_keyword`, `canonical_url`, `sitemap_priority`, `sitemap_changefreq`,
+`noindex`, and timestamps.
+
+`services` and `service_categories` carry the same SEO column set.
+
+### Storing form submissions
+
+Point the front end at the API and every submission is written to `contacts`
+**as well as** emailed:
+
+```
+# react-app/.env
+VITE_CONTACT_API=http://localhost:4000
+```
+
+The two destinations are independent — if the email service is down but the
+database write succeeds, the enquiry is still captured (and vice versa). The
+visitor only sees an error if both fail. Leave the variable unset and the site
+just emails, exactly as before.
 
 ### Endpoints
 
@@ -185,6 +230,52 @@ identical response shapes — no page changes needed.
 scraped from the live WordPress site, not the PDF menu. If you switch
 `VITE_USE_API=true`, re-seed it from `react-app/src/data/menu.js` first so the two
 sources agree.
+
+---
+
+## SEO
+
+Everything an SEO team needs is in place, so nothing has to be retrofitted later.
+
+| Asset | Where | Notes |
+| --- | --- | --- |
+| `robots.txt` | `react-app/public/robots.txt` | Allows everything, points at the sitemap |
+| `sitemap.xml` | generated into `react-app/public/` | **135 URLs** — 7 static pages, 15 departments, 107 treatments, 6 posts |
+| Titles / meta descriptions | `src/seo/Seo.jsx` per page | Unique on all 10 page types |
+| Canonical tags | `src/seo/Seo.jsx` | Absolute, from `SITE_URL` |
+| Open Graph + Twitter cards | `src/seo/Seo.jsx` | Title, description, image, locale `en_IN` |
+| JSON-LD structured data | `src/seo/Seo.jsx` | See below |
+
+**The sitemap regenerates itself.** `npm run build` runs
+`scripts/generate-sitemap.mjs` first, and that script reads the same data files
+the site renders from — so adding a treatment or a blog post puts it in the
+sitemap automatically. Run it on its own with `npm run sitemap`.
+
+**Structured data emitted:**
+
+- `HealthAndBeautyBusiness` / `BeautySalon` — address, geo, phone, opening hours
+  (Mon–Sat 9–8, Sun 10–3), areas served across Noida/Greater Noida/Ghaziabad/Delhi NCR — on every page
+- `BreadcrumbList` — on every inner page
+- `Service` + `Offer` (price in INR) — treatment pages
+- `BlogPosting` — article pages
+- `FAQPage` — department pages and `/values`
+
+**Set your domain before launch.** Everything derives from one value:
+
+```
+# react-app/.env
+VITE_SITE_URL=https://esteqo.co.in
+```
+
+Then `npm run sitemap` to rewrite `sitemap.xml` and the `Sitemap:` line in
+`robots.txt`.
+
+**One limitation to be aware of.** This is a client-rendered React app, so meta
+tags are set in the browser rather than in the served HTML. Google renders
+JavaScript and will index it correctly, but some crawlers and social-preview
+scrapers (WhatsApp, older LinkedIn) only read the raw HTML. If link previews or
+Bing coverage matter, the fix is pre-rendering at build time — worth doing
+before a serious SEO push, and a contained change.
 
 ---
 

@@ -4,6 +4,7 @@ import { useApi, usePageMeta } from '../hooks/useApi';
 import Accordion from '../components/Accordion';
 import { Breadcrumbs, CtaBand, FactList, PageHero, Split, TickList } from '../components/Sections';
 import { Loading, ErrorState } from '../components/States';
+import Seo, { faqSchema } from '../seo/Seo';
 
 /**
  * A department page: intro banner, then one alternating text/image row per
@@ -35,6 +36,17 @@ export default function ServiceCategory() {
 
   return (
     <>
+      <Seo
+        title={`${category.name} in Noida`}
+        description={category.tagline}
+        image={category.heroImage}
+        breadcrumbs={[
+          { name: 'Services', path: '/services' },
+          { name: category.name, path: `/services/${category.slug}` },
+        ]}
+        schema={faqSchema(category.faqs)}
+      />
+
       <PageHero
         eyebrow={`${category.serviceCount} ${category.serviceCount === 1 ? 'treatment' : 'treatments'}`}
         title={category.name}
