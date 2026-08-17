@@ -1,5 +1,6 @@
 import { categoryImages, serviceImages } from './service-images.js';
 import { browsCategory, browServices } from './brows.js';
+import { bridalCategory, bridalServices } from './bridal.js';
 
 /**
  * ESTEQO treatment menu — transcribed from "Esteqo revised menu 2.pdf".
@@ -12,6 +13,7 @@ import { browsCategory, browServices } from './brows.js';
 
 export const categories = [
   browsCategory,
+  bridalCategory,
   {
     slug: 'medi-facials',
     name: 'Medi-Facials',
@@ -143,6 +145,7 @@ export const categories = [
  */
 export const services = [
   ...browServices,
+  ...bridalServices,
 
   // ---------------------------------------------------------------- Medi-Facials
   {
@@ -706,3 +709,58 @@ export const servicesWithCategory = services.map((service, index) => ({
     accent: categoryBySlug[service.categorySlug].accent,
   },
 }));
+
+/**
+ * The four top-level entries in the services menu. Each groups one or more
+ * departments, which become the sub-headings on the services page.
+ */
+export const menuGroups = [
+  {
+    slug: 'facials',
+    name: 'Facials',
+    tagline: 'Every facial and skin treatment on the menu.',
+    intro:
+      'From a 30-minute cleanup to advanced laser and micro-needling protocols. Every facial begins with a skin analysis, so the treatment is chosen for your skin rather than picked off a list.',
+    departments: [
+      'medi-facials',
+      'advanced-facials',
+      'facials',
+      'face-clean-up',
+      'add-on-treatments',
+    ],
+  },
+  {
+    slug: 'brows',
+    name: 'Brows',
+    tagline: 'Precision brows, designed around your face.',
+    intro:
+      'Every brow service starts with personalised brow mapping, so the shape suits your facial proportions, eye shape and natural growth pattern rather than a standard template.',
+    departments: ['brows'],
+  },
+  {
+    slug: 'bridal',
+    name: 'Bridal Services',
+    tagline: 'Planned backwards from your wedding date.',
+    intro:
+      'Bridal skin is a schedule, not a single appointment. These packages combine treatments from across the menu into a plan for the bride, the groom and the family — with a package saving against booking each treatment separately.',
+    departments: ['bridal'],
+  },
+  {
+    slug: 'other',
+    name: 'Other Services',
+    tagline: 'Body, hands, feet, hair removal and massage.',
+    intro:
+      'Everything beyond the face — body brightening and polishing, threading and waxing, manicure and pedicure, nails, and our full massage menu.',
+    departments: [
+      'body-bleach-detan',
+      'body-polish',
+      'threading',
+      'face-waxing',
+      'body-waxing',
+      'manicure',
+      'pedicure',
+      'nails',
+      'massages',
+    ],
+  },
+];

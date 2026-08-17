@@ -1,5 +1,6 @@
 'use strict';
 
+const path = require('node:path');
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -16,13 +17,15 @@ const siteRouter = require('./routes/site');
 const enquiriesRouter = require('./routes/enquiries');
 const contactsRouter = require('./routes/contacts');
 const blogAdminRouter = require('./routes/blogAdmin');
+const uploadsRouter = require('./routes/uploads');
 
 const app = express();
 
 app.set('trust proxy', 1);
 app.use(helmet());
 app.use(compression());
-app.use(express.json({ limit: '256kb' }));
+// Base64 image uploads need headroom; everything else is tiny.
+app.use(express.json({ limit: '12mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 app.use(
@@ -39,6 +42,15 @@ if (config.env !== 'test') {
   app.use(morgan(config.env === 'production' ? 'combined' : 'dev'));
 }
 
+// Uploaded blog images.
+app.use(
+  '/uploads',
+  express.static(path.join(__dirname, '..', 'uploads'), {
+    maxAge: '30d',
+    fallthrough: true,
+  })
+);
+
 app.get(
   '/api/health',
   asyncHandler(async (req, res) => {
@@ -52,6 +64,7 @@ app.use('/api', blogRouter);
 app.use('/api', siteRouter);
 app.use('/api', enquiriesRouter);
 app.use('/api', contactsRouter);
+app.use('/api', uploadsRouter);
 app.use('/api', blogAdminRouter);
 
 app.use(notFound);

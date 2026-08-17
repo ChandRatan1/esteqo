@@ -117,55 +117,51 @@
   transform: rotate(180deg);
 }
 
-/* Mega menu — Silver Mirror's full-width dropdown panel */
-.mega {
+/* Dropdown — a short panel under the nav item, four links only. */
+.dropdown {
   position: absolute;
-  top: calc(100% + 12px);
-  left: 50%;
+  top: calc(100% + 14px);
+  left: -18px;
   z-index: 70;
-  width: min(760px, 88vw);
-  padding: 32px;
+  min-width: 232px;
+  padding: 22px 14px;
   background: var(--white);
-  border: 1px solid rgba(31, 27, 24, 0.09);
-  box-shadow: 0 24px 60px rgba(31, 27, 24, 0.12);
-  transform: translateX(-50%);
+  border-radius: 14px;
+  box-shadow: 0 14px 40px rgba(31, 27, 24, 0.16);
+  animation: dropdown-in 0.2s var(--ease);
 }
 
-.mega__grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 4px 32px;
+@keyframes dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
 }
 
-.mega__link {
+/* Keeps the panel reachable as the pointer crosses the gap below the link. */
+.dropdown::before {
+  content: '';
+  position: absolute;
+  top: -14px;
+  left: 0;
+  right: 0;
+  height: 14px;
+}
+
+.dropdown__list a {
   display: block;
-  padding: 11px 12px;
-  border-left: 2px solid transparent;
-  transition: background-color 0.25s var(--ease), border-color 0.25s var(--ease);
-}
-
-.mega__link:hover {
-  background: var(--cream);
-  border-left-color: var(--gold);
-}
-
-.mega__name {
-  display: block;
+  padding: 11px 16px;
+  border-radius: 8px;
   font-size: 0.9375rem;
   font-weight: 500;
+  color: var(--ink);
+  white-space: nowrap;
+  transition: background-color 0.2s var(--ease), color 0.2s var(--ease);
 }
 
-.mega__meta {
-  display: block;
-  margin-top: 2px;
-  font-size: 0.75rem;
-  color: var(--gray-idle);
-}
-
-.mega__footer {
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(31, 27, 24, 0.09);
+.dropdown__list a:hover {
+  background: var(--cream);
+  color: var(--gold-deep);
 }
 
 .header__actions {
@@ -453,4 +449,21 @@
   body {
     padding-bottom: 52px;
   }
+}
+
+/* ------------------------------------------------------------------ */
+/* Drawer: same four groups on mobile. */
+
+.drawer__group + .drawer__group {
+  margin-top: 18px;
+}
+
+.drawer__grouptitle {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold-deep);
 }

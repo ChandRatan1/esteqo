@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useContactLinks, useSite } from '../context/SiteContext';
+import { menuGroups } from '../data/menu';
 
 const NAV = [
   { label: 'Services', to: '/services', mega: true },
@@ -109,28 +110,17 @@ export default function Header() {
                     <Caret />
                   </NavLink>
 
-                  {megaOpen && categories.length > 0 && (
-                    <div className="mega">
-                      <div className="mega__grid">
-                        {categories.map((category) => (
-                          <Link
-                            key={category.slug}
-                            to={`/services/${category.slug}`}
-                            className="mega__link"
-                          >
-                            <span className="mega__name">{category.name}</span>
-                            <span className="mega__meta">
-                              {category.serviceCount}{' '}
-                              {category.serviceCount === 1 ? 'treatment' : 'treatments'}
-                            </span>
-                          </Link>
+                  {/* A short dropdown: the four service categories, nothing
+                      more. Each opens that section of the services page. */}
+                  {megaOpen && (
+                    <div className="dropdown">
+                      <ul className="dropdown__list">
+                        {menuGroups.map((group) => (
+                          <li key={group.slug}>
+                            <Link to={`/services?c=${group.slug}`}>{group.name}</Link>
+                          </li>
                         ))}
-                      </div>
-                      <div className="mega__footer">
-                        <Link to="/services" className="link-underline">
-                          View the full treatment menu
-                        </Link>
-                      </div>
+                      </ul>
                     </div>
                   )}
                 </div>
@@ -195,16 +185,13 @@ export default function Header() {
             </button>
             {drawerServices && (
               <div className="drawer__sub">
-                <Link to="/services" className="drawer__sublink">
-                  All treatments
-                </Link>
-                {categories.map((category) => (
+                {menuGroups.map((group) => (
                   <Link
-                    key={category.slug}
-                    to={`/services/${category.slug}`}
+                    key={group.slug}
+                    to={`/services?c=${group.slug}`}
                     className="drawer__sublink"
                   >
-                    {category.name}
+                    {group.name}
                   </Link>
                 ))}
               </div>

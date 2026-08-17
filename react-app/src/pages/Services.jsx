@@ -1,69 +1,63 @@
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { api } from '../api/client';
-import { useApi } from '../hooks/useApi';
+import { Link, useSearchParams } from 'react-router-dom';
+import { categoryBySlug, menuGroups, servicesWithCategory } from '../data/menu';
 import { CtaBand } from '../components/Sections';
-import { EmptyState, ErrorState, Loading } from '../components/States';
+import { EmptyState } from '../components/States';
 import Seo from '../seo/Seo';
 
 /**
- * The full treatment menu.
+ * The treatment menu, organised into four top-level categories:
+ * Facials, Brows, Bridal Services and Other Services.
  *
- * Layout follows the reference services page: a sticky "Treatment category"
- * jump list on the left, and on the right one section per department whose
- * treatments are collapsible rows showing the price up front and opening to
- * reveal what the treatment includes plus a booking button.
+ * Layout follows the reference services page — a category rail on the left
+ * that switches the panel on the right, each panel holding sub-category
+ * headings and a card per treatment that expands to show what it includes.
  */
 
-const formatPrice = (service) => {
-  if (service.price == null) return 'On consultation';
-  return `₹${service.price.toLocaleString('en-IN')}`;
-};
+const formatPrice = (service) =>
+  service.price == null ? 'On consultation' : `₹${service.price.toLocaleString('en-IN')}`;
 
-function Caret() {
+function Caret({ open }) {
   return (
-    <svg className="acc-row__caret" viewBox="0 0 20 12" aria-hidden="true">
-      <path d="M1 1l9 9 9-9" fill="none" stroke="currentColor" strokeWidth="1.6" />
-    </svg>
+    <span className={`tcard__toggle${open ? ' tcard__toggle--open' : ''}`} aria-hidden="true">
+      <svg viewBox="0 0 20 12">
+        <path d="M1 1l9 9 9-9" fill="none" stroke="currentColor" strokeWidth="2" />
+      </svg>
+    </span>
   );
 }
 
-function TreatmentRow({ service, open, onToggle }) {
-  const panelId = `treatment-${service.slug}`;
+function TreatmentCard({ service, open, onToggle }) {
+  const panelId = `t-${service.slug}`;
 
   return (
-    <li className={`acc-row${open ? ' acc-row--open' : ''}`}>
-      <h4 className="acc-row__head">
-        <button
-          type="button"
-          className="acc-row__button"
-          aria-expanded={open}
-          aria-controls={panelId}
-          onClick={onToggle}
-        >
-          <span className="acc-row__name">
+    <li className={`tcard${open ? ' tcard--open' : ''}`}>
+      <h4 className="tcard__head">
+        <button type="button" aria-expanded={open} aria-controls={panelId} onClick={onToggle}>
+          <span className="tcard__name">
             {service.name}
+            {service.isFeatured && <span className="tag-best">★ Most booked</span>}
             {service.isNew && <span className="tag-new">New</span>}
-            {service.isFeatured && <span className="tag-best">Most booked</span>}
           </span>
-          <span className="acc-row__meta">
-            <span className="acc-row__price">{formatPrice(service)}</span>
-            {service.durationMinutes && (
-              <span className="acc-row__mins">{service.durationMinutes} min</span>
-            )}
-          </span>
-          <Caret />
+          <span className="tcard__price">{formatPrice(service)}</span>
+          <Caret open={open} />
         </button>
       </h4>
 
       {open && (
-        <div className="acc-row__panel" id={panelId}>
-          <div className="acc-row__left">
+        <div className="tcard__panel" id={panelId}>
+          <div className="tcard__left">
             <p>{service.summary}</p>
 
-            {service.priceNote && service.price != null && (
-              <p className="acc-row__note">{service.priceNote}</p>
+            {service.componentsTotal && service.price && (
+              <p className="tcard__saving">
+                Booked separately{' '}
+                <s>₹{service.componentsTotal.toLocaleString('en-IN')}</s> — you save{' '}
+                <strong>₹{(service.componentsTotal - service.price).toLocaleString('en-IN')}</strong>
+              </p>
             )}
+
+            {service.priceNote && <p className="tcard__note">{service.priceNote}</p>}
 
             {service.variants?.length > 0 && (
               <div className="variants">
@@ -85,24 +79,24 @@ function TreatmentRow({ service, open, onToggle }) {
             </div>
           </div>
 
-          {(service.bullets?.length > 0 || service.idealForList?.length > 0) && (
-            <div className="acc-row__right">
-              {service.bullets?.length > 0 && (
-                <>
-                  <h5 className="acc-row__label">Includes</h5>
-                  <p className="acc-row__list">{service.bullets.join(' • ')}</p>
-                </>
-              )}
-              {service.idealForList?.length > 0 && (
-                <>
-                  <h5 className="acc-row__label">Ideal for</h5>
-                  <p className="acc-row__list">{service.idealForList.slice(0, 3).join(' • ')}</p>
-                </>
-              )}
-              <h5 className="acc-row__label">Department</h5>
-              <p className="acc-row__list">{service.category.name}</p>
-            </div>
-          )}
+          <div className="tcard__right">
+            {service.bullets?.length > 0 && (
+              <>
+                <h5 className="tcard__label">Includes</h5>
+                <p className="tcard__meta">{service.bullets.join(' • ')}</p>
+              </>
+            )}
+            {service.idealFor?.length > 0 && (
+              <>
+                <h5 className="tcard__label">Ideal for</h5>
+                <p className="tcard__meta">{service.idealFor.slice(0, 3).join(' • ')}</p>
+              </>
+            )}
+            <h5 className="tcard__label">Duration</h5>
+            <p className="tcard__meta">
+              {service.durationMinutes ? `${service.durationMinutes} minutes` : 'Confirmed at consultation'}
+            </p>
+          </div>
         </div>
       )}
     </li>
@@ -110,60 +104,70 @@ function TreatmentRow({ service, open, onToggle }) {
 }
 
 export default function Services() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // ?c=<group> lets the header dropdown open a specific category directly,
+  // and keeps that choice in the URL so it can be linked and shared.
+  const requested = searchParams.get('c');
+  const activeGroup = menuGroups.some((g) => g.slug === requested)
+    ? requested
+    : menuGroups[0].slug;
+
+  const setActiveGroup = (slug) => {
+    setSearchParams(slug === menuGroups[0].slug ? {} : { c: slug }, { replace: true });
+  };
   const [query, setQuery] = useState('');
   const [openSlug, setOpenSlug] = useState(null);
 
-  const { data: groups, loading, error, reload } = useApi(
-    (opts) => api.getServices({ grouped: 'true' }, opts),
-    []
-  );
+  const group = menuGroups.find((g) => g.slug === activeGroup) || menuGroups[0];
 
-  const filtered = useMemo(() => {
-    if (!groups) return [];
+  // Departments in this group, each with its treatments, filtered by the search.
+  const sections = useMemo(() => {
     const term = query.trim().toLowerCase();
-    if (!term) return groups;
 
-    return groups
-      .map((group) => ({
-        ...group,
-        services: group.services.filter(
-          (service) =>
-            service.name.toLowerCase().includes(term) ||
-            (service.summary || '').toLowerCase().includes(term)
-        ),
-      }))
-      .filter((group) => group.services.length > 0);
-  }, [groups, query]);
+    return group.departments
+      .map((slug) => {
+        const department = categoryBySlug[slug];
+        if (!department) return null;
 
-  const total = useMemo(
-    () => filtered.reduce((sum, group) => sum + group.services.length, 0),
-    [filtered]
-  );
+        let items = servicesWithCategory.filter((s) => s.categorySlug === slug);
+        if (term) {
+          items = items.filter(
+            (s) =>
+              s.name.toLowerCase().includes(term) ||
+              (s.summary || '').toLowerCase().includes(term)
+          );
+        }
+        if (!items.length) return null;
+
+        // Bridal treatments carry their own sub-grouping (bride / groom / family).
+        const subGroups = [...new Set(items.map((s) => s.subGroup).filter(Boolean))];
+
+        return { department, items, subGroups };
+      })
+      .filter(Boolean);
+  }, [group, query]);
+
+  const total = sections.reduce((sum, s) => sum + s.items.length, 0);
 
   return (
     <>
       <Seo
         title="Treatments & Prices"
-        description="The full ESTEQO treatment menu with prices — brows, medi-facials, advanced facials, peels, body polish, manicure, pedicure, threading, waxing and massages in Noida."
+        description="The full ESTEQO treatment menu with prices — facials, brows, bridal packages, body care, threading, waxing and massages in Sector 25, Noida."
         breadcrumbs={[{ name: 'Services', path: '/services' }]}
       />
 
-      {/* Hero */}
       <section className="svc-hero">
         <div className="container svc-hero__inner">
           <article>
             <span className="eyebrow">Treatment menu</span>
-            <h1>Our Treatments</h1>
+            <h1>Our Services</h1>
             <ul className="svc-hero__points">
               <li>Custom-planned treatments for your skin, not a template</li>
               <li>Medical-grade technology and professional formulations</li>
               <li>Every service begins with a detailed consultation</li>
             </ul>
-            <div className="btn-row" style={{ marginTop: 30 }}>
-              <Link to="/appointment" className="btn btn--primary">
-                Book an appointment
-              </Link>
-            </div>
           </article>
           <div className="svc-hero__media" aria-hidden="true">
             <span>E</span>
@@ -171,87 +175,138 @@ export default function Services() {
         </div>
       </section>
 
-      {loading && <Loading label="Loading the menu…" />}
-      {error && (
-        <div className="container section">
-          <ErrorState error={error} onRetry={reload} />
-        </div>
-      )}
+      <section className="section">
+        <div className="container svc-layout">
+          {/* Category rail */}
+          <aside className="svc-rail">
+            <h2 className="svc-rail__title">Treatment category</h2>
+            <ul className="svc-rail__menu">
+              {menuGroups.map((item) => {
+                const count = item.departments.reduce(
+                  (sum, slug) =>
+                    sum + servicesWithCategory.filter((s) => s.categorySlug === slug).length,
+                  0
+                );
+                const isActive = item.slug === activeGroup;
 
-      {groups && (
-        <section className="section">
-          <div className="container svc-layout">
-            {/* Sticky jump links */}
-            <aside className="svc-aside">
-              <h2 className="svc-aside__title">Treatment category</h2>
-              <ul className="svc-aside__menu">
-                {groups.map((group) => (
-                  <li key={group.slug}>
-                    <a href={`#${group.slug}`}>
-                      {group.name}
-                      <span>{group.services.length}</span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-
-              <div className="field svc-aside__search">
-                <label htmlFor="svc-search">Search treatments</label>
-                <input
-                  id="svc-search"
-                  type="search"
-                  value={query}
-                  placeholder="Hydra, brow, peel…"
-                  onChange={(event) => setQuery(event.target.value)}
-                />
-                {query && (
-                  <p className="form__note" style={{ marginTop: 8 }}>
-                    {total} {total === 1 ? 'match' : 'matches'}
-                  </p>
-                )}
-              </div>
-            </aside>
-
-            {/* Department sections */}
-            <div className="svc-sections">
-              {filtered.length === 0 && (
-                <EmptyState>
-                  <p>No treatments match “{query}”.</p>
-                  <p style={{ marginTop: 16 }}>
-                    <button type="button" className="btn btn--secondary" onClick={() => setQuery('')}>
-                      Clear search
+                return (
+                  <li key={item.slug} className={isActive ? 'is-active' : ''}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setActiveGroup(item.slug);
+                        setOpenSlug(null);
+                      }}
+                      aria-current={isActive ? 'true' : undefined}
+                    >
+                      <span className="svc-rail__arrow" aria-hidden="true">
+                        <svg viewBox="0 0 16 12">
+                          <path
+                            d="M1 6h13M9 1l5 5-5 5"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.6"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </span>
+                      <span className="svc-rail__label">{item.name}</span>
+                      <span className="svc-rail__count">{count}</span>
                     </button>
-                  </p>
-                </EmptyState>
+                  </li>
+                );
+              })}
+            </ul>
+
+            <div className="field svc-rail__search">
+              <label htmlFor="svc-search">Search treatments</label>
+              <input
+                id="svc-search"
+                type="search"
+                value={query}
+                placeholder="Hydra, brow, bridal…"
+                onChange={(event) => setQuery(event.target.value)}
+              />
+              {query && (
+                <p className="form__note" style={{ marginTop: 8 }}>
+                  {total} {total === 1 ? 'match' : 'matches'} in {group.name}
+                </p>
               )}
+            </div>
+          </aside>
 
-              {filtered.map((group) => (
-                <section className="svc-dept" id={group.slug} key={group.slug}>
-                  <header className="svc-dept__head">
-                    <h2>
-                      <Link to={`/services/${group.slug}`}>{group.name}</Link>
-                    </h2>
-                    <p>{group.intro || group.tagline}</p>
-                  </header>
+          {/* Panel */}
+          <div className="svc-panel">
+            <h2 className="svc-panel__title">{group.name}</h2>
+            <p className="svc-panel__intro">{group.intro}</p>
 
-                  <ul className="acc-rows">
-                    {group.services.map((service) => (
-                      <TreatmentRow
+            {sections.length === 0 && (
+              <EmptyState>
+                <p>No treatments in {group.name} match “{query}”.</p>
+                <p style={{ marginTop: 16 }}>
+                  <button type="button" className="btn btn--secondary" onClick={() => setQuery('')}>
+                    Clear search
+                  </button>
+                </p>
+              </EmptyState>
+            )}
+
+            {sections.map(({ department, items, subGroups }) => (
+              <section className="svc-sub" key={department.slug}>
+                {/* Groups with a single department (Brows, Bridal) are already
+                    titled and introduced by the panel heading above — repeating
+                    it here just duplicates the same paragraph. */}
+                {group.departments.length > 1 && (
+                  <>
+                    <h3 className="svc-sub__title">{department.name}</h3>
+                    {department.intro && <p className="svc-sub__intro">{department.intro}</p>}
+                  </>
+                )}
+
+                {subGroups.length > 0 ? (
+                  subGroups.map((subGroup) => (
+                    <div key={subGroup}>
+                      <h4 className="svc-sub__group">{subGroup}</h4>
+                      <ul className="tcards">
+                        {items
+                          .filter((s) => s.subGroup === subGroup)
+                          .map((service) => (
+                            <TreatmentCard
+                              key={service.slug}
+                              service={service}
+                              open={openSlug === service.slug}
+                              onToggle={() =>
+                                setOpenSlug((cur) => (cur === service.slug ? null : service.slug))
+                              }
+                            />
+                          ))}
+                      </ul>
+                    </div>
+                  ))
+                ) : (
+                  <ul className="tcards">
+                    {items.map((service) => (
+                      <TreatmentCard
                         key={service.slug}
                         service={service}
                         open={openSlug === service.slug}
                         onToggle={() =>
-                          setOpenSlug((current) => (current === service.slug ? null : service.slug))
+                          setOpenSlug((cur) => (cur === service.slug ? null : service.slug))
                         }
                       />
                     ))}
                   </ul>
-                </section>
-              ))}
-            </div>
+                )}
+
+                <Link to={`/services/${department.slug}`} className="link-underline svc-sub__more">
+                  More about {department.name}
+                </Link>
+              </section>
+            ))}
           </div>
-        </section>
-      )}
+        </div>
+      </section>
 
       <CtaBand />
     </>

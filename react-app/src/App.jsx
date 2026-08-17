@@ -11,10 +11,13 @@ import BlogPost from './pages/BlogPost';
 import Contact from './pages/Contact';
 import Appointment from './pages/Appointment';
 import NotFound from './pages/NotFound';
+import BlogAdmin from './pages/BlogAdmin';
 
 export default function App() {
   return (
     <Routes>
+      <Route path="admin/blog" element={<BlogAdmin />} />
+
       <Route element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="services" element={<Services />} />

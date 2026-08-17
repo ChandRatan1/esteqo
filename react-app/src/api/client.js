@@ -13,6 +13,11 @@ import { submitEnquiry } from './forms';
 const USE_API = String(import.meta.env.VITE_USE_API || '').toLowerCase() === 'true';
 const BASE_URL = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
 
+// When set, blog posts come from MySQL while everything else stays on the
+// bundled data — so posts can be written through /admin/blog without moving
+// the whole catalogue onto the API.
+const BLOG_API = (import.meta.env.VITE_BLOG_API || '').replace(/\/$/, '');
+
 export class ApiError extends Error {
   constructor(message, { status, details } = {}) {
     super(message);
@@ -200,16 +205,16 @@ const local = {
 /* Optional backend source (VITE_USE_API=true)                         */
 /* ------------------------------------------------------------------ */
 
-const buildUrl = (path, params) => {
+const buildUrl = (path, params, base) => {
   const query = new URLSearchParams();
   for (const [key, value] of Object.entries(params || {})) {
     if (value !== undefined && value !== null && value !== '') query.set(key, value);
   }
   const qs = query.toString();
-  return `${BASE_URL}/api${path}${qs ? `?${qs}` : ''}`;
+  return `${base ?? BASE_URL}/api${path}${qs ? `?${qs}` : ''}`;
 };
 
-async function request(path, { params, method = 'GET', body, signal } = {}) {
+async function request(path, { params, method = 'GET', body, signal, base } = {}) {
   let response;
   try {
     response = await fetch(buildUrl(path, params), {
@@ -254,5 +259,11 @@ const remote = {
 
 // The local source ignores the trailing options argument, so the two share a
 // signature and pages never need to know which one is active.
-export const api = USE_API ? remote : local;
+const blogViaApi = {
+  getPosts: (params, o) => request('/blog/posts', { ...o, params, base: BLOG_API }),
+  getPost: (slug, o) => request(`/blog/posts/${slug}`, { ...o, base: BLOG_API }),
+  getBlogCategories: (o) => request('/blog/categories', { ...o, base: BLOG_API }),
+};
+
+export const api = USE_API ? remote : { ...local, ...(BLOG_API ? blogViaApi : {}) };
 export const usingApi = USE_API;
