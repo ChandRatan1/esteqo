@@ -1,15 +1,20 @@
 /**
- * Generates public/sitemap.xml from the site's own data.
+ * Generates public/sitemap.xml.
  *
  *   npm run sitemap        # regenerate on demand
  *   npm run build          # runs automatically before every build
  *
- * Every route the router serves is covered: static pages, the 15 department
- * pages, all treatment pages and every blog post. Because it reads the same
- * data files the app renders from, adding a treatment or a post automatically
- * adds it to the sitemap — nothing to remember.
+ * Services and static pages come from the bundled data in src/data, which is
+ * what the site renders from.
  *
- * Set SITE_URL (or VITE_SITE_URL) to change the domain.
+ * Blog posts come from the LIVE API when it is reachable, because posts are
+ * written through /admin/blog into MySQL — the bundled file only holds the
+ * original seed content. Reading the bundle for posts would list URLs that no
+ * longer exist and omit everything published since. If the API cannot be
+ * reached the bundled posts are used as a fallback and a warning is printed,
+ * so a stale sitemap is never produced silently.
+ *
+ * Set SITE_URL for the public domain and BLOG_API for the API origin.
  */
 
 import fs from 'node:fs';
@@ -22,11 +27,52 @@ const root = path.join(here, '..');
 const SITE_URL = (process.env.SITE_URL || process.env.VITE_SITE_URL || 'https://esteqo.co.in')
   .replace(/\/$/, '');
 
-// The data modules are plain ESM with no browser dependencies.
+/** Read VITE_BLOG_API out of .env so `npm run sitemap` needs no arguments. */
+function blogApiFromEnv() {
+  if (process.env.BLOG_API) return process.env.BLOG_API.replace(/\/$/, '');
+  try {
+    const env = fs.readFileSync(path.join(root, '.env'), 'utf8');
+    const match = /^\s*VITE_BLOG_API\s*=\s*(.+)$/m.exec(env);
+    if (match) return match[1].trim().replace(/\/$/, '');
+  } catch {
+    /* no .env — fall through */
+  }
+  return '';
+}
+
+const BLOG_API = blogApiFromEnv();
+
 const load = async (rel) => import(pathToFileURL(path.join(root, rel)).href);
 
 const { categories, services } = await load('src/data/menu.js');
-const { blogPosts } = await load('src/data/site.js');
+const { blogPosts: bundledPosts } = await load('src/data/site.js');
+
+/** Published posts from the API, or null when it is unreachable. */
+async function fetchLivePosts() {
+  if (!BLOG_API) return null;
+  try {
+    const response = await fetch(`${BLOG_API}/api/blog/posts?limit=500`, {
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!response.ok) return null;
+    const payload = await response.json();
+    return Array.isArray(payload.data) ? payload.data : null;
+  } catch {
+    return null;
+  }
+}
+
+const livePosts = await fetchLivePosts();
+const posts = livePosts ?? bundledPosts;
+const postSource = livePosts ? `live API (${BLOG_API})` : 'bundled fallback';
+
+if (!livePosts && BLOG_API) {
+  console.warn(
+    `\n  WARNING: could not reach ${BLOG_API}. Blog URLs came from the bundled\n` +
+      '  seed data, which may not match what is published. Start the backend and\n' +
+      '  re-run `npm run sitemap` before deploying.\n'
+  );
+}
 
 const today = new Date().toISOString().slice(0, 10);
 
@@ -47,7 +93,12 @@ const push = (loc, priority, changefreq, lastmod = today) =>
 for (const [loc, priority, changefreq] of STATIC) push(loc, priority, changefreq);
 for (const c of categories) push(`/services/${c.slug}`, 0.8, 'monthly');
 for (const s of services) push(`/treatments/${s.slug}`, 0.7, 'monthly');
-for (const p of blogPosts) push(`/blog/${p.slug}`, 0.6, 'yearly', p.publishedAt || today);
+
+for (const p of posts) {
+  // The API returns publishedAt; the bundled file uses the same key.
+  const date = (p.publishedAt || p.published_at || today).toString().slice(0, 10);
+  push(`/blog/${p.slug}`, 0.6, 'yearly', date);
+}
 
 const escape = (value) =>
   value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -79,6 +130,6 @@ if (fs.existsSync(robotsPath)) {
 }
 
 console.log(
-  `sitemap.xml: ${urls.length} URLs ` +
-    `(${STATIC.length} pages, ${categories.length} departments, ${services.length} treatments, ${blogPosts.length} posts) -> ${SITE_URL}`
+  `sitemap.xml: ${urls.length} URLs — ${STATIC.length} pages, ${categories.length} departments, ` +
+    `${services.length} treatments, ${posts.length} posts [${postSource}] -> ${SITE_URL}`
 );

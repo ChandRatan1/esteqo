@@ -1,0 +1,38 @@
+# ESTEQO API — send every /api/* request to index.php.
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /api/
+
+  # Pass the Authorization/admin header through when PHP runs as CGI, where
+  # Apache would otherwise strip custom headers before PHP sees them.
+  RewriteCond %{HTTP:x-admin-key} ^(.+)$
+  RewriteRule .* - [E=HTTP_X_ADMIN_KEY:%1]
+
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^ index.php [QSA,L]
+</IfModule>
+
+# Only index.php should be reachable over HTTP. Everything else in this folder
+# is source, credentials or database dumps — none of it should be downloadable.
+#
+# Without this, https://esteqo.com/api/install.sql would hand anyone the full
+# schema, and config.php would leak the database password.
+<FilesMatch "\.(sql|md|json|lock|example|ini|log|bak)$">
+  Require all denied
+</FilesMatch>
+
+<FilesMatch "^(config\.php|config\.example\.php)$">
+  Require all denied
+</FilesMatch>
+
+# PHP inside lib/ and routes/ is only ever included by index.php, never
+# requested directly.
+<IfModule mod_rewrite.c>
+  RewriteRule ^(lib|routes)/ - [F,L]
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+</IfModule>

@@ -3,7 +3,7 @@
  *
  * Talks to the Express endpoints under /api/admin/blog/*, which are protected
  * by a shared secret sent as the `x-admin-key` header. The key is whatever is
- * set as ADMIN_API_KEY in backend/.env.
+ * set as admin_key in backend-php/config.php.
  *
  * The key is kept in sessionStorage, so it is cleared when the browser tab
  * closes and never written to disk. It is a shared password, not a per-user

@@ -259,10 +259,37 @@ const remote = {
 
 // The local source ignores the trailing options argument, so the two share a
 // signature and pages never need to know which one is active.
+//
+// Blog reads try the API first and fall back to the bundled posts if it is
+// unreachable. Without this the blog would show an error page whenever the
+// backend is down or not deployed — which is exactly what happens on hosting
+// that cannot run Node. A deliberate 404 is passed through, since that means
+// the API answered and the post genuinely does not exist.
+const withFallback = (fromApi, fromBundle) => async (...args) => {
+  try {
+    return await fromApi(...args);
+  } catch (error) {
+    if (error.name === 'AbortError' || error.status === 404) throw error;
+    if (import.meta.env.DEV) {
+      console.warn('[blog] API unavailable, using bundled posts:', error.message);
+    }
+    return fromBundle(...args);
+  }
+};
+
 const blogViaApi = {
-  getPosts: (params, o) => request('/blog/posts', { ...o, params, base: BLOG_API }),
-  getPost: (slug, o) => request(`/blog/posts/${slug}`, { ...o, base: BLOG_API }),
-  getBlogCategories: (o) => request('/blog/categories', { ...o, base: BLOG_API }),
+  getPosts: withFallback(
+    (params, o) => request('/blog/posts', { ...o, params, base: BLOG_API }),
+    (params, o) => local.getPosts(params, o)
+  ),
+  getPost: withFallback(
+    (slug, o) => request(`/blog/posts/${slug}`, { ...o, base: BLOG_API }),
+    (slug, o) => local.getPost(slug, o)
+  ),
+  getBlogCategories: withFallback(
+    (o) => request('/blog/categories', { ...o, base: BLOG_API }),
+    (o) => local.getBlogCategories(o)
+  ),
 };
 
 export const api = USE_API ? remote : { ...local, ...(BLOG_API ? blogViaApi : {}) };

@@ -6,7 +6,7 @@ import react from '@vitejs/plugin-react';
  * servers already running on this machine (4000, 4173, 5173–5175 were taken).
  *
  *   4142  front end (dev)
- *   4143  backend API  — see backend/.env
+ *   4143  PHP API      — see backend-php/config.php
  *   4144  production preview
  *
  * `host: true` also binds the LAN address, so the site can be opened on a phone

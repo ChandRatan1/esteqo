@@ -9,8 +9,8 @@ import Seo from '../seo/Seo';
  * Blog authoring screen at /admin/blog.
  *
  * Anyone with the admin password can sign in and publish. The password is the
- * ADMIN_API_KEY from backend/.env; it is held in sessionStorage for the tab and
- * sent as the `x-admin-key` header on every request.
+ * admin_key from backend-php/config.php. It is held in sessionStorage for the
+ * tab and sent as the `x-admin-key` header on every request.
  *
  * The page is marked noindex so it never appears in search results.
  */
@@ -500,6 +500,9 @@ export default function BlogAdmin() {
                 New post
               </button>
             )}
+            <Link to="/admin/contacts" className="btn btn--secondary">
+              Enquiries
+            </Link>
             <button type="button" className="btn btn--secondary" onClick={signOut}>
               Sign out
             </button>

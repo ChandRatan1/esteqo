@@ -6,7 +6,7 @@
  * VITE_SITE_URL) and everything follows.
  */
 
-export const SITE_URL = (import.meta.env?.VITE_SITE_URL || 'https://esteqo.co.in').replace(/\/$/, '');
+export const SITE_URL = (import.meta.env?.VITE_SITE_URL || 'https://esteqo.com').replace(/\/$/, '');
 
 export const SITE_NAME = 'ESTEQO';
 export const DEFAULT_OG_IMAGE = '/services/21324.jpg';

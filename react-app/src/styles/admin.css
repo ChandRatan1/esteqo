@@ -235,3 +235,173 @@
     margin-top: 0;
   }
 }
+
+/* ------------------------------------------------------------------ */
+/* Enquiry inbox (/admin/contacts)                                     */
+/* ------------------------------------------------------------------ */
+
+.enq-filters {
+  display: grid;
+  grid-template-columns: 160px 160px minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: end;
+  padding: 20px;
+  margin-bottom: 26px;
+  background: var(--cream);
+  border-radius: 12px;
+}
+
+.enq-filters__refresh {
+  padding-block: 14px;
+}
+
+@media (max-width: 760px) {
+  .enq-filters {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .enq-filters__search,
+  .enq-filters__refresh {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Unhandled enquiries stand out at a glance. */
+.enq-row--new td {
+  background: rgba(255, 226, 118, 0.16);
+}
+
+.enq-row--new td:first-child {
+  box-shadow: inset 3px 0 0 var(--gold);
+}
+
+.enq-table td {
+  vertical-align: middle;
+}
+
+.enq-toggle {
+  padding: 8px 16px;
+  border: 1px solid rgba(31, 27, 24, 0.2);
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+  transition: background-color 0.2s var(--ease), color 0.2s var(--ease);
+}
+
+.enq-toggle:hover {
+  background: var(--ink);
+  color: var(--cream);
+}
+
+.enq-pill--new {
+  background: var(--bright-yellow);
+  color: var(--ink);
+}
+.enq-pill--read {
+  background: var(--light-blue);
+  color: var(--dark-blue);
+}
+.enq-pill--responded {
+  background: var(--light-purple);
+  color: #6b3fa0;
+}
+.enq-pill--booked {
+  background: var(--light-green);
+  color: #2f8f63;
+}
+.enq-pill--closed {
+  background: var(--light-gray);
+  color: var(--gray-idle);
+}
+
+/* Expanded row */
+
+.enq-detail-cell {
+  padding: 0 !important;
+  background: var(--cream);
+}
+
+.enq-detail {
+  padding: 26px 20px;
+}
+
+.enq-detail__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 30px;
+}
+
+@media (max-width: 900px) {
+  .enq-detail__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.enq-facts > div {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(31, 27, 24, 0.1);
+  font-size: 0.875rem;
+}
+
+.enq-facts dt {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+}
+
+.enq-facts dd {
+  margin: 0;
+  word-break: break-word;
+}
+
+.enq-actions {
+  display: grid;
+  gap: 18px;
+  align-content: start;
+}
+
+.enq-message {
+  padding: 18px 20px;
+  background: var(--white);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 8px 8px 0;
+}
+
+.enq-message h4 {
+  margin-bottom: 8px;
+  font-family: var(--body-font);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+}
+
+.enq-message p {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+
+.enq-contact-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.enq-contact-buttons .btn {
+  padding: 12px 22px;
+  font-size: 0.75rem;
+}
+
+.enq-delete {
+  padding: 12px 8px;
+  font-size: 0.8125rem;
+  color: #c0432c;
+  text-decoration: underline;
+}

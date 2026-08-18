@@ -1,0 +1,93 @@
+# ESTEQO — Apache config for Hostinger shared hosting.
+#
+# Vite copies everything in public/ into dist/, so this ships with the build.
+# Upload the CONTENTS of dist/ into public_html (not the dist folder itself).
+
+# ---------------------------------------------------------------------------
+# 1. Single-page app routing  — REQUIRED
+# ---------------------------------------------------------------------------
+# React Router handles /services, /blog/my-post and so on in the browser. Apache
+# knows nothing about them, so a direct visit or a refresh would 404. This sends
+# any request that is not a real file or folder to index.html and lets React
+# resolve it. Without this block every URL except "/" breaks on reload.
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Leave the API and uploaded files alone if they are proxied on this domain.
+  RewriteRule ^api/ - [L]
+  RewriteRule ^uploads/ - [L]
+
+  # Real files and directories are served as-is.
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  RewriteRule . /index.html [L]
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# 2. Force HTTPS
+# ---------------------------------------------------------------------------
+# The admin password travels in a request header, so plain HTTP must not be an
+# option. Enable the free SSL certificate in hPanel first, or this will loop.
+
+<IfModule mod_rewrite.c>
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# 3. Caching
+# ---------------------------------------------------------------------------
+# Vite fingerprints asset filenames (index-a1b2c3.js), so they can be cached
+# hard. index.html must never be cached or visitors keep an old app shell after
+# a deploy. robots.txt and sitemap.xml stay short-lived so SEO edits show up.
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css                "access plus 1 year"
+  ExpiresByType application/javascript  "access plus 1 year"
+  ExpiresByType image/jpeg              "access plus 6 months"
+  ExpiresByType image/png               "access plus 6 months"
+  ExpiresByType image/webp              "access plus 6 months"
+  ExpiresByType image/svg+xml           "access plus 6 months"
+  ExpiresByType font/woff2              "access plus 1 year"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+  <FilesMatch "\.(txt|xml)$">
+    Header set Cache-Control "max-age=3600"
+  </FilesMatch>
+  <FilesMatch "-[A-Za-z0-9_-]{8,}\.(js|css)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # Basic hardening.
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# 4. Compression
+# ---------------------------------------------------------------------------
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# 5. Keep dotfiles private
+# ---------------------------------------------------------------------------
+
+<FilesMatch "^\.">
+  Require all denied
+</FilesMatch>

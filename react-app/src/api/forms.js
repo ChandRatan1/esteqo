@@ -197,7 +197,15 @@ async function sendViaFormSubmit(kind, values, ref) {
  * @returns {Promise<boolean>} true when the row was stored
  */
 async function storeInDatabase(kind, values, ref, emailSent) {
-  if (!CONTACT_API) return false;
+  if (!CONTACT_API) {
+    // Most common cause of "the email arrived but the database is empty":
+    // VITE_CONTACT_API was not set when the bundle was built.
+    console.warn(
+      '[esteqo] Enquiry emailed only. VITE_CONTACT_API is not set in this build, ' +
+        'so nothing was saved to the database. Set it in react-app/.env and rebuild.'
+    );
+    return false;
+  }
 
   try {
     const response = await fetch(`${CONTACT_API}/api/contacts`, {
@@ -224,9 +232,28 @@ async function storeInDatabase(kind, values, ref, emailSent) {
         emailSent,
       }),
     });
-    return response.ok;
-  } catch {
+
+    if (!response.ok) {
+      // A rejected save is still a save that did not happen. Say why, loudly,
+      // so a misconfigured deploy is diagnosable from the browser console
+      // instead of looking like "the email worked but nothing was stored".
+      const detail = await response.text().catch(() => '');
+      console.warn(
+        `[esteqo] Enquiry emailed but NOT saved to the database. ` +
+          `${CONTACT_API}/api/contacts returned ${response.status}. ${detail.slice(0, 200)}`
+      );
+      return false;
+    }
+
+    return true;
+  } catch (error) {
     // The database is a bonus destination; never fail the visitor over it.
+    // But never hide it either — this is the only trace anyone gets.
+    console.warn(
+      `[esteqo] Enquiry emailed but NOT saved to the database. ` +
+        `Could not reach ${CONTACT_API}/api/contacts — ${error.message}. ` +
+        `Check that the API is running and that VITE_CONTACT_API points at it.`
+    );
     return false;
   }
 }

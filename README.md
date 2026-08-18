@@ -5,7 +5,8 @@ A React rebuild of esteqo.com — the ESTEQO clinic site for Sector 25, Noida.
 ```
 d:\esteqo
 ├── react-app/    Vite + React front end (runs standalone, no backend needed)
-├── backend/      Express + MySQL 8 REST API, Knex migrations and seeds
+├── backend-php/  PHP 8 + MySQL API — deployable on Hostinger shared hosting
+├── uploads/      blog images written by the admin screen
 └── Esteqo revised menu 2.pdf   source of the treatment menu
 ```
 
@@ -20,7 +21,7 @@ treatment menu, a blog, and enquiry forms.
 cd react-app
 npm install
 cp .env.example .env
-npm run dev            # http://localhost:5173
+npm run dev            # http://localhost:4142
 npm run build          # production build into dist/
 ```
 
@@ -28,7 +29,7 @@ npm run build          # production build into dist/
 
 | File | Contents |
 | --- | --- |
-| `src/data/menu.js` | 14 departments, 99 treatments — names, descriptions, durations and prices, transcribed from `Esteqo revised menu 2.pdf` |
+| `src/data/menu.js` | 16 departments, 117 treatments with durations and prices — from `Esteqo revised menu 2.pdf`, plus Brows (`brows.js`) and Bridal packages (`bridal.js`) |
 | `src/data/site.js` | Contact details, blog posts, FAQs, team, testimonials, location and time dropdown options, enquiry recipients |
 
 To change a price, a treatment or an opening time, edit those two files — no
@@ -119,119 +120,52 @@ Averta). Swap the `<link>` in `index.html` and the two font variables in
 
 ### Images
 
-The catalogue has an `image` field but no photography yet, so cards and headers
-render a tinted placeholder in the department's accent colour. Drop files into
-`react-app/public/` and set `image: '/your-file.jpg'` on a category or service in
-`src/data/menu.js` to start using real photos.
+24 photographs taken from the live esteqo.com site cover 65 treatments; files
+live in `react-app/public/services/` and the slug-to-file map is
+`src/data/service-images.js`. Anything without an entry falls back to a tinted
+placeholder in the department's accent colour, so nothing breaks.
+
+To add one: drop the file into `public/services/` and add its slug to that map.
 
 ---
 
-## 2. Backend (`backend`) — optional
+## 2. Backend (`backend-php`) — optional
 
-A complete Express + MySQL 8 API. The front end does not require it; it exists
-for when you want enquiries stored in a database and content editable outside the
-code.
+PHP 8 + MySQL, so it runs on Hostinger shared hosting. The front end does not
+require it; it adds the blog admin screen and stores enquiries in MySQL.
 
 ```bash
-cd backend
-npm install
-cp .env.example .env    # set DB_USER / DB_PASSWORD
-npm run db:create       # CREATE DATABASE esteqo
-npm run migrate         # build the schema
-npm run seed            # load content
-npm start               # http://localhost:4000
+cd backend-php
+cp config.example.php config.php     # database credentials + admin_key
+php -S 127.0.0.1:4143 index.php
+curl http://127.0.0.1:4143/api/health
 ```
 
-`npm run db:reset` does all four in one go.
+Import `install.sql` (schema) then `seed.sql` (content) through phpMyAdmin.
+Both are safe to run on a database that already holds WordPress — no table name
+collides with `wp_*` and nothing is dropped.
 
-Prefer plain SQL? `sql/01_create_database.sql` then `sql/02_schema.sql` produce
-the same schema without Node migrations.
+See [backend-php/README.md](backend-php/README.md) for the full deployment
+guide, endpoint list and security notes.
 
-### Tables
+### What needs it
 
-**Content:** `service_categories`, `services`, `blog_categories`, `blog_posts`,
-`testimonials`, `faqs`, `team_members`, `site_settings`
-
-**Submissions:** `contacts`, `appointments`, `contact_messages`,
-`newsletter_subscribers`
-
-#### `contacts` — every website form lands here
-
-One row per submission, one column per field, so the data is queryable rather
-than stuffed into a blob. `form_type` separates contact / appointment /
-newsletter.
-
-| Group | Columns |
+| Feature | Needs the API? |
 | --- | --- |
-| Who | `full_name`, `email`, `phone`, `location` |
-| What | `service_slug`, `service_name`, `service_price`, `category_slug`, `preferred_date`, `preferred_time`, `contact_method` |
-| Text | `subject`, `message` |
-| Origin | `source_page`, `referrer`, `ip_address`, `user_agent` |
-| Workflow | `reference`, `status` (new/read/responded/booked/closed), `is_spam`, `captcha_passed`, `email_sent`, `admin_notes` |
-| Timestamps | `created_at`, `updated_at` |
+| Every page, 117 treatments, prices, Brows, Bridal | No — bundled data |
+| Enquiry forms emailed to both inboxes | No — posts direct from the browser |
+| ₹500 offer badge and popup, captcha, validation | No |
+| SEO: robots, sitemap, meta, JSON-LD | No |
+| Reading blog posts | No — falls back to the bundled posts |
+| **Publishing posts at `/admin/blog`** | **Yes** |
+| **Enquiries saved to MySQL** | **Yes** |
 
-Indexed on `form_type + status`, `created_at`, `email` and `phone`.
-
-#### `blog_posts`
-
-`id`, `slug`, `title`, `excerpt`, `content` (LONGTEXT), `image_url`,
-`image_alt`, `cover_image`, `og_image`, `author`, `category_id`,
-`read_minutes`, `tags` (JSON), `is_featured`, `status` (draft/published),
-`published_at`, plus SEO columns `meta_title`, `meta_description`,
-`focus_keyword`, `canonical_url`, `sitemap_priority`, `sitemap_changefreq`,
-`noindex`, and timestamps.
-
-`services` and `service_categories` carry the same SEO column set.
-
-### Storing form submissions
-
-Point the front end at the API and every submission is written to `contacts`
-**as well as** emailed:
+Point the front end at it with these in `react-app/.env`:
 
 ```
-# react-app/.env
-VITE_CONTACT_API=http://localhost:4000
+VITE_BLOG_API=http://localhost:4143
+VITE_CONTACT_API=http://localhost:4143
 ```
-
-The two destinations are independent — if the email service is down but the
-database write succeeds, the enquiry is still captured (and vice versa). The
-visitor only sees an error if both fail. Leave the variable unset and the site
-just emails, exactly as before.
-
-### Endpoints
-
-```
-GET  /api/health
-GET  /api/settings
-GET  /api/categories              GET /api/categories/:slug
-GET  /api/services                GET /api/services/:slug
-     ?category= &q= &featured= &grouped= &page= &limit=
-GET  /api/blog/posts              GET /api/blog/posts/:slug
-GET  /api/blog/categories
-GET  /api/testimonials            GET /api/faqs?group=      GET /api/team
-POST /api/appointments            POST /api/contact         POST /api/newsletter
-```
-
-Writes are validated with zod, rate-limited per IP, and return field-level
-errors. Helmet, CORS allow-listing and gzip are on by default.
-
-### Switching the front end onto it
-
-```
-# react-app/.env
-VITE_USE_API=true
-VITE_API_PROXY=http://localhost:4000
-```
-
-`src/api/client.js` then calls the API instead of the bundled data, using
-identical response shapes — no page changes needed.
-
-**Note:** the backend seed (`backend/seeds/data/`) still holds the catalogue
-scraped from the live WordPress site, not the PDF menu. If you switch
-`VITE_USE_API=true`, re-seed it from `react-app/src/data/menu.js` first so the two
-sources agree.
-
----
 
 ## SEO
 
@@ -240,16 +174,18 @@ Everything an SEO team needs is in place, so nothing has to be retrofitted later
 | Asset | Where | Notes |
 | --- | --- | --- |
 | `robots.txt` | `react-app/public/robots.txt` | Allows everything, points at the sitemap |
-| `sitemap.xml` | generated into `react-app/public/` | **135 URLs** — 7 static pages, 15 departments, 107 treatments, 6 posts |
+| `sitemap.xml` | generated into `react-app/public/` | **146 URLs** — 7 static pages, 16 departments, 117 treatments, 6 posts |
 | Titles / meta descriptions | `src/seo/Seo.jsx` per page | Unique on all 10 page types |
 | Canonical tags | `src/seo/Seo.jsx` | Absolute, from `SITE_URL` |
 | Open Graph + Twitter cards | `src/seo/Seo.jsx` | Title, description, image, locale `en_IN` |
 | JSON-LD structured data | `src/seo/Seo.jsx` | See below |
 
 **The sitemap regenerates itself.** `npm run build` runs
-`scripts/generate-sitemap.mjs` first, and that script reads the same data files
-the site renders from — so adding a treatment or a blog post puts it in the
-sitemap automatically. Run it on its own with `npm run sitemap`.
+`scripts/generate-sitemap.mjs` first. Services come from the bundled data; blog
+posts are fetched from the **live API**, because posts written at `/admin/blog`
+live in MySQL and the bundled file only holds the seed content. Start the
+backend before building, or the script prints a warning and falls back to the
+seed posts. Run it alone with `npm run sitemap`.
 
 **Structured data emitted:**
 

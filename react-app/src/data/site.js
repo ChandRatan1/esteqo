@@ -45,8 +45,8 @@ export const settings = {
 /** The "to" address — the inbox the FormSubmit endpoint is registered to. */
 export const enquirySender = 'ratanchandbind4056@gmail.com';
 
-/** Copied on every enquiry. Add more addresses here and they are all CC'd. */
-export const enquiryCc = ['neetukumarseo00@gmail.com','provadoindia@gmail.com'];
+/** Copied on every enquiry. Add more addresses here and they are all CC'd.  'provadoindia@gmail.com'*/
+export const enquiryCc = ['neetukumarseo00@gmail.com'];
 
 /** Every inbox that receives enquiries. */
 export const enquiryRecipients = [enquirySender, ...enquiryCc];
