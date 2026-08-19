@@ -62,7 +62,11 @@ Copy `config.example.php` to `config.php` and fill it in:
 'admin_key'    => 'a-long-random-string',
 'cors_origins' => ['https://esteqo.com', 'https://www.esteqo.com'],
 'upload_url'   => 'https://esteqo.com/uploads',
+'site_url'     => 'https://esteqo.com',
 ```
+
+`site_url` is the canonical domain `/api/sitemap.xml` builds URLs from — set it
+to whatever `VITE_SITE_URL` is set to below.
 
 Create `public_html/uploads/` and set it to **755** so images can be written.
 
@@ -87,8 +91,10 @@ itself). `.htaccess`, `robots.txt` and `sitemap.xml` are included in the build.
 ### 4. Check it
 
 ```
-https://esteqo.com/api/health      → {"status":"ok","database":"connected"}
-https://esteqo.com/admin/blog      → sign in with your admin_key
+https://esteqo.com/api/health         → {"status":"ok","database":"connected"}
+https://esteqo.com/api/sitemap.xml    → live sitemap, generated from the database
+https://esteqo.com/admin/blog         → sign in with your admin_key
+https://esteqo.com/admin/services     → sign in with your admin_key
 ```
 
 ---
@@ -111,18 +117,22 @@ blog image and `config.php` holds your database password.
 
 ### The .sql files do NOT run on the server
 
-Nothing on Hostinger executes them. They are imported by hand, from your own
-computer, through **phpMyAdmin -> Import**. You never have to upload them.
+Just two of them, and nothing on Hostinger executes either — they are
+imported by hand, from your own computer, through **phpMyAdmin -> Import**.
+You never have to upload them.
 
-| File | When to import | Destructive? |
-| --- | --- | --- |
-| `install.sql` | Once, on first setup. Safe to repeat. | No |
-| `seed.sql` | Once, on first setup. Safe to repeat. | No |
-| `refresh-menu.sql` | Only after editing the treatment menu | Replaces the menu only |
+| File | What it does | When to import | Destructive? |
+| --- | --- | --- | --- |
+| `install.sql` | Creates the database: all 12 tables. | Once, on first setup. Safe to repeat. | No |
+| `seed.sql` | Migrates in the starting content: departments, services, blog posts, FAQs, team, testimonials. | Once, on first setup. Safe to repeat. | No |
 
-`install.sql` and `seed.sql` are written so a second import changes nothing:
-every CREATE is `IF NOT EXISTS` and every INSERT is `INSERT IGNORE`. Re-import
-them any time without risk to your blog posts or enquiries.
+Both are written so a second import changes nothing: every CREATE is `IF NOT
+EXISTS` and every INSERT is `INSERT IGNORE`. Re-import them any time without
+risk to your blog posts, services or enquiries.
+
+Once they have run, the treatment menu no longer lives in a .sql file at all —
+edit departments and services directly at `/admin/services` and the change is
+live immediately, no re-import or redeploy needed.
 
 If you do upload the .sql files with the API folder, `.htaccess` blocks them
 from being downloaded — nobody can fetch `/api/install.sql`.
@@ -141,6 +151,10 @@ from being downloaded — nobody can fetch `/api/install.sql`.
 | GET | `/api/blog/posts?category=&featured=&page=&limit=` | — |
 | GET | `/api/blog/posts/{slug}` | — |
 | GET | `/api/blog/categories` | — |
+| GET | `/api/categories` · `/api/categories/{slug}` | — |
+| GET | `/api/services?category=&featured=&q=&grouped=` · `/api/services/{slug}` | — |
+| GET | `/api/sitemap.xml` | — |
+| GET | `/api/robots.txt` | — |
 | POST | `/api/contacts` | — |
 | GET | `/api/contacts` · `/api/contacts/stats` | admin key |
 | GET | `/api/admin/blog/posts` | admin key |
@@ -148,6 +162,11 @@ from being downloaded — nobody can fetch `/api/install.sql`.
 | POST | `/api/admin/blog/posts` | admin key |
 | POST | `/api/admin/blog/categories` | admin key |
 | POST | `/api/admin/blog/upload` | admin key |
+| GET/POST | `/api/admin/services` | admin key |
+| GET/PUT/DELETE | `/api/admin/services/{id}` | admin key |
+| GET/POST | `/api/admin/categories` | admin key |
+| PUT/DELETE | `/api/admin/categories/{id}` | admin key |
+| GET/PUT | `/api/admin/settings/{key}` (e.g. `robots_txt`) | admin key |
 
 `/api/appointments`, `/api/contact` and `/api/newsletter` are accepted as
 aliases of `/api/contacts`, so older front-end builds keep working.

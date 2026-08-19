@@ -13,12 +13,14 @@ import Appointment from './pages/Appointment';
 import NotFound from './pages/NotFound';
 import BlogAdmin from './pages/BlogAdmin';
 import ContactsAdmin from './pages/ContactsAdmin';
+import ServicesAdmin from './pages/ServicesAdmin';
 
 export default function App() {
   return (
     <Routes>
       <Route path="admin/blog" element={<BlogAdmin />} />
       <Route path="admin/contacts" element={<ContactsAdmin />} />
+      <Route path="admin/services" element={<ServicesAdmin />} />
 
       <Route element={<Layout />}>
         <Route index element={<Home />} />

@@ -38,6 +38,11 @@ return [
     'upload_url' => 'https://esteqo.com/uploads',
     'upload_max_bytes' => 8 * 1024 * 1024,
 
+    // --- SEO -----------------------------------------------------------------
+    // Canonical domain, with no trailing slash. /api/sitemap.xml builds every
+    // URL from this, so it should match VITE_SITE_URL in react-app/.env.
+    'site_url' => 'https://esteqo.com',
+
     // Submissions per IP per window, for the public write endpoints.
     'rate_limit' => ['max' => 30, 'window_minutes' => 15],
 ];

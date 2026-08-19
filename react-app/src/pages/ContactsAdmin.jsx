@@ -345,6 +345,9 @@ export default function ContactsAdmin() {
             <Link to="/admin/blog" className="btn btn--secondary">
               Blog admin
             </Link>
+            <Link to="/admin/services" className="btn btn--secondary">
+              Services
+            </Link>
             <button
               type="button"
               className="btn btn--secondary"

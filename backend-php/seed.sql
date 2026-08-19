@@ -1,16 +1,18 @@
--- ESTEQO - starting content
+-- ESTEQO - starting content (migration)
 --
--- Generated from react-app/src/data, which is what the website renders.
--- Import AFTER install.sql.
+-- The one data file: everything install.sql's tables start with. Generated
+-- from react-app/src/data, which is what the website renders before any
+-- content is added or edited through /admin. Import AFTER install.sql.
 --
 -- SAFE TO RUN ANY NUMBER OF TIMES. Every statement is INSERT IGNORE and
 -- there is no DELETE, so:
 --   * on an empty database it loads the full starting content
 --   * on a database that already has content it changes NOTHING - your
---     blog posts, edits and enquiries are left exactly as they are
+--     blog posts, services, edits and enquiries are left exactly as they are
 --
--- To deliberately refresh the treatment menu after editing menu.js, use
--- refresh-menu.sql instead. That one does replace the menu, on purpose.
+-- Services and departments no longer need a re-seed after a menu edit: once
+-- install.sql + this file have run once, /admin/services is the source of
+-- truth and edits are live immediately (see backend-php/routes/services*.php).
 
 SET FOREIGN_KEY_CHECKS = 0;
 

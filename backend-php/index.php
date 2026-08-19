@@ -27,6 +27,9 @@ require __DIR__ . '/lib/db.php';
 require __DIR__ . '/lib/validate.php';
 require __DIR__ . '/routes/blog.php';
 require __DIR__ . '/routes/blog_admin.php';
+require __DIR__ . '/routes/services.php';
+require __DIR__ . '/routes/services_admin.php';
+require __DIR__ . '/routes/sitemap.php';
 require __DIR__ . '/routes/contacts.php';
 require __DIR__ . '/routes/uploads.php';
 
@@ -172,6 +175,113 @@ if ($matches(['admin', 'blog', 'posts', '*'])) {
 if ($method === 'POST' && $matches(['admin', 'blog', 'categories'])) {
     require_admin($config);
     route_admin_category_create();
+}
+
+// ---- Public services -------------------------------------------------
+
+// GET /api/categories
+if ($method === 'GET' && $matches(['categories'])) {
+    route_service_categories();
+}
+
+// GET /api/categories/{slug}
+if ($method === 'GET' && $matches(['categories', '*'])) {
+    route_service_category($segments[1]);
+}
+
+// GET /api/services
+if ($method === 'GET' && $matches(['services'])) {
+    route_services();
+}
+
+// GET /api/services/{slug}
+if ($method === 'GET' && $matches(['services', '*'])) {
+    route_service($segments[1]);
+}
+
+// ---- Services authoring (admin key required) ------------------------
+
+// GET|POST /api/admin/services
+if ($matches(['admin', 'services'])) {
+    require_admin($config);
+    if ($method === 'GET') {
+        route_admin_services_list();
+    }
+    if ($method === 'POST') {
+        route_admin_service_create();
+    }
+    json_error('Method not allowed', 405);
+}
+
+// GET|PUT|DELETE /api/admin/services/{id}
+if ($matches(['admin', 'services', '*'])) {
+    require_admin($config);
+    $id = (int) $segments[2];
+    if ($id < 1) {
+        json_error('Invalid service id', 400);
+    }
+    if ($method === 'GET') {
+        route_admin_service_get($id);
+    }
+    if ($method === 'PUT' || $method === 'PATCH') {
+        route_admin_service_update($id);
+    }
+    if ($method === 'DELETE') {
+        route_admin_service_delete($id);
+    }
+    json_error('Method not allowed', 405);
+}
+
+// GET|POST /api/admin/categories
+if ($matches(['admin', 'categories'])) {
+    require_admin($config);
+    if ($method === 'GET') {
+        route_admin_categories_list();
+    }
+    if ($method === 'POST') {
+        route_admin_service_category_create();
+    }
+    json_error('Method not allowed', 405);
+}
+
+// PUT|DELETE /api/admin/categories/{id}
+if ($matches(['admin', 'categories', '*'])) {
+    require_admin($config);
+    $id = (int) $segments[2];
+    if ($id < 1) {
+        json_error('Invalid department id', 400);
+    }
+    if ($method === 'PUT' || $method === 'PATCH') {
+        route_admin_service_category_update($id);
+    }
+    if ($method === 'DELETE') {
+        route_admin_service_category_delete($id);
+    }
+    json_error('Method not allowed', 405);
+}
+
+// GET|PUT /api/admin/settings/{key}
+if ($matches(['admin', 'settings', '*'])) {
+    require_admin($config);
+    if ($method === 'GET') {
+        route_admin_setting_get($segments[2]);
+    }
+    if ($method === 'PUT') {
+        route_admin_setting_update($segments[2]);
+    }
+    json_error('Method not allowed', 405);
+}
+
+// ---- Live SEO files --------------------------------------------------
+
+// GET /api/sitemap.xml
+if ($method === 'GET' && $matches(['sitemap.xml'])) {
+    route_sitemap_xml($config);
+}
+
+// GET /api/robots.txt
+if ($method === 'GET' && $matches(['robots.txt'])) {
+    route_robots_txt($config);
 }
 
 // ---- Enquiry forms -------------------------------------------------

@@ -18,6 +18,14 @@ const BASE_URL = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
 // the whole catalogue onto the API.
 const BLOG_API = (import.meta.env.VITE_BLOG_API || '').replace(/\/$/, '');
 
+// Same idea for departments and treatments, written through /admin/services.
+// Defaults to the same origin as VITE_BLOG_API, since on Hostinger it is the
+// same PHP backend — set VITE_SERVICES_API only if it truly lives elsewhere.
+const SERVICES_API = (import.meta.env.VITE_SERVICES_API || import.meta.env.VITE_BLOG_API || '').replace(
+  /\/$/,
+  ''
+);
+
 export class ApiError extends Error {
   constructor(message, { status, details } = {}) {
     super(message);
@@ -292,5 +300,31 @@ const blogViaApi = {
   ),
 };
 
-export const api = USE_API ? remote : { ...local, ...(BLOG_API ? blogViaApi : {}) };
+// Departments and treatment detail pages try the API first and fall back to
+// the bundled menu if it is unreachable — same reasoning as blogViaApi. The
+// /services catalogue page (with its groups/sub-groups) still reads the
+// bundle directly; it carries curated fields (variants, process steps) that
+// have no column in the database yet.
+const servicesViaApi = {
+  getCategories: withFallback(
+    (o) => request('/categories', { ...o, base: SERVICES_API }),
+    (o) => local.getCategories(o)
+  ),
+  getCategory: withFallback(
+    (slug, o) => request(`/categories/${slug}`, { ...o, base: SERVICES_API }),
+    (slug, o) => local.getCategory(slug, o)
+  ),
+  getServices: withFallback(
+    (params, o) => request('/services', { ...o, params, base: SERVICES_API }),
+    (params, o) => local.getServices(params, o)
+  ),
+  getService: withFallback(
+    (slug, o) => request(`/services/${slug}`, { ...o, base: SERVICES_API }),
+    (slug, o) => local.getService(slug, o)
+  ),
+};
+
+export const api = USE_API
+  ? remote
+  : { ...local, ...(BLOG_API ? blogViaApi : {}), ...(SERVICES_API ? servicesViaApi : {}) };
 export const usingApi = USE_API;

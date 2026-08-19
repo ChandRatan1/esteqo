@@ -500,6 +500,9 @@ export default function BlogAdmin() {
                 New post
               </button>
             )}
+            <Link to="/admin/services" className="btn btn--secondary">
+              Services
+            </Link>
             <Link to="/admin/contacts" className="btn btn--secondary">
               Enquiries
             </Link>
