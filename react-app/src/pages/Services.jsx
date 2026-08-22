@@ -3,7 +3,67 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { categoryBySlug, menuGroups, servicesWithCategory } from '../data/menu';
 import { CtaBand } from '../components/Sections';
 import { EmptyState } from '../components/States';
+import Media from '../components/Media';
 import Seo from '../seo/Seo';
+
+/** One representative photo per menu group, shown at the top of the panel. */
+const GROUP_IMAGES = {
+  facials: { src: '/uploads/facial/premier_contour_facial.jpg', accent: 'light-pink' },
+  brows: { src: '/uploads/brows/brow_shape.jpg', accent: 'light-brown' },
+  bridal: { src: '/uploads/bridal/bridal-radiance-90-days.jpg', accent: 'light-pink' },
+  other: { src: null, accent: 'cream' },
+};
+
+/**
+ * Extra hero copy per group — mostly so the text column has enough content to
+ * sit level with the photo next to it, but written from ESTEQO's own service
+ * detail (react-app/src/data/brows.js has the full brow process; the others
+ * mirror how those departments are actually structured in the catalogue).
+ */
+const GROUP_EXTRA = {
+  facials: {
+    intro:
+      'Every facial on the menu begins the same way: a short skin analysis, so the treatment is chosen for what your skin needs that day rather than a fixed script.',
+    steps: [
+      { title: 'Consultation', text: 'A quick skin analysis before anything else — oiliness, sensitivity, pigmentation, the concern you actually came in for.' },
+      { title: 'Cleanse & exfoliate', text: 'Double cleansing and gentle exfoliation clear the way so the treatment step can actually absorb.' },
+      { title: 'Targeted treatment', text: 'Dermabrasion, a peel, LED light or micro-needling — whichever addresses your specific concern.' },
+      { title: 'Finish & protect', text: 'A hydrating mask, serum and aftercare guidance, so results keep building after you leave.' },
+    ],
+  },
+  brows: {
+    intro:
+      'Documented in full for Brow Shape and Brow Tint — every brow service follows the same five-step structure.',
+    steps: [
+      { title: 'Consultation', text: 'Your preferred style is assessed alongside your existing shape, density and growth pattern.' },
+      { title: 'Brow mapping', text: 'A customised map sets the start, arch, peak and tail for your features before anything is removed.' },
+      { title: 'Precision hair removal', text: 'Threading, waxing, tweezing or trimming — combined as your brows need, never over-thinned.' },
+      { title: 'Finishing', text: 'A detailed pass checks symmetry and balance, then styles the brow.' },
+      { title: 'Aftercare', text: 'Guidance on maintaining the shape between appointments.' },
+    ],
+  },
+  bridal: {
+    intro:
+      'Bridal skin is a schedule, not a single appointment — every package is planned backwards from your wedding date.',
+    steps: [
+      { title: 'Consultation', text: 'A skin analysis and a written plan built around your wedding date, from three months out to the week of.' },
+      { title: 'Scheduled treatments', text: 'A 90-day, 30-day or wedding-week programme, spaced so pigmentation, tone and texture improve gradually.' },
+      { title: 'Final week', text: 'A day-before ritual and last touch-ups, timed so nothing is done too close to the day itself.' },
+    ],
+  },
+  other: {
+    intro: 'Everything beyond the face, in one place — most of it bookable as a short add-on to any facial or brow visit.',
+    steps: [],
+    highlights: [
+      'Body Bleach & Detan',
+      'Body Polish',
+      'Manicure & Pedicure',
+      'Threading & Waxing',
+      'Nails',
+      'Relaxing Massages',
+    ],
+  },
+};
 
 /**
  * The treatment menu, organised into four top-level categories:
@@ -168,10 +228,40 @@ export default function Services() {
               <li>Medical-grade technology and professional formulations</li>
               <li>Every service begins with a detailed consultation</li>
             </ul>
+
+            {GROUP_EXTRA[group.slug] && (
+              <div className="svc-hero__extra">
+                <p className="svc-hero__extra-intro">{GROUP_EXTRA[group.slug].intro}</p>
+
+                {GROUP_EXTRA[group.slug].steps.length > 0 && (
+                  <ol className="svc-hero__steps">
+                    {GROUP_EXTRA[group.slug].steps.map((step) => (
+                      <li key={step.title}>
+                        <strong>{step.title}</strong>
+                        <span>{step.text}</span>
+                      </li>
+                    ))}
+                  </ol>
+                )}
+
+                {GROUP_EXTRA[group.slug].highlights && (
+                  <ul className="svc-hero__highlights">
+                    {GROUP_EXTRA[group.slug].highlights.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
           </article>
-          <div className="svc-hero__media" aria-hidden="true">
-            <span>E</span>
-          </div>
+          <Media
+            className="svc-hero__media"
+            variant="natural"
+            src={GROUP_IMAGES[group.slug]?.src}
+            alt={group.name}
+            accent={GROUP_IMAGES[group.slug]?.accent || 'cream'}
+            label={GROUP_IMAGES[group.slug]?.src ? group.name : 'ESTEQO'}
+          />
         </div>
       </section>
 

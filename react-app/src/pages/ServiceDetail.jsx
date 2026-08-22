@@ -77,7 +77,7 @@ export default function ServiceDetail() {
                 alt={service.name}
                 accent={accent}
                 label={service.name}
-                variant="wide"
+                variant="natural"
               />
 
               <div style={{ marginTop: 'var(--module-spacing-small)' }}>

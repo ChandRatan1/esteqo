@@ -21,12 +21,38 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  /* contain, not cover: the catalogue photos vary wildly in aspect ratio
-     (portrait phone shots next to landscape ones), so cropping to fill would
-     cut people's faces/feet off at random. Containing always shows the whole
-     photo, tinted-letterboxed by the accent background behind it. */
-  object-fit: contain;
+  object-fit: cover;
   transition: transform 0.7s var(--ease);
+}
+
+/*
+ * Single, standalone photo slots (a hero image, a treatment's one big photo)
+ * use this instead of a fixed-ratio box: the catalogue photos vary wildly in
+ * aspect ratio (portrait phone shots next to landscape ones), and a forced
+ * box would either crop them (cover) or float them in empty tinted space
+ * (contain). Sizing the box to the photo's own proportions means every photo
+ * shows completely, at a natural size, with nothing cut off and no gaps.
+ * Not used for card grids, where every card needs the same height.
+ */
+.media--natural {
+  overflow: visible;
+}
+
+.media--natural::after {
+  content: none;
+}
+
+.media--natural img {
+  position: static;
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: unset;
+}
+
+.media--natural .media__placeholder {
+  position: static;
+  aspect-ratio: 4 / 3;
 }
 
 .media__placeholder {
@@ -210,6 +236,13 @@
 .split__media .media::after {
   padding-bottom: 0;
   min-height: 340px;
+}
+
+/* This row stretches the image box to match the text column's height, so
+   the fixed-ratio-box "natural" variant doesn't apply here — but the photo
+   should still show in full rather than being cropped to fill that box. */
+.split__media .media img {
+  object-fit: contain;
 }
 
 .split__title {
