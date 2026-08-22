@@ -10,6 +10,54 @@
  * the image itself can never live in the database.
  */
 
+const UPLOAD_MIME_TYPES = [
+    'jpg'  => 'image/jpeg',
+    'jpeg' => 'image/jpeg',
+    'png'  => 'image/png',
+    'webp' => 'image/webp',
+    'gif'  => 'image/gif',
+    'avif' => 'image/avif',
+];
+
+/**
+ * GET /uploads/{...path} — serves files from the uploads directory directly.
+ *
+ * Only needed for local development: PHP's built-in server (`php -S`) routes
+ * every request through index.php, so without this, a service/blog image
+ * saved as /uploads/facial/x.jpg would 404 in dev. In production this route
+ * is never reached — Apache's .htaccess serves public_html/uploads/* as real
+ * static files before the request ever gets to PHP.
+ */
+function route_serve_upload(array $segments, array $config): void
+{
+    // Reject empty segments, ".." and anything with a path separator inside a
+    // single segment, so a crafted request cannot escape the uploads folder.
+    foreach ($segments as $segment) {
+        if ($segment === '' || $segment === '..' || str_contains($segment, '/') || str_contains($segment, '\\')) {
+            json_error('Not found', 404);
+        }
+    }
+
+    $directory = realpath($config['upload_dir'] ?? (__DIR__ . '/../../uploads'));
+    if ($directory === false) {
+        json_error('Not found', 404);
+    }
+
+    $path = realpath($directory . '/' . implode('/', $segments));
+    if ($path === false || !str_starts_with($path, $directory) || !is_file($path)) {
+        json_error('Not found', 404);
+    }
+
+    $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+    $mime = UPLOAD_MIME_TYPES[$ext] ?? 'application/octet-stream';
+
+    header("Content-Type: $mime");
+    header('Content-Length: ' . filesize($path));
+    header('Cache-Control: public, max-age=86400');
+    readfile($path);
+    exit;
+}
+
 const UPLOAD_EXTENSIONS = [
     'image/jpeg' => '.jpg',
     'image/jpg'  => '.jpg',

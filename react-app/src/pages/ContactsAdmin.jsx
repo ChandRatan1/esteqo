@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { blogAdmin, clearKey, getKey, setKey } from '../api/blogAdmin';
 import { contactsAdmin, contactsApiConfigured, STATUSES, toCsv } from '../api/contactsAdmin';
+import AdminNav from '../components/AdminNav';
 import Field from '../components/Field';
 import Seo from '../seo/Seo';
 
@@ -330,6 +331,8 @@ export default function ContactsAdmin() {
       <Seo title="Enquiries" noindex />
 
       <div className="container section admin">
+        <AdminNav />
+
         <header className="admin__head">
           <div>
             <h1>Enquiries</h1>
@@ -342,12 +345,6 @@ export default function ContactsAdmin() {
             <button type="button" className="btn btn--secondary" onClick={download}>
               Export CSV
             </button>
-            <Link to="/admin/blog" className="btn btn--secondary">
-              Blog admin
-            </Link>
-            <Link to="/admin/services" className="btn btn--secondary">
-              Services
-            </Link>
             <button
               type="button"
               className="btn btn--secondary"

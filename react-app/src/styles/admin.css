@@ -35,6 +35,46 @@
 /* Dashboard                                                           */
 /* ------------------------------------------------------------------ */
 
+/* ------------------------------------------------------------------ */
+/* Shared tab bar across /admin/*                                      */
+/* ------------------------------------------------------------------ */
+
+.admin-nav {
+  margin-bottom: 34px;
+}
+
+.admin-nav__brand {
+  margin-bottom: 16px;
+  font-family: var(--display-font, inherit);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.admin-nav__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  border-bottom: 1px solid rgba(31, 27, 24, 0.16);
+}
+
+.admin-nav__tab {
+  padding-bottom: 14px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+
+.admin-nav__tab:hover {
+  color: var(--ink);
+}
+
+.admin-nav__tab--active {
+  color: var(--gold-deep);
+  border-bottom-color: var(--gold-deep);
+}
+
 .admin__head {
   display: flex;
   flex-wrap: wrap;

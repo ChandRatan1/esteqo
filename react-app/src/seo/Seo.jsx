@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import {
   BUSINESS,
@@ -8,6 +8,7 @@ import {
   SITE_NAME,
   absoluteUrl,
 } from './config';
+import { fetchPageSeoOverride } from '../api/pageSeo';
 
 /**
  * Per-page SEO: title, meta description, canonical, Open Graph, Twitter cards
@@ -109,9 +110,32 @@ export default function Seo({
 }) {
   const { pathname } = useLocation();
 
+  // A per-path override set at /admin/seo, if one exists. Failure or absence
+  // both resolve to null, so the page's own title/description are used —
+  // there is no error state a visitor could ever see.
+  const [override, setOverride] = useState(null);
+
   useEffect(() => {
-    const fullTitle = title ? `${title} | ${SITE_NAME}` : DEFAULT_TITLE;
-    const desc = (description || DEFAULT_DESCRIPTION).slice(0, 160);
+    let cancelled = false;
+    setOverride(null);
+    fetchPageSeoOverride(pathname).then((data) => {
+      if (!cancelled) setOverride(data);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [pathname]);
+
+  useEffect(() => {
+    const overrideTitle = override?.metaTitle;
+    const overrideDescription = override?.metaDescription;
+
+    const fullTitle = overrideTitle
+      ? overrideTitle
+      : title
+        ? `${title} | ${SITE_NAME}`
+        : DEFAULT_TITLE;
+    const desc = (overrideDescription || description || DEFAULT_DESCRIPTION).slice(0, 160);
     const canonical = absoluteUrl(pathname);
     const ogImage = absoluteUrl(image || DEFAULT_OG_IMAGE);
 
@@ -153,7 +177,17 @@ export default function Seo({
     );
 
     setJsonLd('ld-page', schema);
-  }, [pathname, title, description, image, type, noindex, JSON.stringify(breadcrumbs), JSON.stringify(schema)]);
+  }, [
+    pathname,
+    title,
+    description,
+    image,
+    type,
+    noindex,
+    override,
+    JSON.stringify(breadcrumbs),
+    JSON.stringify(schema),
+  ]);
 
   return null;
 }

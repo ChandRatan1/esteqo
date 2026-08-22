@@ -30,6 +30,7 @@ require __DIR__ . '/routes/blog_admin.php';
 require __DIR__ . '/routes/services.php';
 require __DIR__ . '/routes/services_admin.php';
 require __DIR__ . '/routes/sitemap.php';
+require __DIR__ . '/routes/page_seo.php';
 require __DIR__ . '/routes/contacts.php';
 require __DIR__ . '/routes/uploads.php';
 
@@ -80,7 +81,7 @@ $matches = static function (array $pattern) use ($segments): bool {
 if ($method === 'GET' && $matches(['health'])) {
     $expected = [
         'service_categories', 'services', 'blog_categories', 'blog_posts',
-        'testimonials', 'faqs', 'team_members', 'site_settings',
+        'testimonials', 'faqs', 'team_members', 'site_settings', 'page_seo_overrides',
         'contacts', 'appointments', 'contact_messages', 'newsletter_subscribers',
     ];
 
@@ -113,6 +114,11 @@ if ($method === 'GET' && $matches(['health'])) {
     } catch (Throwable $e) {
         json_error('Database unavailable.', 503);
     }
+}
+
+// GET /uploads/{...} — dev-only static passthrough, see route_serve_upload().
+if ($method === 'GET' && $segments !== [] && $segments[0] === 'uploads') {
+    route_serve_upload(array_slice($segments, 1), $config);
 }
 
 // ---- Public blog ---------------------------------------------------
@@ -268,6 +274,22 @@ if ($matches(['admin', 'settings', '*'])) {
     }
     if ($method === 'PUT') {
         route_admin_setting_update($segments[2]);
+    }
+    json_error('Method not allowed', 405);
+}
+
+// ---- Page SEO overrides ----------------------------------------------
+
+// GET /api/page-seo?path=
+if ($method === 'GET' && $matches(['page-seo'])) {
+    route_page_seo_get();
+}
+
+// PUT /api/admin/page-seo
+if ($matches(['admin', 'page-seo'])) {
+    require_admin($config);
+    if ($method === 'PUT' || $method === 'PATCH') {
+        route_admin_page_seo_update();
     }
     json_error('Method not allowed', 405);
 }

@@ -14,6 +14,8 @@ import NotFound from './pages/NotFound';
 import BlogAdmin from './pages/BlogAdmin';
 import ContactsAdmin from './pages/ContactsAdmin';
 import ServicesAdmin from './pages/ServicesAdmin';
+import PageSeoAdmin from './pages/PageSeoAdmin';
+import RobotsAdmin from './pages/RobotsAdmin';
 
 export default function App() {
   return (
@@ -21,6 +23,8 @@ export default function App() {
       <Route path="admin/blog" element={<BlogAdmin />} />
       <Route path="admin/contacts" element={<ContactsAdmin />} />
       <Route path="admin/services" element={<ServicesAdmin />} />
+      <Route path="admin/seo" element={<PageSeoAdmin />} />
+      <Route path="admin/robots" element={<RobotsAdmin />} />
 
       <Route element={<Layout />}>
         <Route index element={<Home />} />

@@ -165,6 +165,14 @@ CREATE TABLE IF NOT EXISTS `newsletter_subscribers` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `newsletter_subscribers_email_unique` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE IF NOT EXISTS `page_seo_overrides` (
+  `path` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `meta_title` varchar(70) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `meta_description` varchar(160) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`path`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE IF NOT EXISTS `service_categories` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `slug` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL,

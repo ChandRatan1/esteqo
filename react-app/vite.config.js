@@ -27,8 +27,15 @@ export default defineConfig(({ mode }) => {
       open: false,
       // Lets the app call /api/* in dev without CORS. Used when
       // VITE_USE_API=true or VITE_CONTACT_API is set to a relative path.
+      //
+      // /uploads is proxied too: service/blog images are stored as relative
+      // paths like /uploads/facial/x.jpg, which only resolve because Apache
+      // serves the sibling uploads/ folder as static files in production. In
+      // dev there is no such static host, so the PHP backend serves them
+      // instead (see route_serve_upload in backend-php/routes/uploads.php).
       proxy: {
         '/api': { target: apiTarget, changeOrigin: true },
+        '/uploads': { target: apiTarget, changeOrigin: true },
       },
     },
     preview: {

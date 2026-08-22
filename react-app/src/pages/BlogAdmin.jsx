@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { adminApiConfigured, blogAdmin, clearKey, getKey, setKey } from '../api/blogAdmin';
 import { blogCategories } from '../data/site';
+import AdminNav from '../components/AdminNav';
 import Field from '../components/Field';
 import Seo from '../seo/Seo';
 
@@ -487,6 +488,8 @@ export default function BlogAdmin() {
       <Seo title="Blog admin" noindex />
 
       <div className="container section admin">
+        <AdminNav />
+
         <header className="admin__head">
           <div>
             <h1>Blog admin</h1>
@@ -500,12 +503,6 @@ export default function BlogAdmin() {
                 New post
               </button>
             )}
-            <Link to="/admin/services" className="btn btn--secondary">
-              Services
-            </Link>
-            <Link to="/admin/contacts" className="btn btn--secondary">
-              Enquiries
-            </Link>
             <button type="button" className="btn btn--secondary" onClick={signOut}>
               Sign out
             </button>

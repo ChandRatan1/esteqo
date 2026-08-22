@@ -15,6 +15,15 @@
   RewriteEngine On
   RewriteBase /
 
+  # Send the real /sitemap.xml and /robots.txt URLs to the live PHP versions,
+  # generated from the database on every request (backend-php/routes/sitemap.php).
+  # This must come before the "serve real files as-is" rule below, since the
+  # static build/ copies of these two files would otherwise win. If you ever
+  # deploy the front end with no PHP backend at all, delete these two lines to
+  # fall back to the static build-time files in public/.
+  RewriteRule ^sitemap\.xml$ /api/sitemap.xml [L]
+  RewriteRule ^robots\.txt$ /api/robots.txt [L]
+
   # Leave the API and uploaded files alone if they are proxied on this domain.
   RewriteRule ^api/ - [L]
   RewriteRule ^uploads/ - [L]

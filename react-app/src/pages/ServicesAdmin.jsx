@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { adminApiConfigured, blogAdmin, clearKey, getKey, setKey } from '../api/blogAdmin';
-import { categoriesAdmin, servicesAdmin, servicesApiConfigured, settingsAdmin } from '../api/servicesAdmin';
+import { categoriesAdmin, servicesAdmin, servicesApiConfigured } from '../api/servicesAdmin';
+import AdminNav from '../components/AdminNav';
 import Field from '../components/Field';
 import Seo from '../seo/Seo';
 
@@ -374,77 +375,6 @@ function ServiceForm({
   );
 }
 
-function RobotsPanel() {
-  const [value, setValue] = useState('');
-  const [loaded, setLoaded] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [notice, setNotice] = useState('');
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    settingsAdmin
-      .get('robots_txt')
-      .then((response) => setValue(response.data?.value || ''))
-      .catch(() => {})
-      .finally(() => setLoaded(true));
-  }, []);
-
-  const save = async (event) => {
-    event.preventDefault();
-    setSaving(true);
-    setError('');
-    setNotice('');
-    try {
-      await settingsAdmin.update('robots_txt', value);
-      setNotice('robots.txt updated. Live at /api/robots.txt.');
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  if (!loaded) return null;
-
-  return (
-    <form className="form admin-form" onSubmit={save}>
-      <h2 className="admin-form__title">robots.txt</h2>
-      <p className="form__note" style={{ marginBottom: 16 }}>
-        Leave blank to use the built-in default. The Sitemap: line pointing at{' '}
-        <code>/api/sitemap.xml</code> is added automatically.
-      </p>
-
-      {notice && (
-        <div className="alert alert--success" role="status" style={{ marginBottom: 16 }}>
-          {notice}
-        </div>
-      )}
-      {error && (
-        <div className="alert alert--error" role="alert" style={{ marginBottom: 16 }}>
-          {error}
-        </div>
-      )}
-
-      <Field id="robots-body" label="Contents">
-        <textarea
-          id="robots-body"
-          rows={8}
-          className="admin-form__editor"
-          placeholder={'User-agent: *\nAllow: /'}
-          value={value}
-          onChange={(event) => setValue(event.target.value)}
-        />
-      </Field>
-
-      <div className="btn-row">
-        <button type="submit" className="btn btn--primary" disabled={saving}>
-          {saving ? 'Saving…' : 'Save robots.txt'}
-        </button>
-      </div>
-    </form>
-  );
-}
-
 export default function ServicesAdmin() {
   const [signedIn, setSignedIn] = useState(() => Boolean(getKey()));
 
@@ -720,6 +650,8 @@ export default function ServicesAdmin() {
       <Seo title="Services admin" noindex />
 
       <div className="container section admin">
+        <AdminNav />
+
         <header className="admin__head">
           <div>
             <h1>Services admin</h1>
@@ -728,12 +660,6 @@ export default function ServicesAdmin() {
             </p>
           </div>
           <div className="btn-row">
-            <Link to="/admin/blog" className="btn btn--secondary">
-              Blog admin
-            </Link>
-            <Link to="/admin/contacts" className="btn btn--secondary">
-              Enquiries
-            </Link>
             <button type="button" className="btn btn--secondary" onClick={signOut}>
               Sign out
             </button>
@@ -906,14 +832,10 @@ export default function ServicesAdmin() {
           </div>
         )}
 
-        {/* ------------------------------ robots.txt ------------------------------ */}
-
-        <h2 className="admin__subtitle">SEO files</h2>
-        <p className="muted" style={{ marginTop: -10, marginBottom: 20 }}>
+        <p className="muted" style={{ marginTop: 30 }}>
           Sitemap: <code>/api/sitemap.xml</code> — regenerated live from the departments, services and blog
-          posts above, no action needed here.
+          posts above, no action needed here. robots.txt has its own tab.
         </p>
-        <RobotsPanel />
       </div>
     </>
   );
