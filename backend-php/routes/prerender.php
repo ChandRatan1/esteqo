@@ -196,9 +196,9 @@ function route_prerender(array $config): void
  * immediately, with no JavaScript required. The React app then boots exactly
  * as it always did; nothing about how the site behaves or looks changes.
  */
-function route_render_shell(array $config): void
+function route_render_shell(array $config, ?string $path = null): void
 {
-    $path = (string) ($_GET['path'] ?? '/');
+    $path = $path ?? (string) ($_GET['path'] ?? '/');
     // Production layout: this file deploys to public_html/api/routes/, and
     // index.html sits at public_html/index.html — two levels up. Override
     // with config.php's spa_index_path for any other layout (e.g. local dev,

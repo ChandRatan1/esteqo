@@ -4,7 +4,23 @@
 # Upload the CONTENTS of dist/ into public_html (not the dist folder itself).
 
 # ---------------------------------------------------------------------------
-# 1. Single-page app routing  — REQUIRED
+# 1. Force HTTPS  — before anything else
+# ---------------------------------------------------------------------------
+# The admin password travels in a request header, so plain HTTP must not be an
+# option. Enable the free SSL certificate in hPanel/cPanel first, or this will
+# loop. Deliberately ahead of the routing block below, so a plain-HTTP request
+# is redirected immediately rather than being rewritten first and redirected
+# on the second pass.
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# 2. Single-page app routing  — REQUIRED
 # ---------------------------------------------------------------------------
 # React Router handles /services, /blog/my-post and so on in the browser. Apache
 # knows nothing about them, so a direct visit or a refresh would 404. This sends
@@ -74,23 +90,16 @@
   # link-preview bots (WhatsApp, Facebook, Twitter/X, LinkedIn) and search
   # crawlers see real per-page content instead of one generic default.
   #
+  # Targets index.php directly (not a virtual /api/render-shell path) so this
+  # resolves in a single Apache rewrite — some hosts don't reliably preserve
+  # the request path across a second internal rewrite through api/.htaccess.
+  # index.php checks for __spa_path before any other routing (see index.php).
+  #
   # The React app then boots exactly as before — nothing about how the site
   # looks or behaves changes for a real visitor, only the initial HTML is
   # richer. If this rule is ever removed, index.html is served as a plain
   # static file instead (the same behaviour the site had before this).
-  RewriteRule ^(.*)$ /api/render-shell?path=$1 [L,QSA]
-</IfModule>
-
-# ---------------------------------------------------------------------------
-# 2. Force HTTPS
-# ---------------------------------------------------------------------------
-# The admin password travels in a request header, so plain HTTP must not be an
-# option. Enable the free SSL certificate in hPanel first, or this will loop.
-
-<IfModule mod_rewrite.c>
-  RewriteCond %{HTTPS} !=on
-  RewriteCond %{HTTP:X-Forwarded-Proto} !https
-  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  RewriteRule ^(.*)$ /api/index.php?__spa_path=$1 [L,QSA]
 </IfModule>
 
 # ---------------------------------------------------------------------------

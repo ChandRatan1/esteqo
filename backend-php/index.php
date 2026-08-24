@@ -48,6 +48,18 @@ set_exception_handler(static function (Throwable $e): void {
 /* ------------------------------------------------------------------ */
 
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+
+// The SPA catch-all in .htaccess rewrites every non-file page request
+// straight to THIS script (not to a virtual /api/render-shell path), so the
+// whole thing resolves in a single Apache rewrite hop. Some hosts (LiteSpeed
+// among them) do not reliably preserve the request path across a second
+// internal rewrite through this folder's own .htaccess, which could send an
+// ordinary page request into the wrong route entirely. Checking this first,
+// before any of the normal /api routing below, sidesteps that completely.
+if ($method === 'GET' && isset($_GET['__spa_path'])) {
+    route_render_shell($config, (string) $_GET['__spa_path']);
+}
+
 $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 
 // Strip everything up to and including /api, so the app works whether it is
