@@ -11,14 +11,19 @@
 function shape_service_category(array $row, ?int $serviceCount = null): array
 {
     return [
-        'id'           => (int) $row['id'],
-        'slug'         => $row['slug'],
-        'name'         => $row['name'],
-        'tagline'      => $row['tagline'],
-        'intro'        => $row['intro'],
-        'accent'       => $row['accent'],
-        'heroImage'    => $row['hero_image'],
-        'serviceCount' => $serviceCount ?? (int) ($row['service_count'] ?? 0),
+        'id'              => (int) $row['id'],
+        'slug'            => $row['slug'],
+        'name'            => $row['name'],
+        'tagline'         => $row['tagline'],
+        'intro'           => $row['intro'],
+        'accent'          => $row['accent'],
+        'heroImage'       => $row['hero_image'],
+        'imageAlt'        => $row['image_alt'] ?? null,
+        'metaTitle'       => $row['meta_title'] ?? null,
+        'metaDescription' => $row['meta_description'] ?? null,
+        'canonicalUrl'    => $row['canonical_url'] ?? null,
+        'noindex'         => (bool) ($row['noindex'] ?? false),
+        'serviceCount'    => $serviceCount ?? (int) ($row['service_count'] ?? 0),
     ];
 }
 
@@ -65,6 +70,13 @@ function shape_service(array $row): array
         'needsContent'    => false,
         'isFeatured'      => (bool) $row['is_featured'],
         'image'           => $row['image'],
+        'imageAlt'        => $row['image_alt'] ?? null,
+        // SEO overrides set in the admin screen — falsy/blank when unset, so
+        // the front end's `metaTitle || name` fallback pattern works as-is.
+        'metaTitle'       => $row['meta_title'] ?? null,
+        'metaDescription' => $row['meta_description'] ?? null,
+        'canonicalUrl'    => $row['canonical_url'] ?? null,
+        'noindex'         => (bool) ($row['noindex'] ?? false),
         'category'        => isset($row['category_slug']) ? [
             'slug'   => $row['category_slug'],
             'name'   => $row['category_name'],

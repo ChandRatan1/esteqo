@@ -105,6 +105,7 @@ export default function Seo({
   image,
   type = 'website',
   noindex = false,
+  canonicalUrl = null,
   breadcrumbs = [],
   schema = null,
 }) {
@@ -136,7 +137,9 @@ export default function Seo({
         ? `${title} | ${SITE_NAME}`
         : DEFAULT_TITLE;
     const desc = (overrideDescription || description || DEFAULT_DESCRIPTION).slice(0, 160);
-    const canonical = absoluteUrl(pathname);
+    // A service/post can set its own canonical (e.g. pointing at a preferred
+    // duplicate), and /admin/seo can still override that for any path.
+    const canonical = override?.canonicalUrl || canonicalUrl || absoluteUrl(pathname);
     const ogImage = absoluteUrl(image || DEFAULT_OG_IMAGE);
 
     document.title = fullTitle;
@@ -184,6 +187,7 @@ export default function Seo({
     image,
     type,
     noindex,
+    canonicalUrl,
     override,
     JSON.stringify(breadcrumbs),
     JSON.stringify(schema),

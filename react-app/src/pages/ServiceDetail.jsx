@@ -40,9 +40,11 @@ export default function ServiceDetail() {
   return (
     <>
       <Seo
-        title={service.name}
-        description={service.summary}
+        title={service.metaTitle || service.name}
+        description={service.metaDescription || service.summary}
         image={service.image}
+        noindex={service.noindex}
+        canonicalUrl={service.canonicalUrl}
         breadcrumbs={[
           { name: 'Services', path: '/services' },
           { name: service.category.name, path: `/services/${service.category.slug}` },
@@ -74,7 +76,7 @@ export default function ServiceDetail() {
             <div>
               <Media
                 src={service.image}
-                alt={service.name}
+                alt={service.imageAlt || service.name}
                 accent={accent}
                 label={service.name}
                 variant="natural"

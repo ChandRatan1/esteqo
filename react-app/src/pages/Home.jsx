@@ -86,7 +86,12 @@ export default function Home() {
           </div>
         </div>
         <div className="hero__media">
-          <Media accent="sand" label="Esteqo" alt="ESTEQO clinic" />
+          <Media
+            src="/uploads/facial/premier_contour_facial.jpg"
+            accent="sand"
+            label="Esteqo"
+            alt="ESTEQO clinic — precision skin, brow and laser treatments"
+          />
         </div>
       </section>
 

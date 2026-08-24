@@ -37,9 +37,11 @@ export default function ServiceCategory() {
   return (
     <>
       <Seo
-        title={`${category.name} in Noida`}
-        description={category.tagline}
+        title={category.metaTitle || `${category.name} in Noida`}
+        description={category.metaDescription || category.tagline}
         image={category.heroImage}
+        noindex={category.noindex}
+        canonicalUrl={category.canonicalUrl}
         breadcrumbs={[
           { name: 'Services', path: '/services' },
           { name: category.name, path: `/services/${category.slug}` },

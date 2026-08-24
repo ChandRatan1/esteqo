@@ -68,10 +68,12 @@ export default function BlogPost() {
   return (
     <>
       <Seo
-        title={post.title}
-        description={post.excerpt}
-        image={post.coverImage}
+        title={post.metaTitle || post.title}
+        description={post.metaDescription || post.excerpt}
+        image={post.ogImage || post.coverImage}
         type="article"
+        noindex={post.noindex}
+        canonicalUrl={post.canonicalUrl}
         breadcrumbs={[
           { name: 'Blog', path: '/blog' },
           { name: post.title, path: `/blog/${post.slug}` },
@@ -96,7 +98,7 @@ export default function BlogPost() {
         <div className="container container--reading">
           <Media
             src={post.coverImage}
-            alt={post.title}
+            alt={post.imageAlt || post.title}
             accent="cream"
             label={post.title}
             variant="wide"

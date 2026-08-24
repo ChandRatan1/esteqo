@@ -24,7 +24,7 @@ const FALLBACK = {
     phone: '+91 8010135135',
     phone_link: '+918010135135',
     whatsapp: '+918010135135',
-    email: 'info@estetico.co.in',
+    email: 'Info.esteqo@gmail.com',
     address_line1: 'Shop No. 209, First Floor, Modi Mall',
     address_line2: 'Sector 25, Noida, Uttar Pradesh – 201301',
     map_query: 'Modi Mall, Sector 25, Noida, Uttar Pradesh 201301',

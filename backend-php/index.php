@@ -31,6 +31,7 @@ require __DIR__ . '/routes/services.php';
 require __DIR__ . '/routes/services_admin.php';
 require __DIR__ . '/routes/sitemap.php';
 require __DIR__ . '/routes/page_seo.php';
+require __DIR__ . '/routes/prerender.php';
 require __DIR__ . '/routes/contacts.php';
 require __DIR__ . '/routes/uploads.php';
 
@@ -304,6 +305,16 @@ if ($method === 'GET' && $matches(['sitemap.xml'])) {
 // GET /api/robots.txt
 if ($method === 'GET' && $matches(['robots.txt'])) {
     route_robots_txt($config);
+}
+
+// GET /api/prerender?path=... — see routes/prerender.php.
+if ($method === 'GET' && $matches(['prerender'])) {
+    route_prerender($config);
+}
+
+// GET /api/render-shell?path=... — the real index.html with tags injected.
+if ($method === 'GET' && $matches(['render-shell'])) {
+    route_render_shell($config);
 }
 
 // ---- Enquiry forms -------------------------------------------------

@@ -15,6 +15,39 @@
   RewriteEngine On
   RewriteBase /
 
+  # ---------------------------------------------------------------------
+  # 0. Redirect the old WordPress site's URLs — REQUIRED before go-live
+  # ---------------------------------------------------------------------
+  # esteqo.com is currently live on WordPress (the "Meni" theme) with these
+  # exact URLs already indexed by Google. Once this build replaces it, every
+  # one of them would 404 without a redirect, throwing away that indexing —
+  # a real 301 here tells Google (and anyone with an old link or bookmark)
+  # where the content moved, instead of just breaking.
+  #
+  # Real, previously-linked pages only — the WordPress install also had ~30
+  # unused theme demo pages (Typography, Portfolio, Pricing Table, Plastic
+  # Surgeons, Practical Nurses, etc.) that were never part of the real site
+  # and are left to 404 naturally rather than redirected.
+  RewriteRule ^home/?$ / [R=301,L]
+  RewriteRule ^faq/?$ /values [R=301,L]
+  RewriteRule ^appointment-i/?$ /appointment [R=301,L]
+  RewriteRule ^appointment-ii/?$ /appointment [R=301,L]
+  RewriteRule ^brows/?$ /services/brows [R=301,L]
+  RewriteRule ^facials-skin-treatments/?$ /services/facials [R=301,L]
+  RewriteRule ^add-on-treatments/?$ /services/add-on-treatments [R=301,L]
+  RewriteRule ^body-bleach-polish/?$ /services/body-bleach-detan [R=301,L]
+  RewriteRule ^threading-face-waxing/?$ /services/threading [R=301,L]
+  RewriteRule ^massages/?$ /services/massages [R=301,L]
+  # No equivalent category exists yet for these two — send to the menu hub
+  # rather than losing the visitor (and the indexed URL) to a 404.
+  RewriteRule ^japanese-head-spa/?$ /services [R=301,L]
+  RewriteRule ^leaser-hair-removal/?$ /services [R=301,L]
+  RewriteRule ^package/?$ /services [R=301,L]
+  # Old theme demo "staff" pages that were nonetheless live in the nav menu.
+  RewriteRule ^(lab-testing|plastic-surgeons|practical-nurses|surgery-assistant)/?$ /about [R=301,L]
+  # Old theme demo wellness services, also live in the nav menu.
+  RewriteRule ^(balanced-nutrition-diet|belly-fat-reduction-exercise|free-healthy-living-diet|health-wellness-camps|meditation-energy-healing|nutrition-health-guide|premium-wellness-club|weight-loss-friendly-foods|yoga-therapy-for-your-knees)/?$ /services [R=301,L]
+
   # Send the real /sitemap.xml and /robots.txt URLs to the live PHP versions,
   # generated from the database on every request (backend-php/routes/sitemap.php).
   # This must come before the "serve real files as-is" rule below, since the
@@ -33,7 +66,19 @@
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
 
-  RewriteRule . /index.html [L]
+  # Every SPA route — /, /services, /treatments/hydra-facial, /blog/my-post —
+  # goes through PHP first, which serves the real built index.html with this
+  # exact page's title/description/OG/canonical/robots tags injected into its
+  # <head>, live from the database. "View Source" on any page now shows the
+  # correct tags directly, with no JavaScript needed — this is what makes
+  # link-preview bots (WhatsApp, Facebook, Twitter/X, LinkedIn) and search
+  # crawlers see real per-page content instead of one generic default.
+  #
+  # The React app then boots exactly as before — nothing about how the site
+  # looks or behaves changes for a real visitor, only the initial HTML is
+  # richer. If this rule is ever removed, index.html is served as a plain
+  # static file instead (the same behaviour the site had before this).
+  RewriteRule ^(.*)$ /api/render-shell?path=$1 [L,QSA]
 </IfModule>
 
 # ---------------------------------------------------------------------------

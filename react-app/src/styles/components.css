@@ -1,6 +1,109 @@
 /* Cards, media, accordion, marquee, carousel, forms and states. */
 
 /* ------------------------------------------------------------------ */
+/* Flip card — image on the front, details on the back. Used by        */
+/* CategoryCard and ServiceCard. Flips top-to-bottom on hover/focus;    */
+/* touch devices (no real hover) get the two faces stacked instead,     */
+/* since a hover-only interaction has no equivalent on a touchscreen.   */
+/* ------------------------------------------------------------------ */
+
+.flip-card {
+  display: block;
+  position: relative;
+  height: 100%;
+  min-height: 340px;
+}
+
+.flip-card__inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s var(--ease);
+  transform-style: preserve-3d;
+}
+
+@media (hover: hover) {
+  .flip-card:hover .flip-card__inner,
+  .flip-card:focus-visible .flip-card__inner {
+    transform: rotateY(180deg);
+  }
+}
+
+.flip-card__face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Front: photo, with the name always visible in a label strip underneath —
+   so which photo belongs to which service is never a mystery, flip or not. */
+.flip-card__front-media {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+}
+
+.flip-card__front-media .media {
+  height: 100%;
+}
+
+.flip-card__front-media .media::after {
+  padding-bottom: 0;
+  min-height: 100%;
+}
+
+.flip-card__front-label {
+  padding: 16px 18px;
+  background: var(--white);
+  border-top: 1px solid rgba(31, 27, 24, 0.08);
+  font-family: var(--heading-font);
+  font-size: 1.0625rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.flip-card__face--back {
+  transform: rotateY(180deg);
+  background: var(--white);
+}
+
+/* No real hover (touch) — skip the 3D flip and stack image above text,
+   which is how these cards worked before the flip interaction existed. */
+@media (hover: none) {
+  .flip-card {
+    min-height: 0;
+  }
+
+  .flip-card__inner {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+  }
+
+  .flip-card__face {
+    position: static;
+    inset: auto;
+  }
+
+  .flip-card__front-media .media {
+    height: auto;
+  }
+
+  .flip-card__front-media .media::after {
+    padding-bottom: var(--media-ratio, 75%);
+    min-height: 0;
+  }
+
+  .flip-card__face--back {
+    transform: none;
+  }
+}
+
+/* ------------------------------------------------------------------ */
 /* Media placeholder                                                   */
 /* ------------------------------------------------------------------ */
 
@@ -96,10 +199,6 @@
 /* ------------------------------------------------------------------ */
 
 .cat-card {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  background: var(--white);
   border: 1px solid rgba(31, 27, 24, 0.09);
   transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
 }
@@ -109,14 +208,11 @@
   box-shadow: 0 20px 44px rgba(31, 27, 24, 0.11);
 }
 
-.cat-card:hover .media img {
-  transform: scale(1.05);
-}
-
 .cat-card__body {
   display: flex;
   flex-direction: column;
   flex: 1;
+  height: 100%;
   padding: 30px 28px 32px;
 }
 
@@ -146,20 +242,21 @@
 /* ------------------------------------------------------------------ */
 
 .svc-card {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: 30px 28px;
-  background: var(--white);
   border: 1px solid rgba(31, 27, 24, 0.09);
-  transition: background-color 0.35s var(--ease), border-color 0.35s var(--ease),
-    transform 0.35s var(--ease);
+  transition: transform 0.35s var(--ease), border-color 0.35s var(--ease);
 }
 
 .svc-card:hover {
   transform: translateY(-4px);
-  background: var(--accent, var(--cream));
   border-color: transparent;
+}
+
+.svc-card__body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 28px 26px;
+  background: var(--accent, var(--cream));
 }
 
 .svc-card__kicker {
@@ -795,6 +892,13 @@
   margin-top: 12px;
   font-size: 0.8125rem;
   color: var(--gray-idle);
+}
+
+.flip-card__front-media .svc-card__badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 1;
 }
 
 .tag-new {

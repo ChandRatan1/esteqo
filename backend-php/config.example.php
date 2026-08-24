@@ -42,6 +42,11 @@ return [
     // Canonical domain, with no trailing slash. /api/sitemap.xml builds every
     // URL from this, so it should match VITE_SITE_URL in react-app/.env.
     'site_url' => 'https://esteqo.com',
+    // Where the built React index.html lives, so /api/render-shell can inject
+    // page-specific meta/OG tags into it. Leave unset on Hostinger — the
+    // default (public_html/index.html, two levels up from here) is already
+    // correct for the deploy layout in README.md.
+    // 'spa_index_path' => __DIR__ . '/../index.html',
 
     // Submissions per IP per window, for the public write endpoints.
     'rate_limit' => ['max' => 30, 'window_minutes' => 15],

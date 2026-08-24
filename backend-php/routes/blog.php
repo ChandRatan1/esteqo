@@ -18,16 +18,24 @@ function shape_post(array $row, bool $withContent = false): array
     }
 
     $post = [
-        'slug'        => $row['slug'],
-        'title'       => $row['title'],
-        'excerpt'     => $row['excerpt'],
-        'coverImage'  => $row['image_url'] ?: ($row['cover_image'] ?? null),
-        'author'      => $row['author'],
-        'readMinutes' => (int) $row['read_minutes'],
-        'tags'        => $tags,
-        'isFeatured'  => (bool) $row['is_featured'],
-        'publishedAt' => $row['published_at'],
-        'category'    => $row['category_slug']
+        'slug'            => $row['slug'],
+        'title'           => $row['title'],
+        'excerpt'         => $row['excerpt'],
+        'coverImage'      => $row['image_url'] ?: ($row['cover_image'] ?? null),
+        'imageAlt'        => $row['image_alt'] ?? null,
+        'author'          => $row['author'],
+        'readMinutes'     => (int) $row['read_minutes'],
+        'tags'            => $tags,
+        'isFeatured'      => (bool) $row['is_featured'],
+        'publishedAt'     => $row['published_at'],
+        // SEO overrides set in the admin screen — falsy/blank when unset, so
+        // the front end's `metaTitle || title` fallback pattern works as-is.
+        'metaTitle'       => $row['meta_title'] ?? null,
+        'metaDescription' => $row['meta_description'] ?? null,
+        'canonicalUrl'    => $row['canonical_url'] ?? null,
+        'ogImage'         => $row['og_image'] ?? null,
+        'noindex'         => (bool) ($row['noindex'] ?? false),
+        'category'        => $row['category_slug']
             ? ['slug' => $row['category_slug'], 'name' => $row['category_name']]
             : null,
     ];
@@ -40,8 +48,9 @@ function shape_post(array $row, bool $withContent = false): array
 }
 
 const POST_COLUMNS = "
-    p.id, p.slug, p.title, p.excerpt, p.content, p.image_url, p.cover_image,
+    p.id, p.slug, p.title, p.excerpt, p.content, p.image_url, p.cover_image, p.image_alt,
     p.author, p.read_minutes, p.tags, p.is_featured, p.published_at,
+    p.meta_title, p.meta_description, p.canonical_url, p.og_image, p.noindex,
     c.slug AS category_slug, c.name AS category_name
 ";
 
