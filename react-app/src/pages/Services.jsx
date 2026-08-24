@@ -1,10 +1,11 @@
 import { useMemo, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
-import { categoryBySlug, menuGroups, servicesWithCategory } from '../data/menu';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { categoryBySlug, groupPath, menuGroups, servicesWithCategory } from '../data/menu';
 import { CtaBand } from '../components/Sections';
 import { EmptyState } from '../components/States';
 import Media from '../components/Media';
 import Seo from '../seo/Seo';
+import { absoluteUrl } from '../seo/config';
 
 /** One representative photo per menu group, shown at the top of the panel. */
 const GROUP_IMAGES = {
@@ -164,17 +165,16 @@ function TreatmentCard({ service, open, onToggle }) {
 }
 
 export default function Services() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { groupSlug } = useParams();
+  const navigate = useNavigate();
 
-  // ?c=<group> lets the header dropdown open a specific category directly,
-  // and keeps that choice in the URL so it can be linked and shared.
-  const requested = searchParams.get('c');
-  const activeGroup = menuGroups.some((g) => g.slug === requested)
-    ? requested
-    : menuGroups[0].slug;
+  // /services/menu/<group> lets the header dropdown open a specific group
+  // directly, and keeps that choice in the URL so it can be linked and
+  // shared. The default group (menuGroups[0]) lives at plain /services.
+  const activeGroup = menuGroups.some((g) => g.slug === groupSlug) ? groupSlug : menuGroups[0].slug;
 
   const setActiveGroup = (slug) => {
-    setSearchParams(slug === menuGroups[0].slug ? {} : { c: slug }, { replace: true });
+    navigate(groupPath(slug), { replace: true });
   };
   const [query, setQuery] = useState('');
   const [openSlug, setOpenSlug] = useState(null);
@@ -215,6 +215,10 @@ export default function Services() {
       <Seo
         title="Treatments & Prices"
         description="The full ESTEQO treatment menu with prices — facials, brows, bridal packages, body care, threading, waxing and massages in Sector 25, Noida."
+        // Every group has exactly one canonical URL (groupPath), even when
+        // reached via the redundant /services/menu/facials for the default
+        // group — this stops that from being counted as duplicate content.
+        canonicalUrl={absoluteUrl(groupPath(activeGroup))}
         breadcrumbs={[{ name: 'Services', path: '/services' }]}
       />
 

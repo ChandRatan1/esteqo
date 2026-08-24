@@ -29,6 +29,7 @@ export default function App() {
       <Route element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="services" element={<Services />} />
+        <Route path="services/menu/:groupSlug" element={<Services />} />
         <Route path="services/:categorySlug" element={<ServiceCategory />} />
         <Route path="treatments/:serviceSlug" element={<ServiceDetail />} />
         <Route path="about" element={<About />} />

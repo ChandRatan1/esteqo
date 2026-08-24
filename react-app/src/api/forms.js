@@ -30,6 +30,7 @@
  */
 
 import { enquiryCc, enquirySender } from '../data/site';
+import { API_ORIGIN } from './apiOrigin';
 
 const WEB3FORMS_KEY = import.meta.env.VITE_WEB3FORMS_KEY || '';
 const WEB3FORMS_URL = 'https://api.web3forms.com/submit';
@@ -38,8 +39,11 @@ const WEB3FORMS_URL = 'https://api.web3forms.com/submit';
 const FORMSUBMIT_ID = import.meta.env.VITE_FORMSUBMIT_ID || enquirySender;
 const FORMSUBMIT_URL = `https://formsubmit.co/ajax/${encodeURIComponent(FORMSUBMIT_ID)}`;
 
-// Backend origin for saving submissions to the `contacts` table. Optional.
-const CONTACT_API = (import.meta.env.VITE_CONTACT_API || '').replace(/\/$/, '');
+// Backend origin for saving submissions to the `contacts` table. Defaults to
+// the page's own origin (see apiOrigin.js) — set VITE_CONTACT_API only if the
+// backend truly lives elsewhere, or blank it in a build meant to run with no
+// backend at all (see storeInDatabase below, which degrades to email-only).
+const CONTACT_API = API_ORIGIN;
 
 const CONTACT_LINE = 'Please call or WhatsApp us on +91 8010135135 instead.';
 

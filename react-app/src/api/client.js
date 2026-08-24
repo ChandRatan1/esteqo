@@ -9,19 +9,18 @@
 import { categories, categoryBySlug, servicesWithCategory } from '../data/menu';
 import { blogCategories, blogPosts, faqs, settings, team, testimonials } from '../data/site';
 import { submitEnquiry } from './forms';
+import { API_ORIGIN } from './apiOrigin';
 
 const USE_API = String(import.meta.env.VITE_USE_API || '').toLowerCase() === 'true';
 const BASE_URL = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
 
-// When set, blog posts come from MySQL while everything else stays on the
-// bundled data — so posts can be written through /admin/blog without moving
-// the whole catalogue onto the API.
-const BLOG_API = (import.meta.env.VITE_BLOG_API || '').replace(/\/$/, '');
+// Blog posts, departments and treatments come from MySQL through this origin
+// — the page's own domain by default (see apiOrigin.js), so a plain build
+// works in production with zero configuration. Everything else (testimonials,
+// team, FAQs) still comes from the bundled data in src/data.
+const BLOG_API = API_ORIGIN;
 
-// Same idea for departments and treatments, written through /admin/services.
-// Defaults to the same origin as VITE_BLOG_API, since on Hostinger it is the
-// same PHP backend — set VITE_SERVICES_API only if it truly lives elsewhere.
-const SERVICES_API = (import.meta.env.VITE_SERVICES_API || import.meta.env.VITE_BLOG_API || '').replace(
+const SERVICES_API = (import.meta.env.VITE_SERVICES_API || import.meta.env.VITE_BLOG_API || API_ORIGIN).replace(
   /\/$/,
   ''
 );

@@ -764,3 +764,18 @@ export const menuGroups = [
     ],
   },
 ];
+
+/**
+ * URL for a menu group's filtered view of /services.
+ *
+ * `/services/menu/<slug>` rather than `/services/<slug>` — three of the four
+ * group slugs (facials, brows, bridal) are identical to real department
+ * slugs (e.g. /services/facials is the Facials department page, a totally
+ * different page from "every facial-related department shown together").
+ * The distinct /menu/ segment keeps the two from colliding.
+ *
+ * The default group (menuGroups[0], "facials") has no query string or extra
+ * segment — plain /services already means that — so there is exactly one
+ * canonical URL per group, never two for the same content.
+ */
+export const groupPath = (slug) => (slug === menuGroups[0].slug ? '/services' : `/services/menu/${slug}`);

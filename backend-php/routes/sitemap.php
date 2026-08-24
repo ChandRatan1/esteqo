@@ -101,11 +101,6 @@ function route_sitemap_xml(array $config): void
 const ROBOTS_DEFAULT = <<<'TXT'
 User-agent: *
 Allow: /
-
-Disallow: /*?service=
-Disallow: /*?page=
-
-Crawl-delay: 1
 TXT;
 
 /**
@@ -127,7 +122,10 @@ function route_robots_txt(array $config): void
     }
 
     if ($siteUrl !== '' && !preg_match('/^Sitemap:/mi', $body)) {
-        $body .= "\n\nSitemap: $siteUrl/api/sitemap.xml";
+        // The pretty root URL, not /api/sitemap.xml — .htaccess rewrites
+        // /sitemap.xml to the live PHP version, so that's the one that
+        // should actually be advertised to crawlers.
+        $body .= "\n\nSitemap: $siteUrl/sitemap.xml";
     }
 
     header('Content-Type: text/plain; charset=utf-8');

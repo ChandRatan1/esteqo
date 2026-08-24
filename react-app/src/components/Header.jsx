@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useContactLinks, useSite } from '../context/SiteContext';
-import { menuGroups } from '../data/menu';
+import { groupPath, menuGroups } from '../data/menu';
 
 const NAV = [
   { label: 'Services', to: '/services', mega: true },
@@ -117,7 +117,7 @@ export default function Header() {
                       <ul className="dropdown__list">
                         {menuGroups.map((group) => (
                           <li key={group.slug}>
-                            <Link to={`/services?c=${group.slug}`}>{group.name}</Link>
+                            <Link to={groupPath(group.slug)}>{group.name}</Link>
                           </li>
                         ))}
                       </ul>
@@ -186,11 +186,7 @@ export default function Header() {
             {drawerServices && (
               <div className="drawer__sub">
                 {menuGroups.map((group) => (
-                  <Link
-                    key={group.slug}
-                    to={`/services?c=${group.slug}`}
-                    className="drawer__sublink"
-                  >
+                  <Link key={group.slug} to={groupPath(group.slug)} className="drawer__sublink">
                     {group.name}
                   </Link>
                 ))}

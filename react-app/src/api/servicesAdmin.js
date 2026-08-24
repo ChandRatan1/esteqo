@@ -7,11 +7,7 @@
  */
 
 import { AdminError, getKey } from './blogAdmin';
-
-const API = (import.meta.env.VITE_SERVICES_API || import.meta.env.VITE_BLOG_API || '').replace(
-  /\/$/,
-  ''
-);
+import { API_ORIGIN as API } from './apiOrigin';
 
 export const servicesApiConfigured = Boolean(API);
 

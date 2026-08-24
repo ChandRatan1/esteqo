@@ -10,10 +10,7 @@
  * login — anyone who has it can publish.
  */
 
-const API = (import.meta.env.VITE_BLOG_API || import.meta.env.VITE_CONTACT_API || '').replace(
-  /\/$/,
-  ''
-);
+import { API_ORIGIN as API } from './apiOrigin';
 
 const KEY_STORAGE = 'esteqo.adminKey';
 
