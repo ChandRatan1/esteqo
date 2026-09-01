@@ -23,7 +23,7 @@ export const settings = {
     map_query: 'Modi Mall, Sector 25, Noida, Uttar Pradesh 201301',
     hours_weekday: 'Mon – Sat: 9:00 am – 8:00 pm',
     hours_sunday: 'Sunday: 10:00 am – 3:00 pm',
-    website: 'www.esteqo.co.in',
+    website: 'www.esteqo.com',
   },
   social: {
     facebook: 'https://www.facebook.com/',

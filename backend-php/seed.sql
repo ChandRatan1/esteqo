@@ -386,7 +386,7 @@ INSERT IGNORE INTO `site_settings` (`setting_key`, `setting_value`, `setting_gro
   ('map_query', 'Modi Mall, Sector 25, Noida, Uttar Pradesh 201301', 'contact'),
   ('hours_weekday', 'Mon – Sat: 9:00 am – 8:00 pm', 'contact'),
   ('hours_sunday', 'Sunday: 10:00 am – 3:00 pm', 'contact'),
-  ('website', 'www.esteqo.co.in', 'contact'),
+  ('website', 'www.esteqo.com', 'contact'),
   ('facebook', 'https://www.facebook.com/', 'social'),
   ('instagram', 'https://www.instagram.com/esteqo_care/', 'social'),
   ('youtube', 'https://www.youtube.com/@cosmetologistseemanandaest4431', 'social');

@@ -1,4 +1,4 @@
-# ESTEQO — https://esteqo.co.in
+# ESTEQO — https://esteqo.com
 # Update the Sitemap line if the site is served from a different domain.
 
 User-agent: *
@@ -11,4 +11,4 @@ Disallow: /*?page=
 # Well-behaved crawlers only need a short pause.
 Crawl-delay: 1
 
-Sitemap: https://esteqo.co.in/sitemap.xml
+Sitemap: https://esteqo.com/sitemap.xml

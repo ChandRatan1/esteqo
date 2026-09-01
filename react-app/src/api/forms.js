@@ -194,7 +194,7 @@ async function sendViaFormSubmit(kind, values, ref) {
 /**
  * Saves the submission to the `contacts` table via the backend.
  *
- * Set VITE_CONTACT_API to the API origin (e.g. https://api.esteqo.co.in, or
+ * Set VITE_CONTACT_API to the API origin (e.g. https://api.esteqo.com, or
  * http://localhost:4000 in development) to turn this on. With it unset the site
  * simply emails, exactly as before — nothing breaks.
  *

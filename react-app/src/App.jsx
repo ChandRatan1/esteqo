@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Services from './pages/Services';
@@ -20,6 +20,7 @@ import RobotsAdmin from './pages/RobotsAdmin';
 export default function App() {
   return (
     <Routes>
+      <Route path="admin" element={<Navigate to="/admin/services" replace />} />
       <Route path="admin/blog" element={<BlogAdmin />} />
       <Route path="admin/contacts" element={<ContactsAdmin />} />
       <Route path="admin/services" element={<ServicesAdmin />} />

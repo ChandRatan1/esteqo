@@ -200,7 +200,7 @@ seed posts. Run it alone with `npm run sitemap`.
 
 ```
 # react-app/.env
-VITE_SITE_URL=https://esteqo.co.in
+VITE_SITE_URL=https://esteqo.com
 ```
 
 Then `npm run sitemap` to rewrite `sitemap.xml` and the `Sitemap:` line in

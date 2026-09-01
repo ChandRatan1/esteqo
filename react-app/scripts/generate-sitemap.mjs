@@ -24,23 +24,26 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(here, '..');
 
-const SITE_URL = (process.env.SITE_URL || process.env.VITE_SITE_URL || 'https://esteqo.co.in')
-  .replace(/\/$/, '');
-
-/** Read VITE_BLOG_API out of .env so `npm run sitemap` needs no arguments. */
-function blogApiFromEnv() {
-  if (process.env.BLOG_API) return process.env.BLOG_API.replace(/\/$/, '');
+/** Read a var out of .env so `npm run sitemap` needs no shell exports. */
+function fromEnv(name) {
   try {
     const env = fs.readFileSync(path.join(root, '.env'), 'utf8');
-    const match = /^\s*VITE_BLOG_API\s*=\s*(.+)$/m.exec(env);
-    if (match) return match[1].trim().replace(/\/$/, '');
+    const match = new RegExp(`^\\s*${name}\\s*=\\s*(.+)$`, 'm').exec(env);
+    if (match) return match[1].trim();
   } catch {
     /* no .env — fall through */
   }
   return '';
 }
 
-const BLOG_API = blogApiFromEnv();
+const SITE_URL = (
+  process.env.SITE_URL ||
+  process.env.VITE_SITE_URL ||
+  fromEnv('VITE_SITE_URL') ||
+  'https://esteqo.com'
+).replace(/\/$/, '');
+
+const BLOG_API = (process.env.BLOG_API || fromEnv('VITE_BLOG_API')).replace(/\/$/, '');
 
 const load = async (rel) => import(pathToFileURL(path.join(root, rel)).href);
 
