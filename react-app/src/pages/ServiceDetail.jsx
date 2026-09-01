@@ -99,7 +99,15 @@ export default function ServiceDetail() {
                   </>
                 )}
 
-                <IdealFor items={service.idealForList} />
+                <IdealFor
+                  items={
+                    service.idealForList?.length
+                      ? service.idealForList
+                      : service.idealFor
+                        ? service.idealFor.split('•').map((s) => s.trim()).filter(Boolean)
+                        : []
+                  }
+                />
 
                 <ProcessSteps steps={service.process} />
 

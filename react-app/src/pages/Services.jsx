@@ -12,7 +12,6 @@ const GROUP_IMAGES = {
   facials: { src: '/uploads/facial/premier_contour_facial.jpg', accent: 'light-pink' },
   brows: { src: '/uploads/brows/brow_shape.jpg', accent: 'light-brown' },
   bridal: { src: '/uploads/bridal/bridal-radiance-90-days.jpg', accent: 'light-pink' },
-  other: { src: null, accent: 'cream' },
 };
 
 /**
@@ -52,23 +51,14 @@ const GROUP_EXTRA = {
       { title: 'Final week', text: 'A day-before ritual and last touch-ups, timed so nothing is done too close to the day itself.' },
     ],
   },
-  other: {
-    intro: 'Everything beyond the face, in one place — most of it bookable as a short add-on to any facial or brow visit.',
-    steps: [],
-    highlights: [
-      'Body Bleach & Detan',
-      'Body Polish',
-      'Manicure & Pedicure',
-      'Threading & Waxing',
-      'Nails',
-      'Relaxing Massages',
-    ],
-  },
 };
 
 /**
- * The treatment menu, organised into four top-level categories:
- * Facials, Brows, Bridal Services and Other Services.
+ * The treatment menu, organised into three top-level groups: Facials, Brows
+ * and Bridal Services. Other departments (body, hands, feet, waxing, massage
+ * — see UNGROUPED_DEPARTMENTS in data/menu.js) are deliberately not grouped
+ * under a tab here; they're still fully live pages, just reached via the
+ * homepage's full department grid or a direct link rather than this menu.
  *
  * Layout follows the reference services page — a category rail on the left
  * that switches the panel on the right, each panel holding sub-category
@@ -77,6 +67,15 @@ const GROUP_EXTRA = {
 
 const formatPrice = (service) =>
   service.price == null ? 'On consultation' : `₹${service.price.toLocaleString('en-IN')}`;
+
+// idealFor comes as a '•'-separated string on most services, but as an array
+// on a few older entries — normalise to an array before rendering either way.
+const idealForItems = (service) =>
+  Array.isArray(service.idealFor)
+    ? service.idealFor
+    : typeof service.idealFor === 'string'
+      ? service.idealFor.split('•').map((s) => s.trim()).filter(Boolean)
+      : [];
 
 function Caret({ open }) {
   return (
@@ -147,10 +146,10 @@ function TreatmentCard({ service, open, onToggle }) {
                 <p className="tcard__meta">{service.bullets.join(' • ')}</p>
               </>
             )}
-            {service.idealFor?.length > 0 && (
+            {idealForItems(service).length > 0 && (
               <>
                 <h5 className="tcard__label">Ideal for</h5>
-                <p className="tcard__meta">{service.idealFor.slice(0, 3).join(' • ')}</p>
+                <p className="tcard__meta">{idealForItems(service).slice(0, 3).join(' • ')}</p>
               </>
             )}
             <h5 className="tcard__label">Duration</h5>
@@ -177,7 +176,16 @@ export default function Services() {
     navigate(groupPath(slug), { replace: true });
   };
   const [query, setQuery] = useState('');
-  const [openSlug, setOpenSlug] = useState(null);
+  const [openSlugs, setOpenSlugs] = useState(() => new Set());
+
+  const toggleSlug = (slug) => {
+    setOpenSlugs((cur) => {
+      const next = new Set(cur);
+      if (next.has(slug)) next.delete(slug);
+      else next.add(slug);
+      return next;
+    });
+  };
 
   const group = menuGroups.find((g) => g.slug === activeGroup) || menuGroups[0];
 
@@ -289,7 +297,7 @@ export default function Services() {
                       type="button"
                       onClick={() => {
                         setActiveGroup(item.slug);
-                        setOpenSlug(null);
+                        setOpenSlugs(new Set());
                       }}
                       aria-current={isActive ? 'true' : undefined}
                     >
@@ -369,10 +377,8 @@ export default function Services() {
                             <TreatmentCard
                               key={service.slug}
                               service={service}
-                              open={openSlug === service.slug}
-                              onToggle={() =>
-                                setOpenSlug((cur) => (cur === service.slug ? null : service.slug))
-                              }
+                              open={openSlugs.has(service.slug)}
+                              onToggle={() => toggleSlug(service.slug)}
                             />
                           ))}
                       </ul>
@@ -384,10 +390,8 @@ export default function Services() {
                       <TreatmentCard
                         key={service.slug}
                         service={service}
-                        open={openSlug === service.slug}
-                        onToggle={() =>
-                          setOpenSlug((cur) => (cur === service.slug ? null : service.slug))
-                        }
+                        open={openSlugs.has(service.slug)}
+                        onToggle={() => toggleSlug(service.slug)}
                       />
                     ))}
                   </ul>

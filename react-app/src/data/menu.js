@@ -334,101 +334,145 @@ export const services = [
 
   // -------------------------------------------------------------------- Facials
   {
-    slug: 'lotus-puravital',
+    slug: 'signature-facial',
     categorySlug: 'facials',
-    name: 'Lotus Puravital',
-    summary: 'A detoxifying facial with Lotus extracts and Puravital serum to deeply cleanse and balance the skin.',
-    bullets: [],
-    durationMinutes: 45,
-    price: 1500,
+    name: 'Signature Facial',
+    summary: "A maintenance facial built around cleansing, exfoliation and a treatment mask suited to your skin's current needs.",
+    description:
+      'A well-rounded maintenance facial for anyone building a skincare routine or just keeping up with one. In half an hour you get a full cleanse, gentle exfoliation and a finishing treatment chosen for what your skin needs that month.',
+    bullets: ['Exfoliating and hydrating', 'Smooths texture', 'Finishes with an oxygen infusion'],
+    idealFor: 'Dullness • Normal skin • Mild congestion',
+    durationMinutes: 30,
+    image: '/uploads/facial/signature_facial.jpg',
     featured: false,
   },
   {
-    slug: 'lotus-puravital-tightening-mask',
+    slug: 'lymphatic-facial',
     categorySlug: 'facials',
-    name: 'Lotus Puravital with Tightening Mask',
-    summary: 'The Puravital facial finished with a tightening mask for extra firmness and definition.',
-    bullets: [],
-    durationMinutes: 60,
-    price: 2000,
+    name: 'Lymphatic Facial',
+    summary: 'A sculpting facial that pairs manual lymphatic drainage technique with modern contouring to reduce puffiness and refresh tired skin.',
+    description:
+      'A sculpting facial that pairs manual lymphatic-drainage technique with modern tools to reduce puffiness and lift tired skin. After cleansing and light exfoliation, the treatment focuses entirely on sculpting — extractions are not part of this one.',
+    bullets: ['Visibly sculpting', 'Compression therapy for circulation', 'Gua sha massage'],
+    idealFor: 'Puffiness • Redness and irritation • Uneven tone',
+    durationMinutes: 30,
+    image: '/uploads/facial/lymphatic_facial.jpg',
     featured: false,
   },
   {
-    slug: 'o3-whitening-facial',
+    slug: 'party-prep-facial',
     categorySlug: 'facials',
-    name: 'O3 Whitening Facial (1 pack = 1 mask)',
-    summary:
-      'An advanced brightening facial using O3+ technology to lighten tan, hydrate and restore even skin tone.',
-    bullets: [],
-    durationMinutes: 70,
-    price: 3500,
+    name: 'Party-Prep Facial',
+    summary: 'A pre-event facial using targeted lifting and contouring technology for an immediate, photo-ready glow.',
+    description:
+      "Built for the hours before an event. Lifting and contouring technology tightens and smooths the skin for an instant, camera-ready look — with no extractions, so there's no redness to work around.",
+    bullets: ['Camera-ready toning', 'Lifting and sculpting technology', 'Extraction-free cleanse'],
+    idealFor: 'Fine lines and wrinkles • Texture • Uneven tone',
+    durationMinutes: 30,
+    image: '/uploads/facial/party_prep_facial.jpg',
     featured: false,
   },
   {
-    slug: 'casmara-prestige',
+    slug: 'just-for-men-facial',
     categorySlug: 'facials',
-    name: 'Casmara Prestige',
-    summary:
-      "A premium facial delivering instant luminosity through Casmara's signature peel-off mask and antioxidants.",
-    bullets: [],
-    durationMinutes: 70,
-    price: 3500,
+    name: 'Just for Men Facial',
+    summary: 'Addresses ingrown hairs, shaving irritation and congestion in the skin beneath facial hair.',
+    description:
+      'Aimed squarely at the skin under and around facial hair — ingrown hairs, shaving irritation and clogged pores from daily grooming. A clarifying mask works on the neck while a deep-clean step targets bacteria beneath the beard line.',
+    bullets: ['Pore-clarifying treatment', 'Deep-cleansing technology', 'Gentle acid exfoliation'],
+    idealFor: 'Shaving irritation • Dryness or flaking • Rough texture',
+    durationMinutes: 30,
+    image: '/uploads/facial/just_for_men_facial.jpg',
     featured: false,
   },
   {
-    slug: 'japanese-seed-mask-organic-facial',
+    slug: 'estheticians-choice',
     categorySlug: 'facials',
-    name: 'Japanese Seed Mask Organic Facial',
-    summary:
-      'A luxurious organic facial enriched with Japanese seed extracts that boost collagen and even out skin tone.',
+    name: "Esthetician's Choice",
+    summary: 'Your therapist examines your skin first, then builds the facial around what it needs that day.',
+    description:
+      "Can't decide? Your esthetician examines your skin first and builds the facial around what it actually needs that day, rather than a fixed menu item.",
     bullets: [],
-    durationMinutes: 90,
-    price: 3500,
+    durationMinutes: 50,
+    image: '/uploads/facial/esthetician_choice.jpg',
+    featured: false,
+  },
+  {
+    slug: 'anti-aging-facial',
+    categorySlug: 'facials',
+    name: 'Anti-Aging Facial',
+    summary: 'Firming and lifting technology combined with red LED light therapy to stimulate collagen and soften fine lines.',
+    description:
+      'A firming, restorative facial that tones facial muscles and pairs it with red light therapy to support collagen, soften fine lines and calm inflammation, finished with hydrating actives.',
+    bullets: ['Supports collagen production', 'Firming muscle-toning technique', 'Cooling finish to reduce puffiness'],
+    idealFor: 'Loss of elasticity • Dark circles • Early age spots',
+    durationMinutes: 50,
+    image: '/uploads/facial/anti_aging_facial.jpg',
     featured: true,
   },
   {
-    slug: 'blanch-skin-whitening',
+    slug: 'acne-fighting-facial',
     categorySlug: 'facials',
-    name: 'Blanch Skin Whitening',
-    summary:
-      'An advanced whitening therapy designed to reduce pigmentation and brighten dull skin from within.',
-    bullets: [],
+    name: 'Acne-Fighting Facial',
+    summary: 'A double cleanse with extractions and blue LED light therapy to calm breakouts and target acne-causing bacteria.',
+    description:
+      'A double cleanse and double exfoliation clear the way for extractions, then targeted light therapy works on acne-causing bacteria while vitamins and oxygen calm the skin afterwards.',
+    bullets: ['Deep-cleaning technology', 'Thorough pore clearing', 'Light therapy to target bacteria'],
+    idealFor: 'Acne-prone skin • Excess oiliness • Uneven texture',
+    durationMinutes: 50,
+    image: '/uploads/facial/acne_fighting_facial.jpg',
+    featured: true,
+  },
+  {
+    slug: 'seasonal-hydrating-facial',
+    categorySlug: 'facials',
+    name: 'Seasonal Hydrating Facial',
+    summary: 'A climate-adapted mask treatment that protects and repairs the skin barrier as the seasons change.',
+    description:
+      'A hydrating facial that changes with the seasons, protecting and repairing your skin barrier against whatever the current weather is doing to it. Gentle exfoliation, a custom mask and an oxygen finish leave skin dewy, not dry.',
+    bullets: ['Gentle antioxidant exfoliation', 'Warming circulation therapy', 'Mask formulated for the current season'],
+    idealFor: 'Dehydration • Environmental skin stress • Redness',
+    durationMinutes: 50,
+    image: '/uploads/facial/seasonal_hydrating_facial.jpg',
+    featured: false,
+  },
+  {
+    slug: 'hyperpigmentation-facial',
+    categorySlug: 'facials',
+    name: 'Hyperpigmentation Facial',
+    summary: 'Green LED light therapy paired with clinical-grade exfoliation to even out tone and fade dark spots.',
+    description:
+      'Targets dullness and sun damage with light therapy paired with clinical-grade exfoliation, evening out tone and refining texture for a brighter finish.',
+    bullets: ['Double exfoliation with fruit acids', 'Healing light therapy', 'Brightening vitamin C infusion'],
+    idealFor: 'Sun and age spots • Dryness • Dullness',
+    durationMinutes: 50,
+    image: '/uploads/facial/hyperpigmentation_facial.jpg',
+    featured: false,
+  },
+  {
+    slug: 'sensitive-skin-facial',
+    categorySlug: 'facials',
+    name: 'Sensitive Skin Facial',
+    summary: 'A calming, low-irritation facial using gentle enzyme exfoliation for reactive or easily-flushed skin.',
+    description:
+      'Built specifically for reactive skin. An ultra-gentle double cleanse and a nutrient-rich jelly mask calm and restore balance, while light therapy reduces redness with a soothing, low-contact approach.',
+    bullets: ['Calming and soothing formulas', 'Enzyme-only exfoliation, no scrubbing', 'Custom jelly mask'],
+    idealFor: 'Redness and irritation • Rosacea • Eczema-prone skin',
+    durationMinutes: 50,
+    image: '/uploads/facial/sensitive_skin_facial.jpg',
+    featured: false,
+  },
+  {
+    slug: 'premier-contour-facial',
+    categorySlug: 'facials',
+    name: 'Premier Contour Facial',
+    summary: 'A multi-step facial combining dermaplaning, lifting technology, gua sha and LED therapy for the most complete result on the menu.',
+    description:
+      'The most complete facial on the menu — 90 minutes combining dermaplaning, sculpting technology, gua sha, light therapy, oxygen and cold therapy to refine texture, lift contours and calm puffiness in a single session.',
+    bullets: ['Dermaplaning with a signature mask for deep exfoliation', 'Gua sha and sculpting technology for contouring', 'Cold therapy finish to reduce puffiness'],
+    idealFor: 'Congestion • Dullness • Inflammation',
     durationMinutes: 90,
-    price: 4500,
-    featured: false,
-  },
-  {
-    slug: 'casmara-goji-treatment-facial',
-    categorySlug: 'facials',
-    name: 'Casmara Goji Treatment Facial',
-    summary:
-      'Powered by Goji berry extracts, this facial protects skin from free radicals and deeply revitalises it.',
-    bullets: [],
-    durationMinutes: 80,
-    price: 4500,
-    featured: false,
-  },
-  {
-    slug: 'upendice-anti-ageing',
-    categorySlug: 'facials',
-    name: 'Upendice Anti Ageing',
-    summary:
-      'A rejuvenating treatment that minimises fine lines, firms skin and restores elasticity using anti-ageing peptides.',
-    bullets: [],
-    durationMinutes: 90,
-    price: 4500,
-    featured: false,
-  },
-  {
-    slug: 'depuffing-ritual',
-    categorySlug: 'facials',
-    name: 'Depuffing Ritual',
-    summary:
-      'A lymphatic-focused ritual that drains puffiness and re-sculpts a tired face. New on the ESTEQO menu.',
-    bullets: [],
-    durationMinutes: 45,
-    price: 2500,
-    isNew: true,
+    image: '/uploads/facial/premier_contour_facial.jpg',
     featured: false,
   },
 
@@ -456,129 +500,112 @@ export const services = [
 
   // ------------------------------------------------------------------- Add-Ons
   {
-    slug: 'glow-peel',
-    categorySlug: 'add-on-treatments',
-    name: 'Glow Peel',
-    summary:
-      'A mild exfoliating peel for dull, tired skin — perfect for that pre-event glow-up. Add it to your Hydra Facial for enhanced radiance at ₹800.',
-    bullets: ['Mild exfoliating peel for dull, tired skin', 'Add to a Hydra Facial for ₹800'],
-    durationMinutes: 20,
-    price: 1200,
-    priceNote: '₹800 when added to a Hydra Facial',
-    featured: true,
-  },
-  {
-    slug: 'spot-peel',
-    categorySlug: 'add-on-treatments',
-    name: 'Spot Peel',
-    summary:
-      'A targeted chemical peel that treats dark spots, pigmentation and acne marks — customised per area.',
-    bullets: [],
-    durationMinutes: null,
-    price: 3000,
-    priceNote: '₹3,000 – ₹5,000 depending on the area',
-    featured: false,
-  },
-  {
-    slug: 'butt-glow-facial',
-    categorySlug: 'add-on-treatments',
-    name: 'Butt Glow Facial',
-    summary:
-      'A clarifying and brightening treatment for the buttocks — cleansing, exfoliation, a targeted mask and an optional peel for acne, pigmentation and rough texture.',
-    bullets: [],
-    durationMinutes: 40,
-    price: 4500,
-    priceNote: '30–40 minutes',
-    featured: false,
-  },
-  {
-    slug: 'green-sea-peel',
-    categorySlug: 'add-on-treatments',
-    name: 'Green Sea Peel',
-    summary:
-      'A Korean algae-based herbal peel for acne, scars and pigmentation, offering deep exfoliation without harsh chemicals.',
-    bullets: ['Korean algae-based herbal peel', 'Deep exfoliation without harsh chemicals'],
-    durationMinutes: 45,
-    price: 6000,
-    featured: false,
-  },
-  {
-    slug: 'signature-hydra-glow-body-polish',
-    categorySlug: 'add-on-treatments',
-    name: 'Signature Hydra Glow Body Polish',
-    summary:
-      'Cleanses, exfoliates, detoxifies, hydrates and nourishes with a revitalising pack, using Hydra dermabrasion.',
-    bullets: [],
-    durationMinutes: 120,
-    price: 5500,
-    featured: false,
-  },
-  {
-    slug: 'intimate-peel',
-    categorySlug: 'add-on-treatments',
-    name: 'Intimate Peel',
-    summary:
-      'Targets pigmentation on the bikini area, underarms, inner thighs or any intimate area using Meline or BioRepeel — with zero downtime. Two to three sessions may be needed for optimal results.',
-    bullets: [],
-    durationMinutes: 20,
-    price: 6000,
-    priceNote: 'Per session',
-    featured: false,
-  },
-  {
-    slug: 'meline-pigmentation-peel',
-    categorySlug: 'add-on-treatments',
-    name: 'Meline Pigmentation Peel',
-    summary:
-      'A medical-grade depigmenting peel designed to treat melasma, tanning and uneven skin tone with minimal downtime.',
-    bullets: [],
-    durationMinutes: 45,
-    price: 7500,
-    priceNote: 'Per session',
-    featured: false,
-  },
-  {
     slug: 'dermaplaning',
     categorySlug: 'add-on-treatments',
     name: 'Dermaplaning',
-    summary:
-      'Gentle exfoliation using a surgical blade to remove dead skin and peach fuzz for instant smoothness and glow.',
+    summary: 'Gentle exfoliation using a surgical blade to remove dead skin and peach fuzz for instant smoothness and glow.',
+    description:
+      'A medical-grade blade gently removes dead skin cells and fine facial hair from the surface of your skin — safe, precise, and effective even for sensitive skin.',
     bullets: [],
-    durationMinutes: null,
+    durationMinutes: 30,
     price: 1000,
-    priceNote: '₹1,000 face / ₹500 neck — add-on',
-    variants: [
-      { label: 'Face', price: 1000 },
-      { label: 'Neck', price: 500 },
-    ],
+    image: '/uploads/facial/dermaplaning.jpg',
     featured: false,
   },
   {
-    slug: 'esthemax-masks',
+    slug: 'hydradermabrasion',
     categorySlug: 'add-on-treatments',
-    name: 'Esthemax Masks',
-    summary:
-      'Hydro-jelly masks — Egyptian Rose, Youthful Elixir, Spot Diminishing, ALA, Radiance Biotin and Brightening Complex — to boost hydration, glow and targeted results.',
-    bullets: [
-      'Egyptian Rose | Youthful Elixir | Spot Diminishing',
-      'ALA | Radiance Biotin | Brightening Complex',
-      'Boosts hydration, glow and targeted results',
-    ],
-    durationMinutes: null,
-    price: 1500,
-    priceNote: '₹1,500 – ₹2,000 — add-on',
+    name: 'Hydradermabrasion',
+    summary: 'A diamond-tipped wand resurfaces the skin while infusing hydrating serum — added on to any facial.',
+    description:
+      'A diamond-tipped wand resurfaces the skin, clears pores and infuses hydrating serum in one pass — gentle enough for dry skin, without any harsh scrubbing.',
+    bullets: [],
+    durationMinutes: 15,
+    image: '/uploads/facial/hydradermabrasion.jpg',
     featured: false,
   },
   {
-    slug: 'biorepeel',
+    slug: 'extra-extractions',
     categorySlug: 'add-on-treatments',
-    name: 'BioRepeel',
-    summary:
-      'A biphasic TCA peel that exfoliates, brightens and stimulates collagen — without visible peeling or downtime.',
+    name: 'Extra Extractions',
+    summary: 'Additional time spent clearing blackheads and congestion from the areas that need it most.',
+    description:
+      'Extra time focused on stubborn blackheads, whiteheads and clogged pores in the areas that need it most.',
+    bullets: [],
+    durationMinutes: 15,
+    image: '/uploads/facial/extra_extractions.jpg',
+    featured: false,
+  },
+  {
+    slug: 'gua-sha-massage',
+    categorySlug: 'add-on-treatments',
+    name: 'Gua Sha Massage',
+    summary: 'A 30-minute sculpting massage blending traditional gua sha technique with modern tools.',
+    description:
+      'Thirty minutes of traditional gua sha technique blended with modern sculpting tools — a neck-and-face massage that eases tension, boosts circulation and supports lymphatic flow. A shorter version is also available on request.',
+    bullets: [],
+    durationMinutes: 30,
+    image: '/uploads/facial/gua_sha_massage.jpg',
+    featured: false,
+  },
+  {
+    slug: 'custom-jelly-mask',
+    categorySlug: 'add-on-treatments',
+    name: 'Custom Jelly Mask',
+    summary: 'A hydrating peel-off mask finished with hyaluronic acid or collagen.',
+    description:
+      'A hydrating peel-off jelly mask, customised with hyaluronic acid, collagen or skin-boosting peptides depending on what your skin needs that day.',
+    bullets: [],
+    durationMinutes: 15,
+    image: '/uploads/facial/custom_jelly_mask.jpg',
+    featured: false,
+  },
+  {
+    slug: 'lip-plump-and-scrub',
+    categorySlug: 'add-on-treatments',
+    name: 'Lip Plump and Scrub',
+    summary: 'Buffing and red LED light therapy to smooth and plump the lips.',
+    description:
+      'A gentle lip buffing followed by red light therapy to smooth fine lines and support collagen — leaves lips softer and visibly fuller.',
     bullets: [],
     durationMinutes: null,
-    price: 6000,
-    priceNote: 'Per session — add-on',
+    image: '/uploads/facial/lip_plump_and_scrub.jpg',
+    featured: false,
+  },
+  {
+    slug: 'microcurrent',
+    categorySlug: 'add-on-treatments',
+    name: 'Microcurrent',
+    summary: 'Gentle electrical micro-currents that tone and firm the facial muscles.',
+    description:
+      'Targeted electrical micro-currents tone and firm the facial muscles for a visibly contoured look — already built into the Party-Prep and Anti-Aging facials.',
+    bullets: [],
+    durationMinutes: 15,
+    image: '/uploads/facial/microcurrent.jpg',
+    featured: false,
+  },
+  {
+    slug: 'eye-puff-minimizer',
+    categorySlug: 'add-on-treatments',
+    name: 'Eye Puff Minimizer',
+    summary: 'A brightening mask and gua sha technique targeting puffiness and dark circles.',
+    description:
+      'A cooling, vitamin-rich mask paired with gua sha technique to target puffiness, dark circles and under-eye congestion for a brighter look.',
+    bullets: [],
+    durationMinutes: null,
+    image: '/uploads/facial/eye_puff_minimizer.jpg',
+    featured: false,
+  },
+  {
+    slug: 'neck-firming',
+    categorySlug: 'add-on-treatments',
+    name: 'Neck Firming',
+    summary: 'Electrical stimulation that lifts and tones the neck and décolletage.',
+    description:
+      "Targeted electrical stimulation that lifts and tones the neck and décolletage, extending your facial's results further down.",
+    bullets: [],
+    durationMinutes: null,
+    image: '/uploads/facial/neck_firming.jpg',
     featured: false,
   },
 
@@ -718,16 +745,10 @@ export const menuGroups = [
   {
     slug: 'facials',
     name: 'Facials',
-    tagline: 'Every facial and skin treatment on the menu.',
+    tagline: 'The full facial menu, from a 30-minute reset to a 90-minute deep treatment.',
     intro:
-      'From a 30-minute cleanup to advanced laser and micro-needling protocols. Every facial begins with a skin analysis, so the treatment is chosen for your skin rather than picked off a list.',
-    departments: [
-      'medi-facials',
-      'advanced-facials',
-      'facials',
-      'face-clean-up',
-      'add-on-treatments',
-    ],
+      'Every facial gives your skin real results without taking over your day — from a focused 30-minute treatment to a full 90-minute deep-contouring session, plus add-ons to enhance any visit.',
+    departments: ['facials', 'add-on-treatments'],
   },
   {
     slug: 'brows',
@@ -745,24 +766,33 @@ export const menuGroups = [
       'Bridal skin is a schedule, not a single appointment. These packages combine treatments from across the menu into a plan for the bride, the groom and the family — with a package saving against booking each treatment separately.',
     departments: ['bridal'],
   },
-  {
-    slug: 'other',
-    name: 'Other Services',
-    tagline: 'Body, hands, feet, hair removal and massage.',
-    intro:
-      'Everything beyond the face — body brightening and polishing, threading and waxing, manicure and pedicure, nails, and our full massage menu.',
-    departments: [
-      'body-bleach-detan',
-      'body-polish',
-      'threading',
-      'face-waxing',
-      'body-waxing',
-      'manicure',
-      'pedicure',
-      'nails',
-      'massages',
-    ],
-  },
+];
+
+/**
+ * Departments not shown in the Services menu/nav grouping above — deliberately
+ * left out of the top nav, per the site owner's choice. Every one of them is
+ * still fully live: a real page at /services/<slug>, in the sitemap, and
+ * shown on the homepage's full department grid — just not grouped under a
+ * top-level tab.
+ *
+ * medi-facials, advanced-facials and face-clean-up were removed from the
+ * Facials group specifically so that group matches the Silver Mirror facial
+ * menu exactly (just "facials" + "add-on-treatments") without the older
+ * Hydra-series content mixed in.
+ */
+export const UNGROUPED_DEPARTMENTS = [
+  'medi-facials',
+  'advanced-facials',
+  'face-clean-up',
+  'body-bleach-detan',
+  'body-polish',
+  'threading',
+  'face-waxing',
+  'body-waxing',
+  'manicure',
+  'pedicure',
+  'nails',
+  'massages',
 ];
 
 /**
