@@ -224,9 +224,6 @@ function ServiceForm({
   saving,
   error,
   fieldErrors,
-  onUpload,
-  uploading,
-  uploadError,
 }) {
   const isEdit = Boolean(service.id);
   const set = (key) => (event) => {
@@ -261,7 +258,7 @@ function ServiceForm({
         <Field
           id="s-slug"
           label="URL slug"
-          hint={service.slug ? `/treatments/${service.slug}` : 'Left blank, it is built from the name'}
+          hint={service.slug ? `Shown on its department page as “${service.slug}”` : 'Left blank, it is built from the name'}
           error={fieldErrors.slug}
         >
           <input id="s-slug" type="text" value={service.slug} onChange={set('slug')} />
@@ -301,27 +298,11 @@ function ServiceForm({
       </Field>
 
       <div className="admin-form__image">
-        <Field id="s-image" label="Image" error={fieldErrors.image} hint="Choose a file, or paste a path such as /services/21324.jpg">
+        <Field id="s-image" label="Image" error={fieldErrors.image} hint="Path to a photo already in uploads/, e.g. /uploads/facial/signature_facial.jpg">
           <input id="s-image" type="text" value={service.image} onChange={set('image')} placeholder="No image" />
         </Field>
 
-        <div className="admin-upload">
-          <label className="btn btn--secondary admin-upload__button">
-            {uploading ? 'Uploading…' : 'Choose image'}
-            <input
-              type="file"
-              accept="image/*"
-              disabled={uploading}
-              onChange={(event) => {
-                const file = event.target.files?.[0];
-                if (file) onUpload(file);
-                event.target.value = '';
-              }}
-            />
-          </label>
-          {uploadError && <p className="field__error">{uploadError}</p>}
-          {service.image && !uploadError && <img className="admin-upload__preview" src={service.image} alt="" />}
-        </div>
+        {service.image && <img className="admin-upload__preview" src={service.image} alt="" />}
 
         <Field id="s-imagealt" label="Image description" error={fieldErrors.imageAlt} hint="Describes the photo for SEO and screen readers.">
           <input id="s-imagealt" type="text" value={service.imageAlt} onChange={set('imageAlt')} />
@@ -393,8 +374,6 @@ export default function ServicesAdmin() {
   const [serviceSaving, setServiceSaving] = useState(false);
   const [serviceError, setServiceError] = useState('');
   const [serviceFieldErrors, setServiceFieldErrors] = useState({});
-  const [uploading, setUploading] = useState(false);
-  const [uploadError, setUploadError] = useState('');
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -421,19 +400,6 @@ export default function ServicesAdmin() {
   useEffect(() => {
     if (signedIn) load();
   }, [signedIn, load]);
-
-  const uploadImage = async (file) => {
-    setUploading(true);
-    setUploadError('');
-    try {
-      const response = await servicesAdmin.upload(file);
-      setEditingService((current) => ({ ...current, image: response.data.url }));
-    } catch (error) {
-      setUploadError(error.message);
-    } finally {
-      setUploading(false);
-    }
-  };
 
   /* -------------------------------- Departments -------------------------------- */
 
@@ -776,9 +742,6 @@ export default function ServicesAdmin() {
             saving={serviceSaving}
             error={serviceError}
             fieldErrors={serviceFieldErrors}
-            onUpload={uploadImage}
-            uploading={uploading}
-            uploadError={uploadError}
           />
         )}
 
@@ -801,7 +764,7 @@ export default function ServicesAdmin() {
                   <tr key={row.id}>
                     <td>
                       <strong>{row.name}</strong>
-                      <span className="admin-table__slug">/treatments/{row.slug}</span>
+                      <span className="admin-table__slug">{row.slug}</span>
                     </td>
                     <td>{row.category_name || '—'}</td>
                     <td>{row.price != null ? `₹${Number(row.price).toLocaleString('en-IN')}` : 'On consultation'}</td>
@@ -815,8 +778,8 @@ export default function ServicesAdmin() {
                         <button type="button" onClick={() => startEditService(row)}>
                           Edit
                         </button>
-                        {Boolean(row.is_active) && (
-                          <Link to={`/treatments/${row.slug}`} target="_blank" rel="noreferrer">
+                        {Boolean(row.is_active) && row.category_slug && (
+                          <Link to={`/services/${row.category_slug}`} target="_blank" rel="noreferrer">
                             View
                           </Link>
                         )}

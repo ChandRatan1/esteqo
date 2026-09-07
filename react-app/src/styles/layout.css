@@ -62,20 +62,36 @@
   line-height: 1;
 }
 
+.brand__logo {
+  display: block;
+  width: clamp(126px, 12vw, 160px);
+  height: auto;
+}
+
+/* Replaces the old "Brows · Lasers · Skin" strapline: a hairline in the
+   logo's own navy that sweeps out from under the wordmark on hover, picking
+   up the red of the swoosh as it goes. */
+.brand__rule {
+  display: block;
+  height: 2px;
+  width: 28px;
+  margin-top: 7px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--brand-navy) 0%, var(--brand-red) 100%);
+  transition: width 0.45s var(--ease);
+}
+
+.brand:hover .brand__rule,
+.brand:focus-visible .brand__rule {
+  width: 100%;
+}
+
 .brand__mark {
   font-family: var(--heading-font);
   font-size: 1.65rem;
   font-weight: 600;
   letter-spacing: 5px;
   text-transform: uppercase;
-}
-
-.brand__tag {
-  margin-top: 5px;
-  font-size: 0.5625rem;
-  letter-spacing: 2.6px;
-  text-transform: uppercase;
-  color: var(--gray-idle);
 }
 
 .nav {
@@ -466,4 +482,50 @@
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--gold-deep);
+}
+
+/* ------------------------------------------------------------------ */
+/* Floating call / WhatsApp buttons — bottom right on every page       */
+/* ------------------------------------------------------------------ */
+
+.float-contact {
+  position: fixed;
+  right: clamp(16px, 2.5vw, 28px);
+  bottom: clamp(16px, 2.5vw, 28px);
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.float-contact__btn {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+  color: var(--white);
+  transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+
+.float-contact__btn:hover,
+.float-contact__btn:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+}
+
+.float-contact__btn--whatsapp {
+  background: #25d366;
+}
+
+.float-contact__btn--call {
+  background: var(--brand-navy);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .float-contact__btn:hover,
+  .float-contact__btn:focus-visible {
+    transform: none;
+  }
 }

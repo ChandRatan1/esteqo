@@ -137,6 +137,15 @@ export const categories = [
     accent: 'light-green',
     sortOrder: 14,
   },
+  {
+    slug: 'lasers',
+    name: 'Laser Hair Reduction',
+    tagline: 'Medical-grade laser technology for safe, long-term hair reduction.',
+    intro:
+      'Each session is calibrated to your skin tone and hair type. Most areas need six to eight sessions, spaced a few weeks apart, for up to 90% reduction in regrowth.',
+    accent: 'light-blue',
+    sortOrder: 15,
+  },
 ];
 
 /**
@@ -475,6 +484,18 @@ export const services = [
     image: '/uploads/facial/premier_contour_facial.jpg',
     featured: false,
   },
+  {
+    slug: 'microneedling',
+    categorySlug: 'facials',
+    name: 'Microneedling',
+    summary: 'Fine sterile needles create controlled micro-channels in the skin to trigger natural collagen production, smoothing texture and softening scars over a course of sessions.',
+    description:
+      "Hundreds of fine, sterile needles create tiny, controlled micro-channels in the skin's surface, triggering your body's own collagen and elastin production. Over a short course of sessions, this smooths texture, softens acne scarring and fine lines, and tightens visibly loose skin.",
+    bullets: ['Stimulates natural collagen production', 'Improves texture and fine scarring', 'A course of sessions builds visible results'],
+    idealFor: 'Acne scarring • Fine lines and texture • Enlarged pores',
+    durationMinutes: 45,
+    featured: false,
+  },
 
   // -------------------------------------------------------------- Face Clean Up
   {
@@ -606,6 +627,116 @@ export const services = [
     bullets: [],
     durationMinutes: null,
     image: '/uploads/facial/neck_firming.jpg',
+    featured: false,
+  },
+
+  // ------------------------------------------------------------------- Lasers
+  {
+    slug: 'upper-lip-chin-laser',
+    categorySlug: 'lasers',
+    name: 'Upper Lip & Chin',
+    summary: 'Fast, precise laser hair reduction for fine upper-lip and chin hair.',
+    description:
+      'Medical-grade laser technology targets hair follicles at the root, calibrated to your skin tone and hair type. The upper lip and chin are quick to treat and among the most requested areas — most clients see up to 90% reduction over a course of six to eight sessions.',
+    bullets: ['Long-term hair reduction, not just removal', 'Calibrated to your skin tone and hair type', 'Quick sessions, minimal discomfort'],
+    idealFor: 'Frequent threading or waxing • Fine, persistent regrowth • Want a long-term solution',
+    durationMinutes: 15,
+    featured: false,
+  },
+  {
+    slug: 'full-face-laser',
+    categorySlug: 'lasers',
+    name: 'Full Face',
+    summary: 'Comprehensive laser hair reduction across the full face for consistently smoother skin.',
+    description:
+      'Covers the full face in one session rather than treating individual areas separately, targeting hair follicles at the root for long-term reduction. Calibrated to your skin tone and hair type, with results building over a course of six to eight sessions.',
+    bullets: ['Whole-face coverage in a single session', 'Long-term hair reduction, not just removal', 'Calibrated to your skin tone and hair type'],
+    idealFor: 'Frequent facial hair removal • Sensitive skin irritated by waxing • Want a long-term solution',
+    durationMinutes: 30,
+    featured: false,
+  },
+  {
+    slug: 'underarms-laser',
+    categorySlug: 'lasers',
+    name: 'Underarms',
+    summary: 'Laser hair reduction for the underarms — one of the fastest areas to treat, and to see results in.',
+    description:
+      'The underarms respond quickly to laser hair reduction, with visibly finer, sparser regrowth after just a few sessions. Calibrated to your skin tone and hair type, this targets follicles at the root for results that last well beyond a wax or shave.',
+    bullets: ['Long-term hair reduction, not just removal', 'Fast sessions with minimal discomfort', 'No more razor bumps or ingrown hairs'],
+    idealFor: 'Frequent shaving or waxing • Razor bumps or irritation • Want a long-term solution',
+    durationMinutes: 15,
+    featured: true,
+  },
+  {
+    slug: 'half-arms-laser',
+    categorySlug: 'lasers',
+    name: 'Half Arms',
+    summary: 'Laser hair reduction from elbow to wrist.',
+    description:
+      'Targets hair follicles from elbow to wrist, calibrated to your skin tone and hair type. Regrowth becomes visibly finer and sparser over a course of six to eight sessions.',
+    bullets: ['Long-term hair reduction, not just removal', 'Calibrated to your skin tone and hair type', 'No downtime — return to your day immediately'],
+    idealFor: 'Frequent waxing or shaving • Ingrown hairs • Want a long-term solution',
+    durationMinutes: 30,
+    featured: false,
+  },
+  {
+    slug: 'full-arms-laser',
+    categorySlug: 'lasers',
+    name: 'Full Arms',
+    summary: 'Laser hair reduction across the full arm, shoulder to wrist.',
+    description:
+      'Covers the full arm, shoulder to wrist, targeting hair follicles at the root. Calibrated to your skin tone and hair type, with visible reduction building over a course of sessions.',
+    bullets: ['Long-term hair reduction, not just removal', 'Whole-arm coverage in one session', 'Calibrated to your skin tone and hair type'],
+    idealFor: 'Frequent waxing or shaving • Ingrown hairs • Want a long-term solution',
+    durationMinutes: 45,
+    featured: false,
+  },
+  {
+    slug: 'half-legs-laser',
+    categorySlug: 'lasers',
+    name: 'Half Legs',
+    summary: 'Laser hair reduction from knee to ankle.',
+    description:
+      'Targets hair follicles from knee to ankle, calibrated to your skin tone and hair type. Most clients see up to 90% reduction in regrowth over a course of six to eight sessions.',
+    bullets: ['Long-term hair reduction, not just removal', 'Calibrated to your skin tone and hair type', 'No downtime — return to your day immediately'],
+    idealFor: 'Frequent waxing or shaving • Ingrown hairs • Want a long-term solution',
+    durationMinutes: 45,
+    featured: false,
+  },
+  {
+    slug: 'full-legs-laser',
+    categorySlug: 'lasers',
+    name: 'Full Legs',
+    summary: 'Laser hair reduction across the full leg, thigh to ankle.',
+    description:
+      'Covers the full leg, thigh to ankle, in one session — targeting hair follicles at the root for reduction that outlasts a wax or shave. Calibrated to your skin tone and hair type, with results building over a course of sessions.',
+    bullets: ['Long-term hair reduction, not just removal', 'Whole-leg coverage in one session', 'Calibrated to your skin tone and hair type'],
+    idealFor: 'Frequent waxing or shaving • Ingrown hairs • Want a long-term solution',
+    durationMinutes: 60,
+    featured: true,
+  },
+  {
+    slug: 'bikini-line-laser',
+    categorySlug: 'lasers',
+    name: 'Bikini Line',
+    summary: 'Precise laser hair reduction along the bikini line.',
+    description:
+      'A precise, controlled treatment along the bikini line, calibrated to your skin tone and hair type. Regrowth becomes visibly finer and sparser over a course of six to eight sessions, with none of the irritation that comes with regular waxing.',
+    bullets: ['Long-term hair reduction, not just removal', 'Reduces ingrown hairs from regular waxing', 'Calibrated to your skin tone and hair type'],
+    idealFor: 'Frequent waxing • Ingrown hairs or irritation • Want a long-term solution',
+    durationMinutes: 20,
+    featured: false,
+  },
+  {
+    slug: 'full-body-laser',
+    categorySlug: 'lasers',
+    name: 'Full Body',
+    summary: 'A comprehensive full-body laser hair reduction session covering every treated area in one visit.',
+    description:
+      'Combines every treated area — face, arms, legs, underarms and bikini line — into a single, comprehensive session. Calibrated to your skin tone and hair type, with up to 90% reduction in regrowth over a course of six to eight sessions.',
+    bullets: ['Every area in a single visit', 'Long-term hair reduction, not just removal', 'Calibrated to your skin tone and hair type'],
+    idealFor: 'Want everything done in one visit • Frequent waxing or shaving across the body • Want a long-term solution',
+    durationMinutes: 90,
     featured: false,
   },
 
@@ -748,7 +879,7 @@ export const menuGroups = [
     tagline: 'The full facial menu, from a 30-minute reset to a 90-minute deep treatment.',
     intro:
       'Every facial gives your skin real results without taking over your day — from a focused 30-minute treatment to a full 90-minute deep-contouring session, plus add-ons to enhance any visit.',
-    departments: ['facials', 'add-on-treatments'],
+    departments: ['facials', 'add-on-treatments', 'lasers'],
   },
   {
     slug: 'brows',

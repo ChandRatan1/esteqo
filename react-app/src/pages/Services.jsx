@@ -4,51 +4,49 @@ import { categoryBySlug, groupPath, menuGroups, servicesWithCategory } from '../
 import { CtaBand } from '../components/Sections';
 import { EmptyState } from '../components/States';
 import Media from '../components/Media';
+import EnquiryForm from '../components/EnquiryForm';
 import Seo from '../seo/Seo';
 import { absoluteUrl } from '../seo/config';
 
-/** One representative photo per menu group, shown at the top of the panel. */
-const GROUP_IMAGES = {
-  facials: { src: '/uploads/facial/premier_contour_facial.jpg', accent: 'light-pink' },
-  brows: { src: '/uploads/brows/brow_shape.jpg', accent: 'light-brown' },
-  bridal: { src: '/uploads/bridal/bridal-radiance-90-days.jpg', accent: 'light-pink' },
-};
-
 /**
- * Extra hero copy per group — mostly so the text column has enough content to
- * sit level with the photo next to it, but written from ESTEQO's own service
- * detail (react-app/src/data/brows.js has the full brow process; the others
- * mirror how those departments are actually structured in the catalogue).
+ * The banner at the top of each menu group: a title, three points, and one
+ * representative photo. Same layout and colour for every group — only the
+ * copy and the photo change.
+ *
+ * The banner is a wide panel (roughly 3:2), so a landscape photo is used
+ * wherever one exists. `focus` sets object-position for the photos that are
+ * portrait, keeping the face in frame instead of cropping to the middle.
  */
-const GROUP_EXTRA = {
+const GROUP_HERO = {
   facials: {
-    intro:
-      'Every facial on the menu begins the same way: a short skin analysis, so the treatment is chosen for what your skin needs that day rather than a fixed script.',
-    steps: [
-      { title: 'Consultation', text: 'A quick skin analysis before anything else — oiliness, sensitivity, pigmentation, the concern you actually came in for.' },
-      { title: 'Cleanse & exfoliate', text: 'Double cleansing and gentle exfoliation clear the way so the treatment step can actually absorb.' },
-      { title: 'Targeted treatment', text: 'Dermabrasion, a peel, LED light or micro-needling — whichever addresses your specific concern.' },
-      { title: 'Finish & protect', text: 'A hydrating mask, serum and aftercare guidance, so results keep building after you leave.' },
+    title: 'Facial Services',
+    image: '/uploads/facial/premier_contour_facial.jpg',
+    focus: 'center',
+    points: [
+      'Custom-tailored facials for unique skin needs',
+      'Powered by advanced facial technology',
+      'Expert guidance to elevate your skincare routine',
     ],
   },
   brows: {
-    intro:
-      'Documented in full for Brow Shape and Brow Tint — every brow service follows the same five-step structure.',
-    steps: [
-      { title: 'Consultation', text: 'Your preferred style is assessed alongside your existing shape, density and growth pattern.' },
-      { title: 'Brow mapping', text: 'A customised map sets the start, arch, peak and tail for your features before anything is removed.' },
-      { title: 'Precision hair removal', text: 'Threading, waxing, tweezing or trimming — combined as your brows need, never over-thinned.' },
-      { title: 'Finishing', text: 'A detailed pass checks symmetry and balance, then styles the brow.' },
-      { title: 'Aftercare', text: 'Guidance on maintaining the shape between appointments.' },
+    title: 'Brow Services',
+    // Portrait (1080x1440) — framed on the upper third so the brows stay in shot.
+    image: '/uploads/brows/brow_shape.jpg',
+    focus: 'center 28%',
+    points: [
+      'Brow mapping designed around your facial structure, not trends',
+      'Tinting, lamination and semi-permanent artistry',
+      'Definition that lasts, with zero downtime',
     ],
   },
   bridal: {
-    intro:
-      'Bridal skin is a schedule, not a single appointment — every package is planned backwards from your wedding date.',
-    steps: [
-      { title: 'Consultation', text: 'A skin analysis and a written plan built around your wedding date, from three months out to the week of.' },
-      { title: 'Scheduled treatments', text: 'A 90-day, 30-day or wedding-week programme, spaced so pigmentation, tone and texture improve gradually.' },
-      { title: 'Final week', text: 'A day-before ritual and last touch-ups, timed so nothing is done too close to the day itself.' },
+    title: 'Bridal Services',
+    image: '/uploads/bridal/bridal-party-group-booking.jpg',
+    focus: 'center',
+    points: [
+      'Packages planned backwards from your wedding date',
+      'Skin, brows and grooming scheduled across 90, 30 or 7 days',
+      'Programmes for the bride, the groom and the family',
     ],
   },
 };
@@ -87,6 +85,27 @@ function Caret({ open }) {
   );
 }
 
+/** Simple line-art glyph per department, shown in the badge next to each treatment name. */
+const DEPARTMENT_ICON_PATHS = {
+  facials: 'M12 2l1.8 5.6H20l-4.8 3.5 1.8 5.6L12 13.2l-5 3.5 1.8-5.6L4 7.6h6.2z',
+  'add-on-treatments': 'M12 2C9 6 6 9.5 6 13a6 6 0 0012 0c0-3.5-3-7-6-11z',
+  lasers: 'M13 2L4 14h6l-1 8 9-12h-6l1-8z',
+  brows: 'M3 15c2-4 6-6 9-6s7 2 9 6',
+  bridal: 'M12 3l2.2 4.5L19 8l-3.5 3.4L16.3 16 12 13.7 7.7 16l.8-4.6L5 8l4.8-.5z',
+};
+const DEFAULT_ICON_PATH = 'M12 2a10 10 0 100 20 10 10 0 000-20zm0 4v6l4 2';
+
+function DepartmentIcon({ categorySlug }) {
+  const path = DEPARTMENT_ICON_PATHS[categorySlug] || DEFAULT_ICON_PATH;
+  return (
+    <span className="tcard__icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d={path} stroke="#fff" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </span>
+  );
+}
+
 function TreatmentCard({ service, open, onToggle }) {
   const panelId = `t-${service.slug}`;
 
@@ -95,6 +114,7 @@ function TreatmentCard({ service, open, onToggle }) {
       <h4 className="tcard__head">
         <button type="button" aria-expanded={open} aria-controls={panelId} onClick={onToggle}>
           <span className="tcard__name">
+            <DepartmentIcon categorySlug={service.categorySlug} />
             {service.name}
             {service.isFeatured && <span className="tag-best">★ Most booked</span>}
             {service.isNew && <span className="tag-new">New</span>}
@@ -132,9 +152,6 @@ function TreatmentCard({ service, open, onToggle }) {
             <div className="btn-row" style={{ marginTop: 24 }}>
               <Link to={`/appointment?service=${service.slug}`} className="btn btn--primary">
                 Book now
-              </Link>
-              <Link to={`/treatments/${service.slug}`} className="link-underline">
-                Full details
               </Link>
             </div>
           </div>
@@ -217,6 +234,7 @@ export default function Services() {
   }, [group, query]);
 
   const total = sections.reduce((sum, s) => sum + s.items.length, 0);
+  const hero = GROUP_HERO[group.slug] || GROUP_HERO.facials;
 
   return (
     <>
@@ -231,51 +249,22 @@ export default function Services() {
       />
 
       <section className="svc-hero">
-        <div className="container svc-hero__inner">
-          <article>
-            <span className="eyebrow">Treatment menu</span>
-            <h1>Our Services</h1>
+        <div className="svc-hero__panel">
+          <article className="svc-hero__text">
+            <h1>{hero.title}</h1>
             <ul className="svc-hero__points">
-              <li>Custom-planned treatments for your skin, not a template</li>
-              <li>Medical-grade technology and professional formulations</li>
-              <li>Every service begins with a detailed consultation</li>
+              {hero.points.map((point) => (
+                <li key={point}>{point}</li>
+              ))}
             </ul>
-
-            {GROUP_EXTRA[group.slug] && (
-              <div className="svc-hero__extra">
-                <p className="svc-hero__extra-intro">{GROUP_EXTRA[group.slug].intro}</p>
-
-                {GROUP_EXTRA[group.slug].steps.length > 0 && (
-                  <ol className="svc-hero__steps">
-                    {GROUP_EXTRA[group.slug].steps.map((step) => (
-                      <li key={step.title}>
-                        <strong>{step.title}</strong>
-                        <span>{step.text}</span>
-                      </li>
-                    ))}
-                  </ol>
-                )}
-
-                {GROUP_EXTRA[group.slug].highlights && (
-                  <ul className="svc-hero__highlights">
-                    {GROUP_EXTRA[group.slug].highlights.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            )}
           </article>
-          <Media
-            className="svc-hero__media"
-            variant="natural"
-            src={GROUP_IMAGES[group.slug]?.src}
-            alt={group.name}
-            accent={GROUP_IMAGES[group.slug]?.accent || 'cream'}
-            label={GROUP_IMAGES[group.slug]?.src ? group.name : 'ESTEQO'}
-          />
+
+          <div className="svc-hero__media" style={{ '--hero-focus': hero.focus }}>
+            <Media src={hero.image} alt={hero.title} accent="light-yellow" label={group.name} />
+          </div>
         </div>
       </section>
+
 
       <section className="section">
         <div className="container svc-layout">
@@ -403,6 +392,19 @@ export default function Services() {
               </section>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="section section--cream">
+        <div className="container container--narrow">
+          <div className="section-head section-head--center">
+            <span className="eyebrow">Still deciding?</span>
+            <h2>Ask us which treatment is right for you</h2>
+            <p className="lede">
+              Send us your skin concern and we'll suggest the right starting point — no obligation.
+            </p>
+          </div>
+          <EnquiryForm variant="contact" />
         </div>
       </section>
 

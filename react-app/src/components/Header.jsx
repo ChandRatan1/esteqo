@@ -5,9 +5,9 @@ import { groupPath, menuGroups } from '../data/menu';
 
 const NAV = [
   { label: 'Services', to: '/services', mega: true },
-  { label: 'About', to: '/about' },
-  { label: 'Values', to: '/values' },
+  { label: 'Our Story', to: '/values' },
   { label: 'Blog', to: '/blog' },
+  { label: 'Gift Cards', to: '/gift-cards' },
   { label: 'Contact', to: '/contact' },
 ];
 
@@ -73,8 +73,8 @@ export default function Header() {
 
   const Brand = (
     <Link to="/" className="brand" aria-label={`${brand.site_name} home`}>
-      <span className="brand__mark">{brand.site_name}</span>
-      <span className="brand__tag">Brows · Lasers · Skin</span>
+      <img className="brand__logo" src="/logo.svg" alt={brand.site_name} width="150" height="45" />
+      <span className="brand__rule" aria-hidden="true" />
     </Link>
   );
 

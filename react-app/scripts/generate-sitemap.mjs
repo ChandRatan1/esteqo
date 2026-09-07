@@ -47,7 +47,7 @@ const BLOG_API = (process.env.BLOG_API || fromEnv('VITE_BLOG_API')).replace(/\/$
 
 const load = async (rel) => import(pathToFileURL(path.join(root, rel)).href);
 
-const { categories, services } = await load('src/data/menu.js');
+const { categories } = await load('src/data/menu.js');
 const { blogPosts: bundledPosts } = await load('src/data/site.js');
 
 /** Published posts from the API, or null when it is unreachable. */
@@ -85,8 +85,7 @@ const STATIC = [
   ['/appointment', 0.9, 'monthly'],
   ['/contact', 0.8, 'monthly'],
   ['/blog', 0.8, 'weekly'],
-  ['/about', 0.7, 'monthly'],
-  ['/values', 0.6, 'monthly'],
+  ['/values', 0.7, 'monthly'],
 ];
 
 const urls = [];
@@ -95,7 +94,6 @@ const push = (loc, priority, changefreq, lastmod = today) =>
 
 for (const [loc, priority, changefreq] of STATIC) push(loc, priority, changefreq);
 for (const c of categories) push(`/services/${c.slug}`, 0.8, 'monthly');
-for (const s of services) push(`/treatments/${s.slug}`, 0.7, 'monthly');
 
 for (const p of posts) {
   // The API returns publishedAt; the bundled file uses the same key.
@@ -134,5 +132,5 @@ if (fs.existsSync(robotsPath)) {
 
 console.log(
   `sitemap.xml: ${urls.length} URLs — ${STATIC.length} pages, ${categories.length} departments, ` +
-    `${services.length} treatments, ${posts.length} posts [${postSource}] -> ${SITE_URL}`
+    `${posts.length} posts [${postSource}] -> ${SITE_URL}`
 );

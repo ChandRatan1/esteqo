@@ -45,7 +45,7 @@ const FORMSUBMIT_URL = `https://formsubmit.co/ajax/${encodeURIComponent(FORMSUBM
 // backend at all (see storeInDatabase below, which degrades to email-only).
 const CONTACT_API = API_ORIGIN;
 
-const CONTACT_LINE = 'Please call or WhatsApp us on +91 8010135135 instead.';
+const CONTACT_LINE = 'Please call us on +91 8010135135 or WhatsApp +91 9958066388 instead.';
 
 const LABELS = {
   fullName: 'Name',
@@ -154,41 +154,66 @@ async function postJson(url, payload) {
   return { response, result };
 }
 
-/** Transport 1 — Web3Forms. Delivers to enquirySender, copies enquiryCc. */
-async function sendViaWeb3Forms(kind, values, ref) {
+/** Transport 1 (generic) — Web3Forms. Delivers to enquirySender, copies enquiryCc. */
+async function sendFieldsViaWeb3Forms(subject, fields, replyToEmail) {
   const { response, result } = await postJson(WEB3FORMS_URL, {
     access_key: WEB3FORMS_KEY,
-    subject: `${SUBJECTS[kind]}${ref ? ` (${ref})` : ''}`,
+    subject,
     from_name: 'ESTEQO website',
     ccemail: enquiryCc.join(','),
-    ...toFields(kind, values, ref),
+    ...fields,
     // Reply-To only — does not change where the email is delivered.
-    ...(values.email ? { replyto: values.email } : {}),
+    ...(replyToEmail ? { replyto: replyToEmail } : {}),
   });
 
   if (!response.ok || result.success === false) {
-    throw new FormError(result.message || `We could not send your enquiry. ${CONTACT_LINE}`);
+    throw new FormError(result.message || `We could not send this. ${CONTACT_LINE}`);
   }
 }
 
-/** Transport 2 — FormSubmit. Delivers to enquirySender, copies enquiryCc. */
-async function sendViaFormSubmit(kind, values, ref) {
+/** Transport 2 (generic) — FormSubmit. Delivers to enquirySender, copies enquiryCc. */
+async function sendFieldsViaFormSubmit(subject, fields, replyToEmail) {
   const { response, result } = await postJson(FORMSUBMIT_URL, {
-    _subject: `${SUBJECTS[kind]}${ref ? ` (${ref})` : ''}`,
+    _subject: subject,
     _cc: enquiryCc.join(','),
     _template: 'table',
     // Required for a pure AJAX submission — otherwise the service redirects to
     // a captcha page, which would take the visitor off the site.
     _captcha: 'false',
-    ...(values.email ? { _replyto: values.email } : {}),
-    ...toFields(kind, values, ref),
+    ...(replyToEmail ? { _replyto: replyToEmail } : {}),
+    ...fields,
   });
 
   // FormSubmit returns success as the string "true".
   const ok = response.ok && String(result.success) === 'true';
   if (!ok) {
-    throw new FormError(result.message || `We could not send your enquiry. ${CONTACT_LINE}`);
+    throw new FormError(result.message || `We could not send this. ${CONTACT_LINE}`);
   }
+}
+
+/** Sends an arbitrary labelled field map by whichever transport is configured. */
+async function sendFields(subject, fields, replyToEmail) {
+  if (WEB3FORMS_KEY) {
+    await sendFieldsViaWeb3Forms(subject, fields, replyToEmail);
+  } else {
+    await sendFieldsViaFormSubmit(subject, fields, replyToEmail);
+  }
+}
+
+async function sendViaWeb3Forms(kind, values, ref) {
+  await sendFieldsViaWeb3Forms(
+    `${SUBJECTS[kind]}${ref ? ` (${ref})` : ''}`,
+    toFields(kind, values, ref),
+    values.email
+  );
+}
+
+async function sendViaFormSubmit(kind, values, ref) {
+  await sendFieldsViaFormSubmit(
+    `${SUBJECTS[kind]}${ref ? ` (${ref})` : ''}`,
+    toFields(kind, values, ref),
+    values.email
+  );
 }
 
 /**
@@ -306,4 +331,61 @@ export async function submitEnquiry(kind, values) {
           : `Thank you${values.fullName ? `, ${values.fullName.split(' ')[0]}` : ''}. We have received your enquiry and will be in touch shortly.`,
     },
   };
+}
+
+/**
+ * Skin quiz submission — emails every answer to ESTEQO and stores the row in
+ * the `quiz_submissions` table via the backend, mirroring submitEnquiry's
+ * email-plus-store pattern but with a dynamic field map instead of the fixed
+ * appointment/contact shape.
+ *
+ * @param {{firstName: string, lastName: string, email: string, answers: Array<{label: string, value: string}>, recommendedService: string}} data
+ */
+export async function submitQuiz(data) {
+  const fullName = `${data.firstName} ${data.lastName}`.trim();
+
+  const fields = {
+    Name: fullName,
+    Email: data.email,
+    'Recommended facial': data.recommendedService,
+    ...Object.fromEntries(data.answers.map((a) => [a.label, a.value])),
+    'Submitted from': window.location.href,
+  };
+
+  let emailSent = false;
+  let emailError = null;
+  try {
+    await sendFields('New Skin Quiz Result - ESTEQO Website', fields, data.email);
+    emailSent = true;
+  } catch (error) {
+    emailError = error;
+  }
+
+  let stored = false;
+  if (CONTACT_API) {
+    try {
+      const response = await fetch(`${CONTACT_API}/api/quiz`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          answers: data.answers,
+          recommendedService: data.recommendedService,
+          emailSent,
+        }),
+      });
+      stored = response.ok;
+      if (!stored) {
+        console.warn(`[esteqo] Quiz result emailed but NOT saved. ${CONTACT_API}/api/quiz returned ${response.status}.`);
+      }
+    } catch (error) {
+      console.warn(`[esteqo] Quiz result emailed but NOT saved. Could not reach ${CONTACT_API}/api/quiz — ${error.message}.`);
+    }
+  }
+
+  if (!emailSent && !stored) throw emailError || new FormError(`We could not save your quiz result. ${CONTACT_LINE}`);
+
+  return { data: { stored, emailSent } };
 }

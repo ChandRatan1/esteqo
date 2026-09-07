@@ -29,8 +29,13 @@
   --cream: #fcf7f2;
   --light-yellow: #fff4d0;
   --bright-yellow: #ffe276;
+  /* The services group banner — one colour shared by every group. */
+  --hero-yellow: #f4df7c;
 
-  /* ESTEQO brand */
+  /* ESTEQO brand — taken from the logo artwork in uploads/Favicon */
+  --brand-navy: #283371;
+  --brand-red: #f05458;
+
   --ink: #1f1b18;
   --ink-soft: #4a423c;
   --sand: #e4dbd3;

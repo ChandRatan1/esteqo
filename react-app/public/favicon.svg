@@ -1,12 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="12" fill="#1F1B18" />
-  <text
-    x="32"
-    y="43"
-    text-anchor="middle"
-    font-family="Georgia, 'Times New Roman', serif"
-    font-size="34"
-    font-weight="600"
-    fill="#FCF7F2"
-  >E</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="ESTEQO">
+  <rect width="64" height="64" rx="14" fill="#283371"/>
+  <!-- E, drawn to echo the fine strokes of the ESTEQO wordmark -->
+  <path d="M22 17h22v3.6H25.6v9.6h16.2v3.6H25.6v10H44V47H22z" fill="#ffffff"/>
+  <!-- The red swoosh from the logo's Q, sweeping under the letter -->
+  <path d="M18 50.5c4.6 4 9.2 4 13.8 0s9.2-4 13.8 0" fill="none" stroke="#f05458" stroke-width="3.2" stroke-linecap="round"/>
 </svg>

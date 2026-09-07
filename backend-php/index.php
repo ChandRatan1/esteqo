@@ -34,6 +34,8 @@ require __DIR__ . '/routes/page_seo.php';
 require __DIR__ . '/routes/prerender.php';
 require __DIR__ . '/routes/contacts.php';
 require __DIR__ . '/routes/uploads.php';
+require __DIR__ . '/routes/gift_cards.php';
+require __DIR__ . '/routes/quiz.php';
 
 apply_cors($config['cors_origins'] ?? []);
 
@@ -51,13 +53,17 @@ $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
 // The SPA catch-all in .htaccess rewrites every non-file page request
 // straight to THIS script (not to a virtual /api/render-shell path), so the
-// whole thing resolves in a single Apache rewrite hop. Some hosts (LiteSpeed
-// among them) do not reliably preserve the request path across a second
-// internal rewrite through this folder's own .htaccess, which could send an
-// ordinary page request into the wrong route entirely. Checking this first,
-// before any of the normal /api routing below, sidesteps that completely.
+// whole thing resolves in a single Apache rewrite hop. `__spa_path` is only
+// used as the TRIGGER for this branch — the path value itself comes from
+// REQUEST_URI, not the query param. Some hosts (LiteSpeed among them) do not
+// reliably preserve a rewrite's captured group ($1) across a second internal
+// rewrite through this folder's own .htaccess, which silently turns every
+// page into the homepage (title/canonical/OG all resolve to "/"). REQUEST_URI
+// is set by the web server itself from the original request and survives
+// internal rewrites intact on every host, so it doesn't have that failure mode.
 if ($method === 'GET' && isset($_GET['__spa_path'])) {
-    route_render_shell($config, (string) $_GET['__spa_path']);
+    $spaPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+    route_render_shell($config, $spaPath);
 }
 
 $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
@@ -370,6 +376,43 @@ if ($matches(['contacts', '*'])) {
 // contacts rows, so accept the old paths too rather than breaking them.
 if ($method === 'POST' && ($matches(['appointments']) || $matches(['newsletter']) || $matches(['contact']))) {
     route_contacts_create($config);
+}
+
+// ---- Gift cards ------------------------------------------------------
+
+// POST /api/gift-cards (public)
+if ($method === 'POST' && $matches(['gift-cards'])) {
+    route_gift_card_create($config);
+}
+
+// GET /api/admin/gift-cards
+if ($method === 'GET' && $matches(['admin', 'gift-cards'])) {
+    route_admin_gift_cards_list($config);
+}
+
+// PUT /api/admin/gift-cards/{id}
+if ($matches(['admin', 'gift-cards', '*'])) {
+    require_admin($config);
+    $id = (int) $segments[2];
+    if ($id < 1) {
+        json_error('Invalid gift card request id', 400);
+    }
+    if ($method === 'PUT' || $method === 'PATCH') {
+        route_admin_gift_card_update($config, $id);
+    }
+    json_error('Method not allowed', 405);
+}
+
+// ---- Skin quiz ---------------------------------------------------------
+
+// POST /api/quiz (public)
+if ($method === 'POST' && $matches(['quiz'])) {
+    route_quiz_create($config);
+}
+
+// GET /api/admin/quiz
+if ($method === 'GET' && $matches(['admin', 'quiz'])) {
+    route_admin_quiz_list($config);
 }
 
 /* ------------------------------------------------------------------ */

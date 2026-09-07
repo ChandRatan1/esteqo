@@ -155,6 +155,26 @@ CREATE TABLE IF NOT EXISTS `faqs` (
   PRIMARY KEY (`id`),
   KEY `idx_faqs_group_sort` (`faq_group`,`sort_order`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE IF NOT EXISTS `gift_card_requests` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `buyer_name` varchar(160) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `buyer_email` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `buyer_phone` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `recipient_name` varchar(160) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `recipient_contact` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `services` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `amount_note` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `payment_screenshot` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `message` text COLLATE utf8mb4_unicode_ci,
+  `status` enum('pending','verified','issued','rejected') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `gift_code` varchar(60) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `admin_note` text COLLATE utf8mb4_unicode_ci,
+  `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_gift_card_requests_status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE IF NOT EXISTS `newsletter_subscribers` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `email` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -172,6 +192,18 @@ CREATE TABLE IF NOT EXISTS `page_seo_overrides` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`path`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE IF NOT EXISTS `quiz_submissions` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `last_name` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `answers` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `recommended_service` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email_sent` tinyint(1) NOT NULL DEFAULT '0',
+  `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 CREATE TABLE IF NOT EXISTS `service_categories` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,

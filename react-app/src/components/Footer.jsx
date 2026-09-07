@@ -81,7 +81,7 @@ export default function Footer() {
       <div className="container">
         <div className="footer__top">
           <div className="footer__brand">
-            <span className="brand__mark">{brand.site_name}</span>
+            <img className="brand__logo" src="/logo-light.svg" alt={brand.site_name} width="170" height="51" />
             <p className="footer__blurb">
               {brand.site_tagline} Clinically planned skin, brow and laser treatments led by{' '}
               {brand.founder_name} in Sector 25, Noida.
@@ -123,10 +123,10 @@ export default function Footer() {
             <h2 className="footer__title">Clinic</h2>
             <ul className="footer__list">
               <li>
-                <Link to="/about">About ESTEQO</Link>
+                <Link to="/values">Our story</Link>
               </li>
               <li>
-                <Link to="/values">Our values &amp; FAQ</Link>
+                <Link to="/values#faq">FAQ</Link>
               </li>
               <li>
                 <Link to="/blog">Blog</Link>
@@ -136,6 +136,12 @@ export default function Footer() {
               </li>
               <li>
                 <Link to="/appointment">Book an appointment</Link>
+              </li>
+              <li>
+                <Link to="/gift-cards">Gift cards</Link>
+              </li>
+              <li>
+                <Link to="/referral-program">Referral program</Link>
               </li>
             </ul>
           </div>

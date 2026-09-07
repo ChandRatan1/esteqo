@@ -44,7 +44,7 @@ export function CategoryCard({ category }) {
 export function ServiceCard({ service, showCategory = false }) {
   const accent = service.category?.accent || 'cream';
   return (
-    <Link to={`/treatments/${service.slug}`} className={`svc-card flip-card accent-${accent}`}>
+    <Link to={`/services/${service.category?.slug}`} className={`svc-card flip-card accent-${accent}`}>
       <div className="flip-card__inner">
         <div className="flip-card__face flip-card__face--front">
           <div className="flip-card__front-media">

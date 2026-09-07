@@ -44,10 +44,24 @@
 }
 
 .admin-nav__brand {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
   margin-bottom: 16px;
-  font-family: var(--display-font, inherit);
-  font-size: 1.5rem;
-  font-weight: 700;
+}
+
+.admin-nav__brand img {
+  display: block;
+  width: 112px;
+  height: auto;
+}
+
+.admin-nav__brand span {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--gray-idle);
 }
 
 .admin-nav__tabs {

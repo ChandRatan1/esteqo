@@ -53,19 +53,6 @@ function route_sitemap_xml(array $config): void
         ];
     }
 
-    $services = db_all(
-        'SELECT slug, sitemap_priority, sitemap_changefreq, updated_at
-         FROM services WHERE is_active = 1 AND noindex = 0 ORDER BY sort_order'
-    );
-    foreach ($services as $s) {
-        $urls[] = [
-            "$siteUrl/treatments/{$s['slug']}",
-            substr((string) $s['updated_at'], 0, 10) ?: $today,
-            $s['sitemap_changefreq'],
-            (float) $s['sitemap_priority'],
-        ];
-    }
-
     $posts = db_all(
         "SELECT slug, sitemap_priority, sitemap_changefreq, published_at, updated_at
          FROM blog_posts WHERE status = 'published' AND noindex = 0 ORDER BY published_at DESC"

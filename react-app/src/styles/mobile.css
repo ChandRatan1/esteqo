@@ -175,3 +175,17 @@
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
 }
+
+/* The sticky action bar is shown at 720px (see layout.css), so the floating
+   buttons are lifted clear of it at exactly the same breakpoint — otherwise
+   they would float above a bar that is not there. */
+@media (max-width: 720px) {
+  .float-contact {
+    bottom: calc(74px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .float-contact__btn {
+    width: 46px;
+    height: 46px;
+  }
+}

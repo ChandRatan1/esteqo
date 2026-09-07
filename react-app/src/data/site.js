@@ -16,7 +16,7 @@ export const settings = {
   contact: {
     phone: '+91 8010135135',
     phone_link: '+918010135135',
-    whatsapp: '+918010135135',
+    whatsapp: '+919958066388',
     email: 'Info.esteqo@gmail.com',
     address_line1: 'ESTEQO, Shop No. 209, First Floor, Modi Mall',
     address_line2: 'Sector 25, Noida, Uttar Pradesh – 201301',
@@ -410,7 +410,7 @@ Come without makeup if you can. Avoid sun exposure and strong exfoliating active
 
 You will leave with a protocol, not just a treatment. Aftercare and the spacing of your next appointment are part of the result.
 
-Call or WhatsApp **+91 8010135135** if anything changes before your slot.`,
+Call **+91 8010135135** or WhatsApp **+91 9958066388** if anything changes before your slot.`,
   },
 ];
 
@@ -420,7 +420,7 @@ export const faqs = {
     { id: 'g2', question: 'Do I need an appointment, or can I walk in?', answer: 'Walk-ins are welcome when a slot is free, but we strongly recommend booking. Every service begins with a detailed skin consultation, and a booked slot guarantees your specialist has time to plan the treatment properly.' },
     { id: 'g3', question: 'What happens during the first consultation?', answer: 'Your specialist analyses your skin type, concerns and history before recommending anything. We plan treatments after analysis, not around trends.' },
     { id: 'g4', question: 'Do you serve areas outside Noida?', answer: 'Clients travel to us from across Noida, Greater Noida, Ghaziabad and Delhi NCR. Tell us your area when you enquire and we will suggest the easiest time to reach Sector 25.' },
-    { id: 'g5', question: 'How do I reschedule?', answer: 'Call or WhatsApp +91 8010135135, or email Info.esteqo@gmail.com. Please give us at least 24 hours notice so we can offer the slot to someone else.' },
+    { id: 'g5', question: 'How do I reschedule?', answer: 'Call +91 8010135135, WhatsApp +91 9958066388, or email Info.esteqo@gmail.com. Please give us at least 24 hours notice so we can offer the slot to someone else.' },
   ],
   'medi-facials': [
     { id: 'm1', question: 'What is the difference between Hydra Clean Up and Hydra Facial?', answer: 'The Hydra Clean Up (30 mins, ₹2,000) is a focused cleansing treatment for sensitive or acne-prone skin. The Hydra Facial (80 mins, ₹3,000) adds serum infusion, cryo therapy, ultrasound and LED for a full multi-step result.' },

@@ -196,32 +196,6 @@ export default function Seo({
   return null;
 }
 
-/** Service / treatment page schema. */
-export function serviceSchema(service) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Service',
-    name: service.name,
-    description: service.summary,
-    serviceType: service.category?.name,
-    url: absoluteUrl(`/treatments/${service.slug}`),
-    provider: { '@id': `${absoluteUrl('/')}#business` },
-    areaServed: BUSINESS.areaServed.map((name) => ({ '@type': 'Place', name })),
-    ...(service.image ? { image: absoluteUrl(service.image) } : {}),
-    ...(service.price != null
-      ? {
-          offers: {
-            '@type': 'Offer',
-            price: service.price,
-            priceCurrency: 'INR',
-            availability: 'https://schema.org/InStock',
-            url: absoluteUrl(`/appointment?service=${service.slug}`),
-          },
-        }
-      : {}),
-  };
-}
-
 /** Blog article schema. */
 export function articleSchema(post) {
   return {

@@ -91,4 +91,5 @@ export const categoryImages = {
   'face-waxing': '/services/21357.jpg',
   'body-waxing': '/services/21339.jpg',
   'massages': '/services/21652.jpg',
+  'lasers': '/uploads/advanced-facials/carbon-laser-facial.jpg',
 };

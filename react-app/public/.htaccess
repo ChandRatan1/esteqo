@@ -54,13 +54,13 @@
   RewriteRule ^body-bleach-polish/?$ /services/body-bleach-detan [R=301,L]
   RewriteRule ^threading-face-waxing/?$ /services/threading [R=301,L]
   RewriteRule ^massages/?$ /services/massages [R=301,L]
-  # No equivalent category exists yet for these two — send to the menu hub
+  # No equivalent category exists yet for this one — send to the menu hub
   # rather than losing the visitor (and the indexed URL) to a 404.
   RewriteRule ^japanese-head-spa/?$ /services [R=301,L]
-  RewriteRule ^leaser-hair-removal/?$ /services [R=301,L]
+  RewriteRule ^leaser-hair-removal/?$ /services/lasers [R=301,L]
   RewriteRule ^package/?$ /services [R=301,L]
   # Old theme demo "staff" pages that were nonetheless live in the nav menu.
-  RewriteRule ^(lab-testing|plastic-surgeons|practical-nurses|surgery-assistant)/?$ /about [R=301,L]
+  RewriteRule ^(lab-testing|plastic-surgeons|practical-nurses|surgery-assistant)/?$ /values [R=301,L]
   # Old theme demo wellness services, also live in the nav menu.
   RewriteRule ^(balanced-nutrition-diet|belly-fat-reduction-exercise|free-healthy-living-diet|health-wellness-camps|meditation-energy-healing|nutrition-health-guide|premium-wellness-club|weight-loss-friendly-foods|yoga-therapy-for-your-knees)/?$ /services [R=301,L]
 
@@ -76,6 +76,16 @@
   # Leave the API and uploaded files alone if they are proxied on this domain.
   RewriteRule ^api/ - [L]
   RewriteRule ^uploads/ - [L]
+
+  # The /services route (the treatment catalogue page) collides with the real
+  # services/ directory this same build ships treatment images from (e.g.
+  # /services/21324.jpg). Without this rule, the "serve real directories
+  # as-is" block below — and Apache's own automatic directory-slash handling —
+  # intercepts the bare /services request before it ever reaches the SPA,
+  # serving a directory listing/404 instead of the page. Only the exact bare
+  # path is matched here, so /services/21324.jpg (a real file) still falls
+  # through to the block below and is served as-is, unaffected.
+  RewriteRule ^(services)/?$ /api/index.php?__spa_path=$1 [L,QSA]
 
   # Real files and directories are served as-is.
   RewriteCond %{REQUEST_FILENAME} -f [OR]

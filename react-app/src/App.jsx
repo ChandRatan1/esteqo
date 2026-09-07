@@ -3,8 +3,6 @@ import Layout from './components/Layout';
 import Home from './pages/Home';
 import Services from './pages/Services';
 import ServiceCategory from './pages/ServiceCategory';
-import ServiceDetail from './pages/ServiceDetail';
-import About from './pages/About';
 import Values from './pages/Values';
 import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
@@ -16,6 +14,9 @@ import ContactsAdmin from './pages/ContactsAdmin';
 import ServicesAdmin from './pages/ServicesAdmin';
 import PageSeoAdmin from './pages/PageSeoAdmin';
 import RobotsAdmin from './pages/RobotsAdmin';
+import GiftCardsAdmin from './pages/GiftCardsAdmin';
+import GiftCards from './pages/GiftCards';
+import ReferralProgram from './pages/ReferralProgram';
 
 export default function App() {
   return (
@@ -26,19 +27,22 @@ export default function App() {
       <Route path="admin/services" element={<ServicesAdmin />} />
       <Route path="admin/seo" element={<PageSeoAdmin />} />
       <Route path="admin/robots" element={<RobotsAdmin />} />
+      <Route path="admin/gift-cards" element={<GiftCardsAdmin />} />
 
       <Route element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="services" element={<Services />} />
         <Route path="services/menu/:groupSlug" element={<Services />} />
         <Route path="services/:categorySlug" element={<ServiceCategory />} />
-        <Route path="treatments/:serviceSlug" element={<ServiceDetail />} />
-        <Route path="about" element={<About />} />
+        <Route path="treatments/:serviceSlug" element={<Navigate to="/services" replace />} />
+        <Route path="about" element={<Navigate to="/values" replace />} />
         <Route path="values" element={<Values />} />
         <Route path="blog" element={<Blog />} />
         <Route path="blog/:postSlug" element={<BlogPost />} />
         <Route path="contact" element={<Contact />} />
         <Route path="appointment" element={<Appointment />} />
+        <Route path="gift-cards" element={<GiftCards />} />
+        <Route path="referral-program" element={<ReferralProgram />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

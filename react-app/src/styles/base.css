@@ -311,6 +311,22 @@ p:last-child {
   color: var(--cream);
 }
 
+/* Rounded pill CTA — used by the home hero carousel only, matching the
+   reference banner (white pill, thin border, sits on a solid colour panel). */
+.btn--pill {
+  padding: 16px 34px;
+  border-radius: 999px;
+  background: var(--white);
+  border-color: var(--white);
+  color: var(--ink);
+}
+
+.btn--pill:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--white);
+}
+
 .btn--ghost {
   padding-inline: 0;
   background: none;

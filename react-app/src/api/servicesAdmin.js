@@ -52,19 +52,6 @@ export const servicesAdmin = {
   create: (service) => request('/admin/services', { method: 'POST', body: service }),
   update: (id, service) => request(`/admin/services/${id}`, { method: 'PUT', body: service }),
   remove: (id) => request(`/admin/services/${id}`, { method: 'DELETE' }),
-  /** Reuses the blog admin's upload endpoint — it is not blog-specific. */
-  upload: (file) =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onerror = () => reject(new AdminError('Could not read that file.'));
-      reader.onload = () => {
-        request('/admin/blog/upload', {
-          method: 'POST',
-          body: { dataUrl: reader.result, filename: file.name },
-        }).then(resolve, reject);
-      };
-      reader.readAsDataURL(file);
-    }),
 };
 
 export const categoriesAdmin = {

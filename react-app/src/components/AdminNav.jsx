@@ -10,6 +10,7 @@ const TABS = [
   { label: 'Blogs', to: '/admin/blog' },
   { label: 'Services', to: '/admin/services' },
   { label: 'Enquiries', to: '/admin/contacts' },
+  { label: 'Gift Cards', to: '/admin/gift-cards' },
   { label: 'Page SEO', to: '/admin/seo' },
   { label: 'robots.txt', to: '/admin/robots' },
 ];
@@ -17,7 +18,10 @@ const TABS = [
 export default function AdminNav() {
   return (
     <div className="admin-nav">
-      <div className="admin-nav__brand">ESTEQO Admin</div>
+      <div className="admin-nav__brand">
+        <img src="/logo.svg" alt="ESTEQO" width="112" height="34" />
+        <span>Admin</span>
+      </div>
       <nav className="admin-nav__tabs" aria-label="Admin sections">
         {TABS.map((tab) => (
           <NavLink

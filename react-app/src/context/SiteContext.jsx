@@ -23,7 +23,7 @@ const FALLBACK = {
   contact: {
     phone: '+91 8010135135',
     phone_link: '+918010135135',
-    whatsapp: '+918010135135',
+    whatsapp: '+919958066388',
     email: 'Info.esteqo@gmail.com',
     address_line1: 'Shop No. 209, First Floor, Modi Mall',
     address_line2: 'Sector 25, Noida, Uttar Pradesh – 201301',

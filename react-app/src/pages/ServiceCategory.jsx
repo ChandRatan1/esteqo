@@ -103,14 +103,7 @@ export default function ServiceCategory() {
               )}
 
               <div className="btn-row" style={{ marginTop: 30 }}>
-                <Link to={`/treatments/${service.slug}`} className="btn btn--secondary">
-                  Treatment details
-                </Link>
-                <Link
-                  to={`/appointment?service=${service.slug}`}
-                  className="link-underline"
-                  style={{ marginLeft: 8 }}
-                >
+                <Link to={`/appointment?service=${service.slug}`} className="btn btn--secondary">
                   Book this
                 </Link>
               </div>

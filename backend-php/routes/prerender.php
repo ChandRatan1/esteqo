@@ -28,13 +28,9 @@ const PRERENDER_STATIC_PAGES = [
         'title'       => 'Treatments & Prices',
         'description' => 'The full ESTEQO treatment menu with prices — facials, brows, bridal packages, body care, threading, waxing and massages in Sector 25, Noida.',
     ],
-    '/about' => [
-        'title'       => 'About',
-        'description' => 'ESTEQO blends advanced dermatological science with the artistry of beauty. Founded by Seema Nanda in Sector 25, Noida.',
-    ],
     '/values' => [
-        'title'       => 'Our Values & FAQ',
-        'description' => 'How ESTEQO works — analysis before treatment, realistic timelines, and answers to the questions we are asked most.',
+        'title'       => 'Our Story & FAQ',
+        'description' => 'ESTEQO blends advanced dermatological science with the artistry of beauty. Founded by Seema Nanda in Sector 25, Noida — plus answers to the questions we are asked most.',
     ],
     '/blog' => [
         'title'       => 'Blog',
@@ -63,23 +59,6 @@ function prerender_meta_for(string $path): array
         $path = '/';
     }
     $segments = $path === '/' ? [] : explode('/', trim($path, '/'));
-
-    if (count($segments) === 2 && $segments[0] === 'treatments') {
-        $row = db_one(
-            'SELECT name, summary, image, meta_title, meta_description, noindex
-             FROM services WHERE slug = :slug AND is_active = 1',
-            ['slug' => $segments[1]]
-        );
-        if ($row) {
-            return [
-                'title'       => $row['meta_title'] ?: $row['name'],
-                'description' => $row['meta_description'] ?: $row['summary'],
-                'image'       => $row['image'],
-                'type'        => 'website',
-                'noindex'     => (bool) $row['noindex'],
-            ];
-        }
-    }
 
     if (count($segments) === 2 && $segments[0] === 'services') {
         $row = db_one(
@@ -166,7 +145,7 @@ function prerender_tags_html(array $r): string
 }
 
 /**
- * GET /api/prerender?path=/treatments/hydra-facial — a minimal standalone
+ * GET /api/prerender?path=/services/facials — a minimal standalone
  * page, used only as a fallback when the real built index.html can't be
  * found (see route_render_shell for the version real visitors get).
  */
