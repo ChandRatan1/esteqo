@@ -169,9 +169,7 @@ export default function Footer() {
               </li>
               <li>
                 <strong>Opening hours</strong>
-                {contact.hours_weekday}
-                <br />
-                {contact.hours_sunday}
+                {contact.hours}
               </li>
             </ul>
             <div style={{ marginTop: 28 }}>

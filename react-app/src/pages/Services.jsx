@@ -5,6 +5,7 @@ import { CtaBand } from '../components/Sections';
 import { EmptyState } from '../components/States';
 import Media from '../components/Media';
 import EnquiryForm from '../components/EnquiryForm';
+import ConcernIcon from '../components/ConcernIcon';
 import Seo from '../seo/Seo';
 import { absoluteUrl } from '../seo/config';
 
@@ -23,9 +24,9 @@ const GROUP_HERO = {
     image: '/uploads/facial/premier_contour_facial.jpg',
     focus: 'center',
     points: [
-      'Custom-tailored facials for unique skin needs',
-      'Powered by advanced facial technology',
-      'Expert guidance to elevate your skincare routine',
+      'Every facial built around your skin, not a fixed script',
+      'Clinical-grade technology behind every session',
+      'Honest guidance to shape a routine that lasts',
     ],
   },
   brows: {
@@ -165,8 +166,15 @@ function TreatmentCard({ service, open, onToggle }) {
             )}
             {idealForItems(service).length > 0 && (
               <>
-                <h5 className="tcard__label">Ideal for</h5>
-                <p className="tcard__meta">{idealForItems(service).slice(0, 3).join(' • ')}</p>
+                <h5 className="tcard__label">Concerns</h5>
+                <ul className="concerns">
+                  {idealForItems(service).slice(0, 3).map((concern) => (
+                    <li className="concern" key={concern}>
+                      <ConcernIcon concern={concern} />
+                      <span className="concern__label">{concern}</span>
+                    </li>
+                  ))}
+                </ul>
               </>
             )}
             <h5 className="tcard__label">Duration</h5>

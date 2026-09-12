@@ -146,6 +146,15 @@ export const categories = [
     accent: 'light-blue',
     sortOrder: 15,
   },
+  {
+    slug: 'chemical-peels',
+    name: 'Chemical Peels',
+    tagline: 'Controlled resurfacing for pigmentation, texture and dull skin.',
+    intro:
+      'Professional-strength peels that work beneath the surface to lift pigmentation, smooth texture and restore clarity. Strength is matched to your skin at consultation, and a patch test is done wherever your skin needs one.',
+    accent: 'light-green',
+    sortOrder: 16,
+  },
 ];
 
 /**
@@ -740,6 +749,36 @@ export const services = [
     featured: false,
   },
 
+  // ----------------------------------------------------------- Chemical Peels
+  {
+    slug: 'biorepeel',
+    categorySlug: 'chemical-peels',
+    name: 'BioRePeel',
+    summary:
+      'A biphasic TCA peel that exfoliates, brightens and stimulates collagen — without the visible peeling or downtime a peel usually means.',
+    description:
+      'A two-phase formula that resurfaces the skin while feeding it: the oily phase carries actives in without stripping the barrier, the water phase gets to work on pigmentation, texture and fine lines. Most people walk out with an immediate glow and no flaking to hide.',
+    bullets: ['Brightens and evens skin tone', 'Stimulates collagen', 'No visible peeling, no downtime'],
+    idealFor: 'Dullness • Uneven tone • Fine lines and wrinkles',
+    durationMinutes: 30,
+    image: '/uploads/facial/biorepeel.jpg',
+    featured: true,
+  },
+  {
+    slug: 'antioxidant-peel',
+    categorySlug: 'chemical-peels',
+    name: 'Antioxidant Peel',
+    summary:
+      'A gentle fruit-acid peel packed with antioxidants, for skin that needs brightening without a strong resurfacing step.',
+    description:
+      'The lightest peel on the menu. Fruit acids lift dead surface cells while antioxidants defend against the pollution and sun exposure that dull city skin. Comfortable enough for a first peel, and easy to add before an event.',
+    bullets: ['Gentle enough for a first peel', 'Antioxidant protection', 'Immediate brightness, no downtime'],
+    idealFor: 'Dullness • Environmental skin stress • Congestion',
+    durationMinutes: 30,
+    image: '/uploads/facial/antioxidant_peel.jpg',
+    featured: false,
+  },
+
   // -------------------------------------------------------- Body Bleach & Detan
   { slug: 'face-bleach-detan', categorySlug: 'body-bleach-detan', name: 'Face Bleach / Detan', summary: 'A quick facial bleach that lifts tan and softens your complexion — ideal for regular maintenance.', bullets: [], durationMinutes: null, price: 500, featured: false },
   { slug: 'half-hands-bleach-detan', categorySlug: 'body-bleach-detan', name: 'Half Hands Bleach / Detan', summary: 'Brightens the arms from shoulders to elbows by reducing sun tan and evening out tone.', bullets: [], durationMinutes: null, price: 600, featured: false },
@@ -879,7 +918,7 @@ export const menuGroups = [
     tagline: 'The full facial menu, from a 30-minute reset to a 90-minute deep treatment.',
     intro:
       'Every facial gives your skin real results without taking over your day — from a focused 30-minute treatment to a full 90-minute deep-contouring session, plus add-ons to enhance any visit.',
-    departments: ['facials', 'add-on-treatments', 'lasers'],
+    departments: ['facials', 'add-on-treatments', 'lasers', 'chemical-peels'],
   },
   {
     slug: 'brows',

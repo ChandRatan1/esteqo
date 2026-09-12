@@ -15,7 +15,7 @@
  *     copies `enquiryCc`.
  *
  *     ONE-TIME ACTIVATION: the very first submission triggers a confirmation
- *     email to ratanchandbind4056@gmail.com. Click the link in it once and all
+ *     email to provadoindia@gmail.com. Click the link in it once and all
  *     later submissions arrive automatically.
  *
  *     Once activated, FormSubmit shows a random alias for the address. Put it
@@ -66,6 +66,7 @@ const SUBJECTS = {
   appointment: 'New Appointment Request - ESTEQO Website',
   contact: 'New Contact Enquiry - ESTEQO Website',
   newsletter: 'New Newsletter Subscriber - ESTEQO Website',
+  giftCard: 'New Gift Card Request - ESTEQO Website',
 };
 
 export class FormError extends Error {
@@ -191,8 +192,13 @@ async function sendFieldsViaFormSubmit(subject, fields, replyToEmail) {
   }
 }
 
-/** Sends an arbitrary labelled field map by whichever transport is configured. */
-async function sendFields(subject, fields, replyToEmail) {
+/**
+ * Sends an arbitrary labelled field map by whichever transport is configured.
+ * Delivers to every address in `enquiryRecipients` (site.js): the sender inbox
+ * plus the CC list. Exported so other forms (gift cards) can email the same
+ * inboxes without duplicating the transport.
+ */
+export async function sendFields(subject, fields, replyToEmail) {
   if (WEB3FORMS_KEY) {
     await sendFieldsViaWeb3Forms(subject, fields, replyToEmail);
   } else {
@@ -332,6 +338,9 @@ export async function submitEnquiry(kind, values) {
     },
   };
 }
+
+/** Subject line for a gift card request email. */
+export const GIFT_CARD_SUBJECT = SUBJECTS.giftCard;
 
 /**
  * Skin quiz submission — emails every answer to ESTEQO and stores the row in

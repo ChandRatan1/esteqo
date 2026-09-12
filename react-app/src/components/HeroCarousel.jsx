@@ -48,7 +48,7 @@ export default function HeroCarousel({ slides, stats }) {
         </div>
       </div>
 
-      <div className="hero__media">
+      <div className="hero__media" style={{ '--hero-focus': slide.focus || 'center' }}>
         <Media src={slide.image} accent={slide.accent} label="ESTEQO" alt={slide.title} />
 
         {slides.length > 1 && (

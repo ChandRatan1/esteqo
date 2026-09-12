@@ -49,19 +49,21 @@ export const BUSINESS = {
     'https://www.instagram.com/esteqo_care/',
     'https://www.youtube.com/@cosmetologistseemanandaest4431',
   ],
-  /** Mon–Sat 9–8, Sunday 10–3. */
+  /** The same hours every day: 10:00 am – 8:30 pm. */
   openingHours: [
     {
       '@type': 'OpeningHoursSpecification',
-      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-      opens: '09:00',
-      closes: '20:00',
-    },
-    {
-      '@type': 'OpeningHoursSpecification',
-      dayOfWeek: ['Sunday'],
+      dayOfWeek: [
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+        'Sunday',
+      ],
       opens: '10:00',
-      closes: '15:00',
+      closes: '20:30',
     },
   ],
   areaServed: [

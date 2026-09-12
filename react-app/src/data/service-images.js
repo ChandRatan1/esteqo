@@ -92,4 +92,5 @@ export const categoryImages = {
   'body-waxing': '/services/21339.jpg',
   'massages': '/services/21652.jpg',
   'lasers': '/uploads/advanced-facials/carbon-laser-facial.jpg',
+  'chemical-peels': '/uploads/facial/biorepeel.jpg',
 };

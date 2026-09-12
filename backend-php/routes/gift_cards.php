@@ -71,9 +71,12 @@ function route_gift_card_create(array $config): void
 
     json_response([
         'data' => [
-            'id'      => $id,
-            'stored'  => true,
-            'message' => 'Thank you — we will verify your payment and send the gift code to you shortly.',
+            'id'         => $id,
+            'stored'     => true,
+            // Public path of the saved screenshot so the front end can link it
+            // in the notification email.
+            'screenshot' => $screenshotPath,
+            'message'    => 'Thank you — we will verify your payment and send the gift code to you shortly.',
         ],
     ], 201);
 }

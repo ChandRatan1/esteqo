@@ -8,7 +8,7 @@ import { offer } from '../data/site';
  * Behaviour:
  *  - A fixed badge sits on the LEFT edge of every page. Clicking it always
  *    opens the form, whatever happened earlier.
- *  - The popup also opens by itself once, after ONE MINUTE OF ACTIVE TIME on
+ *  - The popup also opens by itself once, after TEN SECONDS OF ACTIVE TIME on
  *    the site. "Active" means the tab is visible — time spent on a background
  *    tab does not count, and the timer carries across page navigations.
  *  - It auto-opens at most once, ever. Closing it (or submitting) means it
@@ -19,7 +19,7 @@ import { offer } from '../data/site';
  */
 
 const STORAGE_KEY = 'esteqo.offerPopup';
-const ACTIVE_MS = 60 * 1000; // one minute of active time
+const ACTIVE_MS = 10 * 1000; // ten seconds of active time
 const TICK_MS = 1000;
 
 const alreadyHandled = () => {
@@ -54,7 +54,7 @@ function OfferIcon() {
   );
 }
 
-export default function OfferPopup() {
+export default function OfferPopup({ onOpenChange }) {
   const [open, setOpen] = useState(false);
   const [source, setSource] = useState('badge');
   const activeMs = useRef(0);
@@ -91,6 +91,11 @@ export default function OfferPopup() {
 
     return () => clearInterval(timer);
   }, [openForm]);
+
+  // Tell the layout whether this dialog is currently showing.
+  useEffect(() => {
+    onOpenChange?.(open);
+  }, [open, onOpenChange]);
 
   // Escape closes; lock the page behind the dialog.
   useEffect(() => {

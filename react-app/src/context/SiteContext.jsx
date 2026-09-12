@@ -28,8 +28,7 @@ const FALLBACK = {
     address_line1: 'Shop No. 209, First Floor, Modi Mall',
     address_line2: 'Sector 25, Noida, Uttar Pradesh – 201301',
     map_query: 'Modi Mall, Sector 25, Noida, Uttar Pradesh 201301',
-    hours_weekday: 'Mon – Sat: 9:00 am – 8:00 pm',
-    hours_sunday: 'Sunday: 10:00 am – 3:00 pm',
+    hours: 'Open daily: 10:00 am – 8:30 pm',
   },
   social: {},
 };

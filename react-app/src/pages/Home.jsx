@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
 import { api } from '../api/client';
 import { useApi, usePageMeta } from '../hooks/useApi';
 import { useSite } from '../context/SiteContext';
@@ -10,7 +9,6 @@ import Seo from '../seo/Seo';
 import HeroCarousel from '../components/HeroCarousel';
 import ServiceSlider from '../components/ServiceSlider';
 import ReviewSlider from '../components/ReviewSlider';
-import SkinQuiz from '../components/SkinQuiz';
 
 const HERO_SLIDES = [
   {
@@ -18,6 +16,7 @@ const HERO_SLIDES = [
     title: 'Lift. Define. Glow.',
     text: 'A 90-minute facial designed to firm and refresh the skin, while enhancing the natural contours of your face for a visibly lifted, sculpted look.',
     serviceSlug: 'premier-contour-facial',
+    focus: 'center',
     image: '/uploads/facial/premier_contour_facial.jpg',
     accent: 'light-blue',
   },
@@ -26,7 +25,8 @@ const HERO_SLIDES = [
     title: 'Brows that define your look.',
     text: 'Wake up to naturally shaped, fuller-looking brows every day. Our semi-permanent brow service is tailored to your face, creating a balanced and polished look that lasts.',
     serviceSlug: 'hd-brows',
-    image: '/uploads/brows/microblading.jpg',
+    focus: 'center 30%',
+    image: '/uploads/brows/brow-hero.jpg',
     accent: 'light-blue',
   },
   {
@@ -34,6 +34,7 @@ const HERO_SLIDES = [
     title: 'The Ultimate Wedding Glow-Up for Brides & Grooms',
     text: 'Give yourself the beauty preparation you deserve before your big day. Our personalised wedding treatments help refresh, refine and enhance your look — from radiant, glowing skin to perfectly groomed details — so you can walk down the aisle feeling confident, polished and picture-perfect.',
     serviceSlug: 'bridal-radiance-90-days',
+    focus: 'center 25%',
     image: '/uploads/bridal/bridal-radiance-90-days.jpg',
     accent: 'light-blue',
   },
@@ -42,6 +43,7 @@ const HERO_SLIDES = [
     title: 'Brighter, clearer, smoother skin',
     text: 'Treat sun-damaged skin, pigmentation and the signs of ageing with our advanced peel and resurfacing protocols.',
     serviceSlug: 'carbon-laser-facial',
+    focus: 'center 30%',
     image: '/uploads/advanced-facials/carbon-laser-facial.jpg',
     accent: 'light-blue',
   },
@@ -50,6 +52,7 @@ const HERO_SLIDES = [
     title: 'Skip the Shave, Stay Smooth',
     text: 'Say goodbye to constant shaving and hello to smooth, hair-free skin. Our professional hair-reduction services are designed to leave your skin feeling soft, clean and beautifully smooth — so you can enjoy confidence that lasts.',
     serviceSlug: 'full-legs-laser',
+    focus: 'center',
     image: '/uploads/body-waxing/full-legs.jpg',
     accent: 'light-blue',
   },
@@ -64,6 +67,7 @@ const SKIN_CARE_CARDS = [
     to: '/services',
     accent: 'light-blue',
     image: '/uploads/facial/signature_facial.jpg',
+    focus: 'center 20%',
     iconPath: 'M12 3.5c.7 2.6 2.4 4.3 5 5-2.6.7-4.3 2.4-5 5-.7-2.6-2.4-4.3-5-5 2.6-.7 4.3-2.4 5-5z',
   },
   {
@@ -73,7 +77,8 @@ const SKIN_CARE_CARDS = [
     text: 'Precision mapping, tinting, lamination and semi-permanent artistry. We map your ideal shape around your facial structure, not around trends.',
     to: '/services/menu/brows',
     accent: 'light-blue',
-    image: '/uploads/brows/brow_shape.jpg',
+    image: '/uploads/brows/brow-hero.jpg',
+    focus: 'center 30%',
     iconPath: 'M3 15c2-4 6-6 9-6s7 2 9 6',
   },
   {
@@ -83,7 +88,8 @@ const SKIN_CARE_CARDS = [
     text: 'Medical-grade laser hair reduction, calibrated to your skin tone and hair type. Most areas need six to eight sessions for up to 90% less regrowth.',
     to: '/services/lasers',
     accent: 'light-blue',
-    image: '/uploads/body-waxing/full-legs.jpg',
+    image: '/uploads/advanced-facials/carbon-laser-facial.jpg',
+    focus: 'center 28%',
     iconPath: 'M13 2L4 14h6l-1 8 9-12h-6l1-8z',
   },
 ];
@@ -172,7 +178,7 @@ export default function Home() {
 
   const totalTreatments = (categories || []).reduce((sum, c) => sum + (c.serviceCount || 0), 0);
 
-  const [quizOpen, setQuizOpen] = useState(false);
+  const { openQuiz } = useOutletContext();
 
   return (
     <>
@@ -221,7 +227,7 @@ export default function Home() {
           </span>
           <span className="eyebrow">Made just for your skin</span>
           <h2>Not Sure Where to Begin? Take Our Quiz to Find Your Perfect Facial</h2>
-          <button type="button" className="quiz-banner__link" onClick={() => setQuizOpen(true)}>
+          <button type="button" className="quiz-banner__link" onClick={openQuiz}>
             Take the facial quiz
             <span className="quiz-banner__arrow">
               <svg viewBox="0 0 20 12" width="16" height="10" fill="none">
@@ -237,7 +243,7 @@ export default function Home() {
 
         {/* Sits outside the photo panel: that panel clips its own rounded
             corners, which would slice this circle in half. */}
-        <button type="button" className="quiz-banner__badge" onClick={() => setQuizOpen(true)}>
+        <button type="button" className="quiz-banner__badge" onClick={openQuiz}>
           <svg viewBox="0 0 120 120" className="quiz-banner__badge-text" aria-hidden="true">
             <path id="quizBadgeCircle" fill="none" d="M60,10 a50,50 0 1,1 -0.1,0" />
             <text>
@@ -251,8 +257,6 @@ export default function Home() {
           </svg>
         </button>
       </section>
-
-      {quizOpen && <SkinQuiz onClose={() => setQuizOpen(false)} />}
 
       {/* Expert care */}
       <section className="section expert-care">
@@ -330,7 +334,7 @@ export default function Home() {
           <div className="grid grid--3">
             {SKIN_CARE_CARDS.map((card) => (
               <Link to={card.to} key={card.slug} className="new-here__card">
-                <div className="new-here__media">
+                <div className="new-here__media" style={{ '--card-focus': card.focus || 'center' }}>
                   <Media src={card.image} alt={card.label} accent={card.accent} label={card.label} />
                   <span className="new-here__badge" aria-hidden="true">
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
@@ -389,7 +393,7 @@ export default function Home() {
 
       <CtaBand
         title="Book your consultation"
-        text={`Call ${contact.phone} or book online. ${contact.hours_weekday}.`}
+        text={`Call ${contact.phone} or book online. ${contact.hours}.`}
       />
     </>
   );

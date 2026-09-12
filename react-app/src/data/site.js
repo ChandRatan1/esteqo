@@ -21,8 +21,7 @@ export const settings = {
     address_line1: 'ESTEQO, Shop No. 209, First Floor, Modi Mall',
     address_line2: 'Sector 25, Noida, Uttar Pradesh – 201301',
     map_query: 'Modi Mall, Sector 25, Noida, Uttar Pradesh 201301',
-    hours_weekday: 'Mon – Sat: 9:00 am – 8:00 pm',
-    hours_sunday: 'Sunday: 10:00 am – 3:00 pm',
+    hours: 'Open daily: 10:00 am – 8:30 pm',
     website: 'www.esteqo.com',
   },
   social: {
@@ -43,10 +42,14 @@ export const settings = {
  * never opened. See src/api/forms.js.
  */
 /** The "to" address — the inbox the FormSubmit endpoint is registered to. */
-export const enquirySender = 'ratanchandbind4056@gmail.com';
+export const enquirySender = 'provadoindia@gmail.com';
 
-/** Copied on every enquiry. Add more addresses here and they are all CC'd.  'provadoindia@gmail.com'*/
-export const enquiryCc = ['neetukumarseo00@gmail.com'];
+/**
+ * Copied on every enquiry. Add more addresses here and they are all CC'd.
+ * Together with enquirySender above, these are every inbox that receives an
+ * enquiry — the sender is not repeated here, or it would be delivered twice.
+ */
+export const enquiryCc = ['neetukumarseo00@gmail.com', 'Info.esteqo@gmail.com'];
 
 /** Every inbox that receives enquiries. */
 export const enquiryRecipients = [enquirySender, ...enquiryCc];
@@ -416,7 +419,7 @@ Call **+91 8010135135** or WhatsApp **+91 9958066388** if anything changes befor
 
 export const faqs = {
   general: [
-    { id: 'g1', question: 'Where is ESTEQO located?', answer: 'ESTEQO, Shop No. 209, First Floor, Modi Mall, Sector 25, Noida – 201301. Open Monday to Saturday, 9 am to 8 pm, and Sunday 10 am to 3 pm.' },
+    { id: 'g1', question: 'Where is ESTEQO located?', answer: 'ESTEQO, Shop No. 209, First Floor, Modi Mall, Sector 25, Noida – 201301. Open every day, 10 am to 8:30 pm.' },
     { id: 'g2', question: 'Do I need an appointment, or can I walk in?', answer: 'Walk-ins are welcome when a slot is free, but we strongly recommend booking. Every service begins with a detailed skin consultation, and a booked slot guarantees your specialist has time to plan the treatment properly.' },
     { id: 'g3', question: 'What happens during the first consultation?', answer: 'Your specialist analyses your skin type, concerns and history before recommending anything. We plan treatments after analysis, not around trends.' },
     { id: 'g4', question: 'Do you serve areas outside Noida?', answer: 'Clients travel to us from across Noida, Greater Noida, Ghaziabad and Delhi NCR. Tell us your area when you enquire and we will suggest the easiest time to reach Sector 25.' },

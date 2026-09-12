@@ -109,7 +109,7 @@ export default function EnquiryForm({
   const today = new Date().toISOString().slice(0, 10);
 
   // Slots follow the opening hours of whichever date is chosen:
-  // Mon–Sat 9am–8pm, Sunday 10am–3pm.
+  // The same hours every day: 10am–8:30pm.
   const daySlots = useMemo(() => slotsForDate(form.preferredDate), [form.preferredDate]);
   const dayHours = useMemo(() => hoursForDate(form.preferredDate), [form.preferredDate]);
   const dayLabel = useMemo(() => hoursLabel(form.preferredDate), [form.preferredDate]);

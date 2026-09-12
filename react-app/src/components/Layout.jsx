@@ -1,7 +1,10 @@
+import { useCallback, useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
 import OfferPopup from './OfferPopup';
+import QuizPopup from './QuizPopup';
+import SkinQuiz from './SkinQuiz';
 import FloatingContact from './FloatingContact';
 import { useContactLinks } from '../context/SiteContext';
 import { useScrollToTop } from '../hooks/useApi';
@@ -23,6 +26,14 @@ export default function Layout() {
   const { pathname } = useLocation();
   useScrollToTop(pathname);
 
+  // The quiz lives here rather than on the home page, so it can be opened
+  // from any page — by the prompt below, or by a page passing openQuiz on.
+  const [quizOpen, setQuizOpen] = useState(false);
+  const [offerOpen, setOfferOpen] = useState(false);
+
+  const openQuiz = useCallback(() => setQuizOpen(true), []);
+  const closeQuiz = useCallback(() => setQuizOpen(false), []);
+
   return (
     <>
       <a href="#main" className="sr-only">
@@ -30,12 +41,19 @@ export default function Layout() {
       </a>
       <Header />
       <main id="main">
-        <Outlet />
+        <Outlet context={{ openQuiz }} />
       </main>
       <Footer />
       <StickyBar />
       <FloatingContact />
-      <OfferPopup />
+
+      <OfferPopup onOpenChange={setOfferOpen} />
+
+      {/* Held back while the offer dialog or the quiz itself is showing, so
+          two dialogs never stack on top of each other. */}
+      <QuizPopup onTakeQuiz={openQuiz} blocked={offerOpen || quizOpen} />
+
+      {quizOpen && <SkinQuiz onClose={closeQuiz} />}
     </>
   );
 }

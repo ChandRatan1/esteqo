@@ -29,6 +29,9 @@
   --cream: #fcf7f2;
   --light-yellow: #fff4d0;
   --bright-yellow: #ffe276;
+  /* Home banner height — one value so all slides match exactly. */
+  --hero-height: min(66vh, 620px);
+
   /* The services group banner — one colour shared by every group. */
   --hero-yellow: #f4df7c;
 

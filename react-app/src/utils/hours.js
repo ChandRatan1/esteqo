@@ -1,23 +1,17 @@
 /**
  * Opening hours and the booking slots derived from them.
  *
- *   Mon – Sat: 9:00 am – 8:00 pm
- *   Sunday:   10:00 am – 3:00 pm
+ *   Every day: 10:00 am – 8:30 pm
+ *
+ * The clinic keeps the same hours seven days a week, so there is no per-day
+ * table here — one pair of times covers Monday through Sunday alike.
  *
  * The appointment form offers only the slots valid for the date the visitor
  * picked, and rejects a manually typed time that falls outside them.
  */
 
-/** Keyed by JS weekday: 0 = Sunday … 6 = Saturday. */
-export const openingHours = {
-  0: { open: '10:00', close: '15:00' }, // Sunday
-  1: { open: '09:00', close: '20:00' },
-  2: { open: '09:00', close: '20:00' },
-  3: { open: '09:00', close: '20:00' },
-  4: { open: '09:00', close: '20:00' },
-  5: { open: '09:00', close: '20:00' },
-  6: { open: '09:00', close: '20:00' }, // Saturday
-};
+/** The one set of hours the clinic keeps, every day of the week. */
+export const OPENING = { open: '10:00', close: '20:30' };
 
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
@@ -46,15 +40,18 @@ export function formatTime(hhmm) {
 export function hoursForDate(value) {
   const date = parseDate(value);
   if (!date) return null;
-  const hours = openingHours[date.getDay()];
-  return { ...hours, day: date.getDay(), dayName: DAY_NAMES[date.getDay()] };
+  return { ...OPENING, day: date.getDay(), dayName: DAY_NAMES[date.getDay()] };
 }
 
-/** "Sunday: 10:00 am – 3:00 pm" — shown under the time field. */
+/**
+ * "10:00 am – 8:30 pm" — shown under the time field.
+ *
+ * No day name, because the hours are the same whichever date is picked.
+ */
 export function hoursLabel(value) {
   const hours = hoursForDate(value);
   if (!hours) return null;
-  return `${hours.dayName}: ${formatTime(hours.open)} – ${formatTime(hours.close)}`;
+  return `${formatTime(hours.open)} – ${formatTime(hours.close)}`;
 }
 
 /**

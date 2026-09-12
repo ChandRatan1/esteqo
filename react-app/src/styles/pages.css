@@ -9,7 +9,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
-  min-height: min(78vh, 760px);
+  min-height: var(--hero-height);
   background: var(--cream);
 }
 
@@ -90,7 +90,14 @@
 
 .hero__media .media::after {
   padding-bottom: 0;
-  min-height: min(78vh, 760px);
+  min-height: var(--hero-height);
+}
+
+/* Every slide is framed by the same box, so the five photos are identical in
+   height however their own proportions differ; `focus` keeps the subject in
+   shot (see HERO_SLIDES in Home.jsx). */
+.hero--carousel .hero__media .media img {
+  object-position: var(--hero-focus, center);
 }
 
 .hero__stats {
@@ -211,25 +218,48 @@
   box-shadow: 3px 3px 0 var(--brand-navy);
 }
 
-/* The row itself bleeds past both edges of the page, so a partial card is
-   visible either side and it reads as a continuing strip. */
+/* The row bleeds past both edges of the page, so a partial card shows either
+   side and it reads as a continuing strip. The track is moved with a
+   transform rather than scrolled, so it can loop back on itself. */
+.slider-viewport {
+  padding: 34px max(var(--container-outer-margin), 24px) 10px;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.slider-viewport:active {
+  cursor: grabbing;
+}
+
 .slider-track {
   display: flex;
   gap: 24px;
-  padding: 34px max(var(--container-outer-margin), 24px) 10px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
+  width: max-content;
+  transition: transform 0.45s var(--ease);
 }
 
-.slider-track::-webkit-scrollbar {
-  display: none;
+/* Used for the silent rewind once a full set has passed. */
+.slider-track--instant {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slider-track {
+    transition: none;
+  }
 }
 
 .slider-card {
   position: relative;
   flex: 0 0 clamp(260px, 34vw, 520px);
-  scroll-snap-align: start;
+  /* Stops the browser's own image/text drag fighting the swipe. */
+  user-select: none;
+}
+
+.slider-card img {
+  -webkit-user-drag: none;
+  user-select: none;
 }
 
 .slider-card__media {
@@ -1747,4 +1777,113 @@
     padding-left: clamp(28px, 4vw, 56px);
     padding-top: 70px;
   }
+}
+
+/* ------------------------------------------------------------------ */
+/* Skin quiz prompt — the timed popup that offers the quiz             */
+/* ------------------------------------------------------------------ */
+
+.quiz-prompt {
+  position: fixed;
+  inset: 0;
+  z-index: 210;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(31, 27, 24, 0.55);
+  animation: quiz-prompt-fade 0.25s var(--ease);
+}
+
+@keyframes quiz-prompt-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.quiz-prompt__panel {
+  position: relative;
+  width: min(440px, 100%);
+  padding: clamp(30px, 4vw, 44px);
+  border-radius: 18px;
+  background: var(--white);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.28);
+  text-align: center;
+  animation: quiz-prompt-rise 0.3s var(--ease);
+}
+
+@keyframes quiz-prompt-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+.quiz-prompt__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background: var(--cream);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--ink);
+}
+
+.quiz-prompt__mark {
+  display: grid;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+.quiz-prompt__panel h2 {
+  margin: 10px 0 12px;
+  font-size: clamp(1.5rem, 3vw, 1.9rem);
+}
+
+.quiz-prompt__panel p {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.quiz-prompt__actions {
+  display: grid;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.quiz-prompt__later {
+  border: none;
+  background: none;
+  padding: 4px;
+  font-size: 0.8125rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--gray-idle);
+  cursor: pointer;
+}
+
+.quiz-prompt__later:hover {
+  color: var(--ink);
+}
+
+/* The card photos are portraits in a wider frame, so each one carries its own
+   focal point (see SKIN_CARE_CARDS) to keep the face in shot rather than
+   cropping to hands or clothing. */
+.slider-card__media .media img,
+.new-here__media .media img {
+  object-position: var(--card-focus, center);
+}
+
+/* A squarer frame crops a portrait far more kindly than a wide one. */
+.new-here__media .media {
+  --media-ratio: 92%;
 }

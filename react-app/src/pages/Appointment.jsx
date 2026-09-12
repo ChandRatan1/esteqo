@@ -57,9 +57,7 @@ export default function Appointment() {
                 <div>
                   <dt>Opening hours</dt>
                   <dd>
-                    {contact.hours_weekday}
-                    <br />
-                    {contact.hours_sunday}
+                    {contact.hours}
                   </dd>
                 </div>
                 <div>

@@ -193,7 +193,7 @@ export default function Values() {
             <span className="eyebrow">Visit us</span>
             <h2>Sector 25, Noida</h2>
             <p className="lede">
-              {contact.address_line1} {contact.address_line2}. {contact.hours_weekday}.
+              {contact.address_line1} {contact.address_line2}. {contact.hours}.
             </p>
           </div>
         </div>
