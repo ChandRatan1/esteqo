@@ -102,44 +102,94 @@ const EXPERT_CARE_CARDS = [
 ];
 
 /**
- * Client reviews, carried over from ESTEQO's own previous site.
- *
- * These are genuine ESTEQO testimonials rather than the placeholder set in
- * src/data/site.js. Pulling live Google reviews needs a Places API key and the
- * clinic's Place ID — see the note in the README before wiring that up.
+ * Client reviews from ESTEQO's Google Business Profile (5.0 from 501 reviews,
+ * https://maps.google.com/?cid=185292525259873671), copied on 12 Sep 2026.
+ * Names are shown exactly as the reviewers appear on Google. Some quotes are
+ * the preview Google shows before "More" — the sentence is cut where Google
+ * cut it. To refresh, paste new reviews here; nothing else needs changing.
  */
+const GOOGLE_REVIEWS_URL = 'https://maps.google.com/?cid=185292525259873671';
+
 const REVIEWS = [
   {
     id: 1,
-    author: 'Aditi S.',
-    treatment: 'Hydra Facial',
+    author: 'Tanisha Awasthi',
+    treatment: 'Ombré Brows',
     rating: 5,
     quote:
-      'ESTEQO is my go-to place for facials and brows. Seema is truly a magician when it comes to understanding skin. My Hydra Facial results were amazing — I walked out glowing.',
+      "I recently got my Ombré Brows done by Seema Nanda, and I couldn't be happier with the results. Seema is a highly skilled Senior Brow Artist who truly understands facial features and brow design.",
   },
   {
     id: 2,
-    author: 'Ritika M.',
-    treatment: 'Korean PDRN Glowlift',
+    author: 'Sneha Diaries',
+    treatment: 'Laser Hair Reduction',
     rating: 5,
     quote:
-      'I tried the Korean PDRN Glowlift for the first time, and my skin has never looked this hydrated and firm. The ambiance, hygiene and attention to detail are unmatched.',
+      "Had a great experience with laser hair reduction at Seema Nanda's clinic. I have taken 4 to 5 sessions. The service was professional, hygienic, and effective. I'm already seeing visible results. Highly recommend her for laser hair removal, skincare treatments, and cosmetology services in Noida.",
   },
   {
     id: 3,
-    author: 'Neha K.',
-    treatment: 'Brow Shape',
+    author: 'Nidhi Dadheech',
+    treatment: 'Permanent Brows, HydraFacial & Dermaplaning',
     rating: 5,
     quote:
-      "I got my brows done by Seema and I can't stop getting compliments. The shape is perfect and looks so natural. I finally found someone who understands symmetry.",
+      "Absolutely loved my permanent eyebrows, Hydrafacial, and dermaplaning treatment with Seema Nanda. She is knowledgeable, skilled, and makes you feel comfortable throughout the process. If you're looking for the best Hydrafacial and permanent makeup services in Noida, I highly recommend her.",
   },
   {
     id: 4,
-    author: 'Priya R.',
-    treatment: 'Carbon Laser Facial',
+    author: 'Riya Maurya',
+    treatment: 'Pre-Bridal Package',
     rating: 5,
     quote:
-      'ESTEQO blends luxury and science beautifully. The Carbon Laser Facial reduced my pigmentation drastically in just a few sessions. Highly recommend for anyone serious about skin care.',
+      "Got my pre-bridal treatment hydra facial, body polish, permanent eyebrows and laser hair reduction done at Esteqo and honestly didn't expect to feel this good about my skin before the wedding. Seema ma'am really understood what I needed. My skin looked so calm and glowy on the day. No filter needed. Would recommend to every bride.",
+  },
+  {
+    id: 5,
+    author: 'Sanjana Saxena',
+    treatment: 'Hydra Clean Up',
+    rating: 5,
+    quote:
+      'Seema is incredibly professional and suggested me all the right treatments focussing on my needs and not a higher charge. I really appreciated that. I had a hydra clean up done too, which was an amazing experience.',
+  },
+  {
+    id: 6,
+    author: 'Deependrakumar Deep',
+    treatment: 'Laser Hair Reduction',
+    rating: 5,
+    quote:
+      'I had a wonderful experience at esteqo by Seema nanda. I like how it is clean and everything is done with maintaining hygiene. The sessions were smooth and I can already see noticeable results. I highly recommend laser by Seema Nanda to anyone looking for safe and effective laser treatments in Noida NCR.',
+  },
+  {
+    id: 7,
+    author: 'Vandana Pandey',
+    treatment: 'Hydra Facial',
+    rating: 5,
+    quote:
+      'Had a really good experience at Esteqo. The hydra facial was very relaxing and the staff was polite and professional. My skin feels fresh, soft, and glowing after the treatment. They maintained hygiene properly and made the whole experience comfortable. Definitely worth it.',
+  },
+  {
+    id: 8,
+    author: 'Agsyy466',
+    treatment: 'Microneedling',
+    rating: 5,
+    quote:
+      "Got microneedling done by Seema Nanda and I'm genuinely impressed with the results. My skin feels firmer, smoother, and much more refined. The treatment was tailored to my skin concerns and carried out with great care. Highly recommend for microneedling, collagen induction therapy, and skin renewal treatments in Noida.",
+  },
+  {
+    id: 9,
+    author: 'Shreya Sachan',
+    treatment: 'Hydra Facial & Laser Hair Reduction',
+    rating: 5,
+    quote:
+      'I had a great experience at Esteqo The Facial Brow and Laser Bar. I visited for a Hydra Facial in Noida NCR and laser hair reduction in Noida NCR, and the results were excellent. The Hydra Facial gave my skin instant glow and deep cleansing.',
+  },
+  {
+    id: 10,
+    author: 'Sumit Kumar',
+    treatment: 'Nano Microblading',
+    rating: 5,
+    quote:
+      'I got nano microblading done by Seema Nanda and I felt very comfortable throughout. She was very patient and extremely careful with every step.',
   },
 ];
 
@@ -173,10 +223,8 @@ export default function Home() {
     'Clinically planned skin, brow and laser treatments in Sector 25, Noida. Medi-facials, PMU brows, laser hair reduction and body care by Seema Nanda.'
   );
 
-  const { data: categories } = useApi((opts) => api.getCategories(opts), []);
   const { data: posts } = useApi((opts) => api.getPosts({ limit: 3 }, opts), []);
 
-  const totalTreatments = (categories || []).reduce((sum, c) => sum + (c.serviceCount || 0), 0);
 
   const { openQuiz } = useOutletContext();
 
@@ -187,11 +235,7 @@ export default function Home() {
       />
 
       {/* Hero */}
-      <HeroCarousel slides={HERO_SLIDES} stats={[
-        { value: '10+', label: 'Years of experience' },
-        { value: totalTreatments, label: 'Treatments on the menu' },
-        { value: categories?.length || 8, label: 'Specialist departments' },
-      ]} />
+      <HeroCarousel slides={HERO_SLIDES} />
 
       <Marquee
         items={[
@@ -286,7 +330,8 @@ export default function Home() {
       <ReviewSlider
         title="Our Guests' Results Speak for Themselves"
         reviews={REVIEWS}
-        footnote="Reviews from ESTEQO clients in Sector 25, Noida."
+        footnote="Google reviews of ESTEQO, Sector 25, Noida — rated 5.0 from 501 reviews."
+        footnoteHref={GOOGLE_REVIEWS_URL}
       />
 
       {/* Founder */}

@@ -1,91 +1,103 @@
 /* Hero banners and page-specific composition. */
 
 /* ------------------------------------------------------------------ */
-/* Home hero                                                           */
+/* Home hero — Silver Mirror style banner                              */
+/*                                                                     */
+/* One flat pale-blue panel (#d4eaff, sampled from silvermirror.com's  */
+/* banner — our --light-blue token), big sans headline + short line on */
+/* the left, outlined "BOOK NOW" pill, photo bleeding into the panel   */
+/* on the right, centred blue dots underneath. Slides sit on a single  */
+/* horizontal track that slides between them.                          */
 /* ------------------------------------------------------------------ */
 
 .hero {
   position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
   min-height: var(--hero-height);
   background: var(--cream);
 }
 
 .hero--carousel {
-  background: var(--accent, var(--cream));
-  transition: background 0.5s var(--ease);
+  --hero-bg: #d4eaff;
+  --hero-ink: #050505;
+  --hero-dot: #a9c8ef;
+  --hero-dot-active: #4a8fe0;
+  overflow: hidden;
+  background: var(--hero-bg);
 }
 
-.hero__dots {
-  position: absolute;
-  left: clamp(20px, 4vw, 40px);
-  bottom: clamp(20px, 4vw, 32px);
+.hero__track {
   display: flex;
-  gap: 10px;
+  width: 100%;
+  transition: transform 0.7s var(--ease);
+  will-change: transform;
 }
 
-.hero__dot {
-  width: 10px;
-  height: 10px;
-  padding: 0;
-  border-radius: 50%;
-  border: 1.5px solid rgba(255, 255, 255, 0.9);
-  background: rgba(255, 255, 255, 0.35);
-  cursor: pointer;
-  transition: background 0.2s var(--ease), transform 0.2s var(--ease);
-}
-
-.hero__dot--active {
-  background: var(--gold-deep);
-  border-color: var(--gold-deep);
-  transform: scale(1.15);
+.hero__slide {
+  flex: 0 0 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 46fr) minmax(0, 54fr);
+  align-items: center;
+  min-height: var(--hero-height);
+  background: var(--hero-bg);
 }
 
 .hero__body {
-  padding: clamp(48px, 6vw, 96px) clamp(24px, 5vw, 80px);
+  padding: clamp(40px, 5vw, 72px) clamp(24px, 4vw, 64px) clamp(64px, 7vw, 96px);
   padding-left: max(var(--container-outer-margin), 24px);
 }
 
 .hero__inner {
-  max-width: 620px;
-  margin-left: auto;
-  padding-right: clamp(20px, 4vw, 64px);
+  max-width: 600px;
 }
 
 .hero__title {
-  margin-bottom: 24px;
-}
-
-.hero__title em {
-  font-style: italic;
-  color: var(--gold-deep);
+  margin: 0 0 22px;
+  font-family: var(--body-font);
+  font-size: clamp(2.25rem, 4.2vw, 4rem);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.5px;
+  color: var(--hero-ink);
+  text-wrap: balance;
 }
 
 .hero__text {
   max-width: 46ch;
-  margin-bottom: 36px;
+  margin: 0 0 32px;
+  font-size: clamp(1.0625rem, 1.4vw, 1.3rem);
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--hero-ink);
+}
+
+.hero__cta {
+  min-width: 220px;
+  padding: 17px 44px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  border: 1.5px solid var(--hero-ink);
+  background: rgba(255, 255, 255, 0.55);
+  color: var(--hero-ink);
+}
+
+.hero__cta:hover {
+  background: var(--hero-ink);
+  color: var(--white);
 }
 
 .hero__media {
   position: relative;
   align-self: stretch;
-  min-height: 420px;
-  background: var(--sand);
-}
-
-/* On the carousel the photo sits on the slide's own colour, so any part of
-   the frame the image does not cover blends into the banner instead of
-   showing a hard sand-coloured block. */
-.hero--carousel .hero__media,
-.hero--carousel .hero__media .media {
-  background: var(--accent, var(--cream));
+  min-height: var(--hero-height);
+  background: var(--hero-bg);
 }
 
 .hero__media .media,
 .hero__media .media__placeholder {
   height: 100%;
+  background: var(--hero-bg);
 }
 
 .hero__media .media::after {
@@ -93,52 +105,106 @@
   min-height: var(--hero-height);
 }
 
-/* Every slide is framed by the same box, so the five photos are identical in
+/* Every slide is framed by the same box, so the photos are identical in
    height however their own proportions differ; `focus` keeps the subject in
    shot (see HERO_SLIDES in Home.jsx). */
-.hero--carousel .hero__media .media img {
+.hero__media .media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   object-position: var(--hero-focus, center);
 }
 
-.hero__stats {
+/* Soft fade from the panel colour into the photo, so the picture reads as a
+   cut-out sitting on the blue rather than a hard-edged rectangle — the same
+   trick Silver Mirror's banner artwork uses. */
+.hero__media::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(to right, var(--hero-bg) 0%, rgba(212, 234, 255, 0.6) 14%, rgba(212, 234, 255, 0) 38%),
+    linear-gradient(to top, var(--hero-bg) 0%, rgba(212, 234, 255, 0) 18%);
+}
+
+.hero__dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: clamp(18px, 3vw, 30px);
+  z-index: 2;
   display: flex;
-  flex-wrap: wrap;
-  gap: clamp(24px, 4vw, 56px);
-  margin-top: 44px;
-  padding-top: 30px;
-  border-top: 1px solid rgba(31, 27, 24, 0.14);
+  justify-content: center;
+  gap: 12px;
 }
 
-.hero__stat strong {
-  display: block;
-  font-family: var(--heading-font);
-  font-size: 2rem;
-  font-weight: 500;
-  line-height: 1;
+.hero__dot {
+  width: 12px;
+  height: 12px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--hero-dot);
+  cursor: pointer;
+  transition: background 0.2s var(--ease), transform 0.2s var(--ease);
 }
 
-.hero__stat span {
-  display: block;
-  margin-top: 8px;
-  font-size: 0.6875rem;
-  letter-spacing: 1.6px;
-  text-transform: uppercase;
-  color: var(--gray-idle);
+.hero__dot:hover {
+  transform: scale(1.15);
+}
+
+.hero__dot--active {
+  background: var(--hero-dot-active);
 }
 
 @media (max-width: 900px) {
-  .hero {
-    grid-template-columns: minmax(0, 1fr);
+  .hero,
+  .hero__slide {
     min-height: 0;
   }
 
-  .hero__inner {
-    margin-left: 0;
-    max-width: none;
+  /* Stack like Silver Mirror's mobile banner: photo on top, copy below. */
+  .hero__slide {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .hero__media {
-    display: none;
+    order: -1;
+    min-height: 0;
+    aspect-ratio: 4 / 3;
+    max-height: 60vh;
+  }
+
+  .hero__media .media::after {
+    min-height: 0;
+  }
+
+  .hero__media::before {
+    background: linear-gradient(to top, var(--hero-bg) 0%, rgba(212, 234, 255, 0) 30%);
+  }
+
+  .hero__body {
+    padding: 8px 24px 72px;
+  }
+
+  .hero__inner {
+    max-width: none;
+  }
+
+  .hero__title {
+    font-size: clamp(2rem, 8vw, 2.75rem);
+  }
+
+  .hero__cta {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__track {
+    transition: none;
   }
 }
 
@@ -452,31 +518,40 @@
   margin-top: 0;
 }
 
+/* The row drifts on its own (see ReviewSlider.jsx), so the viewport clips
+   sideways only — a card's floating panel may still grow past the track. */
+.review-viewport {
+  overflow-x: clip;
+  overflow-y: visible;
+  padding: 34px 0 44px;
+}
+
 .review-track {
   display: flex;
   gap: 24px;
-  padding: 34px max(var(--container-outer-margin), 24px) 6px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-}
-
-.review-track::-webkit-scrollbar {
-  display: none;
+  width: max-content;
+  padding-left: max(var(--container-outer-margin), 24px);
+  will-change: transform;
 }
 
 .review-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 18px;
   flex: 0 0 clamp(250px, 26vw, 330px);
-  scroll-snap-align: start;
   margin: 0;
   padding: 32px 28px;
   border-radius: 14px;
   background: var(--light-blue);
   text-align: center;
+  cursor: default;
+  outline: none;
+}
+
+.review-card--open {
+  z-index: 5;
 }
 
 .review-card__stars {
@@ -486,6 +561,10 @@
 }
 
 .review-card__quote {
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
   margin: 0;
   font-size: 0.9375rem;
   line-height: 1.7;
@@ -509,6 +588,51 @@
   letter-spacing: 1px;
   text-transform: uppercase;
   color: var(--ink-soft);
+}
+
+/* Hover / focus panel: the same review, full length, floating just above the
+   card it belongs to so the visitor can read it while the row is stopped. */
+.review-card__pop {
+  position: absolute;
+  top: -14px;
+  left: -14px;
+  right: -14px;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  min-height: calc(100% + 28px);
+  padding: 36px 32px;
+  border-radius: 16px;
+  background: var(--white);
+  box-shadow: 0 24px 60px rgba(31, 27, 24, 0.22);
+  text-align: center;
+  animation: review-pop 0.25s var(--ease);
+}
+
+.review-card__pop .review-card__quote {
+  display: block;
+  overflow: visible;
+  -webkit-line-clamp: unset;
+  font-size: 1rem;
+}
+
+@keyframes review-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.review-section__footnote a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .review-section__footnote {

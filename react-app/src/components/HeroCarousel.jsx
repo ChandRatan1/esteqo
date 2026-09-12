@@ -1,72 +1,101 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Media from './Media';
 
 const AUTO_ADVANCE_MS = 6000;
+const SWIPE_THRESHOLD_PX = 48;
 
 /**
- * Home page hero: a rotating set of slides (one per department highlight),
- * each with its own photo, headline and call to action. Auto-advances, with
- * dot navigation so a visitor can jump straight to what they came for.
+ * Home page hero, styled after the Silver Mirror banner: a flat pale-blue
+ * panel (#d4eaff sampled from silvermirror.com), a large sans headline and
+ * short subtitle on the left, an outlined "BOOK NOW" pill, and the photo
+ * blended into the panel colour on the right.
+ *
+ * Slides sit side by side on one track that slides horizontally, auto-advances,
+ * pauses while hovered, and answers to swipes and the dots underneath.
  */
-export default function HeroCarousel({ slides, stats }) {
+export default function HeroCarousel({ slides }) {
   const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const touchStartX = useRef(null);
 
   useEffect(() => {
-    if (slides.length <= 1) return undefined;
+    if (slides.length <= 1 || paused) return undefined;
     const timer = setInterval(() => {
       setActive((current) => (current + 1) % slides.length);
     }, AUTO_ADVANCE_MS);
     return () => clearInterval(timer);
-  }, [slides.length]);
+  }, [slides.length, paused]);
 
-  const slide = slides[active];
+  const go = (index) => setActive((index + slides.length) % slides.length);
+
+  const onTouchStart = (event) => {
+    touchStartX.current = event.touches[0].clientX;
+  };
+
+  const onTouchEnd = (event) => {
+    if (touchStartX.current === null) return;
+    const delta = event.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (Math.abs(delta) < SWIPE_THRESHOLD_PX) return;
+    go(delta < 0 ? active + 1 : active - 1);
+  };
 
   return (
-    <section className={`hero hero--carousel accent-${slide.accent}`}>
-      <div className="hero__body">
-        <div className="hero__inner">
-          <span className="eyebrow">{slide.eyebrow}</span>
-          <h1 className="hero__title">{slide.title}</h1>
-          <p className="lede hero__text">{slide.text}</p>
-          <div className="btn-row">
-            <Link to={`/appointment?service=${slide.serviceSlug || ''}`} className="btn btn--pill">
-              Book Now
-            </Link>
-          </div>
-
-          {stats?.length > 0 && (
-            <div className="hero__stats">
-              {stats.map((stat) => (
-                <div className="hero__stat" key={stat.label}>
-                  <strong>{stat.value}</strong>
-                  <span>{stat.label}</span>
-                </div>
-              ))}
+    <section
+      className="hero hero--carousel accent-light-blue"
+      aria-roledescription="carousel"
+      aria-label="Featured treatments"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+    >
+      <div className="hero__track" style={{ transform: `translateX(-${active * 100}%)` }}>
+        {slides.map((slide, index) => (
+          <article
+            className="hero__slide"
+            key={slide.serviceSlug || slide.title}
+            aria-hidden={index !== active}
+            aria-roledescription="slide"
+            aria-label={`${index + 1} of ${slides.length}`}
+          >
+            <div className="hero__body">
+              <div className="hero__inner">
+                <h1 className="hero__title">{slide.title}</h1>
+                <p className="hero__text">{slide.text}</p>
+                <Link
+                  to={`/appointment?service=${slide.serviceSlug || ''}`}
+                  className="btn btn--pill-outline hero__cta"
+                  tabIndex={index === active ? 0 : -1}
+                >
+                  Book Now
+                </Link>
+              </div>
             </div>
-          )}
+
+            <div className="hero__media" style={{ '--hero-focus': slide.focus || 'center' }}>
+              <Media src={slide.image} accent="light-blue" label="ESTEQO" alt={slide.title} />
+            </div>
+          </article>
+        ))}
+      </div>
+
+      {slides.length > 1 && (
+        <div className="hero__dots" role="tablist" aria-label="Hero slides">
+          {slides.map((item, index) => (
+            <button
+              key={item.serviceSlug || item.title}
+              type="button"
+              role="tab"
+              aria-selected={index === active}
+              aria-label={`Show slide ${index + 1}: ${item.title}`}
+              className={`hero__dot${index === active ? ' hero__dot--active' : ''}`}
+              onClick={() => go(index)}
+            />
+          ))}
         </div>
-      </div>
-
-      <div className="hero__media" style={{ '--hero-focus': slide.focus || 'center' }}>
-        <Media src={slide.image} accent={slide.accent} label="ESTEQO" alt={slide.title} />
-
-        {slides.length > 1 && (
-          <div className="hero__dots" role="tablist" aria-label="Hero slides">
-            {slides.map((item, index) => (
-              <button
-                key={item.eyebrow}
-                type="button"
-                role="tab"
-                aria-selected={index === active}
-                aria-label={`Show slide: ${item.eyebrow}`}
-                className={`hero__dot${index === active ? ' hero__dot--active' : ''}`}
-                onClick={() => setActive(index)}
-              />
-            ))}
-          </div>
-        )}
-      </div>
+      )}
     </section>
   );
 }

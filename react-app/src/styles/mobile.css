@@ -154,11 +154,6 @@
     height: 300px;
   }
 
-  /* Three stats side by side is too tight — let them breathe. */
-  .hero__stats {
-    gap: 22px 32px;
-  }
-
   .testimonial {
     padding: 30px 26px;
   }
