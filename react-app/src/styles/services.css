@@ -89,7 +89,7 @@
 .svc-hero__extra {
   margin-top: 30px;
   padding-top: 26px;
-  border-top: 1px solid rgba(31, 27, 24, 0.12);
+  border-top: 1px solid rgba(30, 42, 94, 0.12);
 }
 
 .svc-hero__extra-intro {
@@ -151,12 +151,12 @@
   font-size: 0.8125rem;
   color: var(--ink-soft);
   background: var(--white);
-  border: 1px solid rgba(31, 27, 24, 0.12);
+  border: 1px solid rgba(30, 42, 94, 0.12);
   border-radius: 999px;
 }
 
 .svc-hero__media {
-  border: 1px solid rgba(31, 27, 24, 0.1);
+  border: 1px solid rgba(30, 42, 94, 0.1);
   border-radius: 14px;
 }
 
@@ -201,7 +201,7 @@
 }
 
 .svc-rail__menu li + li {
-  border-top: 1px solid rgba(31, 27, 24, 0.14);
+  border-top: 1px solid rgba(30, 42, 94, 0.14);
 }
 
 .svc-rail__menu button {
@@ -264,7 +264,7 @@
 .svc-rail__search {
   margin-top: 26px;
   padding-top: 22px;
-  border-top: 1px solid rgba(31, 27, 24, 0.14);
+  border-top: 1px solid rgba(30, 42, 94, 0.14);
 }
 
 @media (max-width: 1024px) {
@@ -288,7 +288,7 @@
 
   .svc-rail__menu button {
     padding: 10px 18px;
-    border: 1px solid rgba(31, 27, 24, 0.18);
+    border: 1px solid rgba(30, 42, 94, 0.18);
     border-radius: 999px;
     font-size: 0.9375rem;
   }
@@ -373,13 +373,13 @@
 .tcard {
   background: var(--white);
   border-radius: 14px;
-  box-shadow: 0 1px 3px rgba(31, 27, 24, 0.06);
+  box-shadow: 0 1px 3px rgba(30, 42, 94, 0.06);
   transition: box-shadow 0.3s var(--ease);
 }
 
 .tcard:hover,
 .tcard--open {
-  box-shadow: 0 10px 30px rgba(31, 27, 24, 0.1);
+  box-shadow: 0 10px 30px rgba(30, 42, 94, 0.1);
 }
 
 .tcard__head {
@@ -498,7 +498,7 @@
 
 .tcard__right {
   padding-left: clamp(0px, 2vw, 24px);
-  border-left: 1px solid rgba(31, 27, 24, 0.1);
+  border-left: 1px solid rgba(30, 42, 94, 0.1);
 }
 
 .tcard__label {
@@ -573,7 +573,7 @@
     padding-left: 0;
     padding-top: 18px;
     border-left: 0;
-    border-top: 1px solid rgba(31, 27, 24, 0.1);
+    border-top: 1px solid rgba(30, 42, 94, 0.1);
   }
 }
 

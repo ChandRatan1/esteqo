@@ -9,41 +9,44 @@
 :root {
   /* Neutrals */
   --white: #fff;
-  --off-white: #f9f9f9;
-  --light-gray: #f5f5f5;
-  --mid-gray: #b3b3b3;
-  --gray-idle: #707070;
-  --dark-gray: #404040;
+  --off-white: #f7f9fe;
+  --light-gray: #f1f4fa;
+  --mid-gray: #aeb7cc;
+  --gray-idle: #67708e;
+  --dark-gray: #3a4368;
   --black: #000;
 
-  /* Pastel accents — used to tint alternating sections and category cards */
+  /* Palette: red, blue and white. Navy ink, red accents, blue tints for
+     sections and cards — the pastel names below are kept so nothing else
+     had to be renamed, but every value is now a blue or red tint. */
   --light-blue: #d6ebff;
-  --bright-blue: #50aaf2;
-  --cta-blue: #318cd4;
-  --dark-blue: #257bbf;
-  --light-green: #dffbec;
-  --light-purple: #f3e5f9;
-  --light-pink: #ffebf1;
-  --bright-pink: #ffc6d5;
-  --light-brown: #eee4e8;
-  --cream: #fcf7f2;
-  --light-yellow: #fff4d0;
-  --bright-yellow: #ffe276;
+  --bright-blue: #3d8fe4;
+  --cta-blue: #1d5fd6;
+  --dark-blue: #1a4fb5;
+  --light-green: #e4efff;
+  --light-purple: #e8ecfb;
+  --light-pink: #ffe5e7;
+  --bright-pink: #ffb3b6;
+  --light-brown: #eef2fb;
+  --cream: #f4f8ff;
+  --light-yellow: #ffecec;
+  --bright-yellow: #ffb3b6;
   /* Home banner height — one value so all slides match exactly. */
   --hero-height: min(66vh, 620px);
 
   /* The services group banner — one colour shared by every group. */
-  --hero-yellow: #f4df7c;
+  --hero-yellow: #f4df7c; /* kept from the old palette on request */
 
-  /* ESTEQO brand — taken from the logo artwork in uploads/Favicon */
+  /* ESTEQO brand — taken from the logo artwork in uploads/Favicon.
+     --ink is the text navy, --gold / --gold-deep are the accent reds. */
   --brand-navy: #283371;
   --brand-red: #f05458;
 
-  --ink: #1f1b18;
-  --ink-soft: #4a423c;
-  --sand: #e4dbd3;
-  --gold: #a8874f;
-  --gold-deep: #8a6d3a;
+  --ink: #1e2a5e;
+  --ink-soft: #4a5680;
+  --sand: #dfe8f8;
+  --gold: #e63e45;
+  --gold-deep: #c9282f;
 
   /* Typography */
   --body-font: 'Jost', 'Averta', Arial, Helvetica, sans-serif;

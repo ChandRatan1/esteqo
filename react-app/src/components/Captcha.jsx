@@ -13,7 +13,7 @@ import { LIMITS } from '../utils/validation';
  * if you later move submissions onto the backend, verify there too.
  */
 
-const CHAR_COLOURS = ['#1f1b18', '#8a6d3a', '#404040', '#257bbf'];
+const CHAR_COLOURS = ['#1e2a5e', '#c9282f', '#3a4368', '#1d5fd6'];
 
 export default function Captcha({ code, value, onChange, onRefresh, error }) {
   const inputId = useId();
@@ -38,7 +38,7 @@ export default function Captcha({ code, value, onChange, onRefresh, error }) {
                 y1={y + (i % 2 ? 6 : -4)}
                 x2="156"
                 y2={y - (i % 2 ? 5 : -6)}
-                stroke="rgba(31,27,24,0.18)"
+                stroke="rgba(30,42,94,0.18)"
                 strokeWidth="1"
               />
             ))}

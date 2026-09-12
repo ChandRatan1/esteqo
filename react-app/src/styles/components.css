@@ -59,7 +59,7 @@
 .flip-card__front-label {
   padding: 16px 18px;
   background: var(--white);
-  border-top: 1px solid rgba(31, 27, 24, 0.08);
+  border-top: 1px solid rgba(30, 42, 94, 0.08);
   font-family: var(--heading-font);
   font-size: 1.0625rem;
   font-weight: 500;
@@ -170,7 +170,7 @@
   content: '';
   position: absolute;
   inset: 14px;
-  border: 1px solid rgba(31, 27, 24, 0.1);
+  border: 1px solid rgba(30, 42, 94, 0.1);
 }
 
 .media__initial {
@@ -178,7 +178,7 @@
   font-size: clamp(2.2rem, 4vw, 3.4rem);
   font-weight: 500;
   letter-spacing: 3px;
-  color: rgba(31, 27, 24, 0.24);
+  color: rgba(30, 42, 94, 0.24);
   text-transform: uppercase;
 }
 
@@ -199,13 +199,13 @@
 /* ------------------------------------------------------------------ */
 
 .cat-card {
-  border: 1px solid rgba(31, 27, 24, 0.09);
+  border: 1px solid rgba(30, 42, 94, 0.09);
   transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
 }
 
 .cat-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 20px 44px rgba(31, 27, 24, 0.11);
+  box-shadow: 0 20px 44px rgba(30, 42, 94, 0.11);
 }
 
 .cat-card__body {
@@ -242,7 +242,7 @@
 /* ------------------------------------------------------------------ */
 
 .svc-card {
-  border: 1px solid rgba(31, 27, 24, 0.09);
+  border: 1px solid rgba(30, 42, 94, 0.09);
   transition: transform 0.35s var(--ease), border-color 0.35s var(--ease);
 }
 
@@ -285,7 +285,7 @@
   gap: 12px;
   margin-top: 24px;
   padding-top: 18px;
-  border-top: 1px solid rgba(31, 27, 24, 0.12);
+  border-top: 1px solid rgba(30, 42, 94, 0.12);
 }
 
 .svc-card__price {
@@ -385,7 +385,7 @@
   grid-template-columns: 190px 1fr;
   gap: 18px;
   padding-bottom: 16px;
-  border-bottom: 1px solid rgba(31, 27, 24, 0.12);
+  border-bottom: 1px solid rgba(30, 42, 94, 0.12);
 }
 
 .fact:last-child {
@@ -442,11 +442,11 @@
 /* ------------------------------------------------------------------ */
 
 .accordion {
-  border-top: 1px solid rgba(31, 27, 24, 0.14);
+  border-top: 1px solid rgba(30, 42, 94, 0.14);
 }
 
 .accordion__item {
-  border-bottom: 1px solid rgba(31, 27, 24, 0.14);
+  border-bottom: 1px solid rgba(30, 42, 94, 0.14);
 }
 
 .accordion__trigger {
@@ -577,7 +577,7 @@
   scroll-snap-align: start;
   padding: 38px 34px;
   background: var(--white);
-  border: 1px solid rgba(31, 27, 24, 0.09);
+  border: 1px solid rgba(30, 42, 94, 0.09);
 }
 
 .testimonial__stars {
@@ -596,7 +596,7 @@
 .testimonial__meta {
   margin-top: 26px;
   padding-top: 18px;
-  border-top: 1px solid rgba(31, 27, 24, 0.12);
+  border-top: 1px solid rgba(30, 42, 94, 0.12);
   font-size: 0.8125rem;
   letter-spacing: 0.6px;
   color: var(--gray-idle);
@@ -705,7 +705,7 @@
   width: 100%;
   padding: 15px 16px;
   background: var(--white);
-  border: 1px solid rgba(31, 27, 24, 0.2);
+  border: 1px solid rgba(30, 42, 94, 0.2);
   border-radius: var(--radius);
   font-size: 0.9375rem;
   transition: border-color 0.25s var(--ease);
@@ -779,7 +779,7 @@
   width: 30px;
   height: 30px;
   margin: 0 auto 18px;
-  border: 2px solid rgba(31, 27, 24, 0.15);
+  border: 2px solid rgba(30, 42, 94, 0.15);
   border-top-color: var(--gold);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
@@ -816,7 +816,7 @@
 
 .chip {
   padding: 10px 20px;
-  border: 1px solid rgba(31, 27, 24, 0.2);
+  border: 1px solid rgba(30, 42, 94, 0.2);
   border-radius: 999px;
   font-size: 0.8125rem;
   letter-spacing: 0.8px;
@@ -866,7 +866,7 @@
 .pager button {
   min-width: 44px;
   padding: 11px 14px;
-  border: 1px solid rgba(31, 27, 24, 0.18);
+  border: 1px solid rgba(30, 42, 94, 0.18);
   font-size: 0.875rem;
   transition: background-color 0.25s var(--ease), color 0.25s var(--ease);
 }
@@ -944,7 +944,7 @@
 
 .variant {
   padding: 9px 16px;
-  border: 1px solid rgba(31, 27, 24, 0.18);
+  border: 1px solid rgba(30, 42, 94, 0.18);
   font-size: 0.8125rem;
 }
 
@@ -959,7 +959,7 @@
 .captcha {
   padding: 22px;
   background: var(--off-white);
-  border: 1px solid rgba(31, 27, 24, 0.12);
+  border: 1px solid rgba(30, 42, 94, 0.12);
 }
 
 .captcha__row {
@@ -979,7 +979,7 @@
   display: block;
   width: 160px;
   height: 56px;
-  border: 1px solid rgba(31, 27, 24, 0.14);
+  border: 1px solid rgba(30, 42, 94, 0.14);
   border-radius: var(--radius);
   /* Discourages selecting the characters instead of reading them. */
   user-select: none;
@@ -991,7 +991,7 @@
   place-items: center;
   width: 40px;
   height: 40px;
-  border: 1px solid rgba(31, 27, 24, 0.18);
+  border: 1px solid rgba(30, 42, 94, 0.18);
   border-radius: var(--radius);
   color: var(--ink);
   transition: background-color 0.25s var(--ease), color 0.25s var(--ease);
@@ -1036,7 +1036,7 @@
 
 .process__list {
   counter-reset: process;
-  border-top: 1px solid rgba(31, 27, 24, 0.14);
+  border-top: 1px solid rgba(30, 42, 94, 0.14);
 }
 
 .process__step {
@@ -1044,7 +1044,7 @@
   grid-template-columns: 72px minmax(0, 1fr);
   gap: 20px;
   padding: 26px 0;
-  border-bottom: 1px solid rgba(31, 27, 24, 0.14);
+  border-bottom: 1px solid rgba(30, 42, 94, 0.14);
 }
 
 .process__num {
@@ -1106,7 +1106,7 @@
   background: var(--ink);
   color: var(--cream);
   border-radius: 999px;
-  box-shadow: 0 10px 30px rgba(31, 27, 24, 0.28);
+  box-shadow: 0 10px 30px rgba(30, 42, 94, 0.28);
   transform: translateY(-50%);
   transition: background-color 0.3s var(--ease), padding-right 0.3s var(--ease);
   animation: offer-in 0.6s var(--ease) 1.2s both;
@@ -1129,7 +1129,7 @@
   place-items: center;
   width: 34px;
   height: 34px;
-  border: 1px solid rgba(252, 247, 242, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 50%;
   flex: 0 0 auto;
 }
@@ -1193,7 +1193,7 @@
   display: grid;
   place-items: center;
   padding: 20px;
-  background: rgba(31, 27, 24, 0.55);
+  background: rgba(30, 42, 94, 0.55);
   backdrop-filter: blur(2px);
   animation: fade-in 0.25s var(--ease);
   overflow-y: auto;
@@ -1211,7 +1211,7 @@
   max-height: 92vh;
   overflow-y: auto;
   background: var(--white);
-  box-shadow: 0 30px 80px rgba(31, 27, 24, 0.3);
+  box-shadow: 0 30px 80px rgba(30, 42, 94, 0.3);
   animation: panel-in 0.3s var(--ease);
 }
 
