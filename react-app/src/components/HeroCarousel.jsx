@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Media from './Media';
+import { googleRating } from '../data/site';
 
 const AUTO_ADVANCE_MS = 6000;
 const SWIPE_THRESHOLD_PX = 48;
@@ -71,6 +72,19 @@ export default function HeroCarousel({ slides }) {
                 >
                   Book Now
                 </Link>
+
+                <a
+                  className="hero__rating"
+                  href={googleRating.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  tabIndex={index === active ? 0 : -1}
+                  aria-label={`Rated ${googleRating.rating} on Google from ${googleRating.count} reviews`}
+                >
+                  <span className="hero__rating-stars" aria-hidden="true">★★★★★</span>
+                  <strong>{googleRating.rating}</strong>
+                  <span>{googleRating.count} Google reviews</span>
+                </a>
               </div>
             </div>
 

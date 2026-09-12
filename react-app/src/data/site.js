@@ -55,6 +55,16 @@ export const enquiryCc = ['neetukumarseo00@gmail.com', 'Info.esteqo@gmail.com'];
 export const enquiryRecipients = [enquirySender, ...enquiryCc];
 
 /**
+ * Google Business Profile rating, shown in the home hero and under the
+ * reviews row. Update the numbers by hand when they change.
+ */
+export const googleRating = {
+  rating: '5.0',
+  count: 501,
+  url: 'https://maps.google.com/?cid=185292525259873671',
+};
+
+/**
  * The ₹500-off promotion behind the left-hand badge and the one-time popup.
  *
  * `code` is what gets sent to the backend; the amount stored in the database is

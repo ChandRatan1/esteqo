@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
+import Analytics from './components/Analytics';
 import Home from './pages/Home';
 import Services from './pages/Services';
 import ServiceCategory from './pages/ServiceCategory';
@@ -20,6 +21,8 @@ import ReferralProgram from './pages/ReferralProgram';
 
 export default function App() {
   return (
+    <>
+      <Analytics />
     <Routes>
       <Route path="admin" element={<Navigate to="/admin/services" replace />} />
       <Route path="admin/blog" element={<BlogAdmin />} />
@@ -46,5 +49,6 @@ export default function App() {
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
+    </>
   );
 }

@@ -9,6 +9,7 @@ import Seo from '../seo/Seo';
 import HeroCarousel from '../components/HeroCarousel';
 import ServiceSlider from '../components/ServiceSlider';
 import ReviewSlider from '../components/ReviewSlider';
+import { googleRating } from '../data/site';
 
 const HERO_SLIDES = [
   {
@@ -108,8 +109,6 @@ const EXPERT_CARE_CARDS = [
  * the preview Google shows before "More" — the sentence is cut where Google
  * cut it. To refresh, paste new reviews here; nothing else needs changing.
  */
-const GOOGLE_REVIEWS_URL = 'https://maps.google.com/?cid=185292525259873671';
-
 const REVIEWS = [
   {
     id: 1,
@@ -330,8 +329,8 @@ export default function Home() {
       <ReviewSlider
         title="Our Guests' Results Speak for Themselves"
         reviews={REVIEWS}
-        footnote="Google reviews of ESTEQO, Sector 25, Noida — rated 5.0 from 501 reviews."
-        footnoteHref={GOOGLE_REVIEWS_URL}
+        footnote={`Google reviews of ESTEQO, Sector 25, Noida — rated ${googleRating.rating} from ${googleRating.count} reviews.`}
+        footnoteHref={googleRating.url}
       />
 
       {/* Founder */}

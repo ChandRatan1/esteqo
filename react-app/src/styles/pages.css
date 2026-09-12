@@ -87,6 +87,39 @@
   color: var(--white);
 }
 
+/* Google rating line under the button — the strongest trust signal, so it
+   sits in the first screen instead of only in the reviews footnote. */
+.hero__rating {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  gap: 8px;
+  margin-top: 22px;
+  font-size: 0.875rem;
+  color: var(--hero-ink);
+  text-decoration: none;
+}
+
+.hero__rating-stars {
+  font-size: 0.9375rem;
+  letter-spacing: 1px;
+  color: var(--gold);
+}
+
+.hero__rating strong {
+  font-weight: 600;
+}
+
+.hero__rating span:last-child {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(5, 5, 5, 0.35);
+}
+
+.hero__rating:hover span:last-child {
+  text-decoration-color: currentColor;
+}
+
 .hero__media {
   position: relative;
   align-self: stretch;
