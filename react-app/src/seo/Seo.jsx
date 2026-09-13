@@ -5,6 +5,7 @@ import {
   DEFAULT_DESCRIPTION,
   DEFAULT_OG_IMAGE,
   DEFAULT_TITLE,
+  KEYWORDS,
   SITE_NAME,
   absoluteUrl,
 } from './config';
@@ -86,6 +87,10 @@ export function businessSchema() {
     areaServed: BUSINESS.areaServed.map((name) => ({ '@type': 'Place', name })),
     sameAs: BUSINESS.sameAs,
     founder: { '@type': 'Person', name: 'Seema Nanda' },
+    // Treatments are for everyone — this stops the clinic being read as
+    // women-only by search engines.
+    audience: { '@type': 'PeopleAudience', suggestedGender: 'unisex', audienceType: 'women and men' },
+    keywords: KEYWORDS.join(', '),
   };
 }
 
@@ -98,6 +103,7 @@ export function businessSchema() {
  * @param {boolean} [props.noindex]
  * @param {Array}  [props.breadcrumbs]  [{ name, path }]
  * @param {object} [props.schema]       extra JSON-LD for this page
+ * @param {string[]} [props.keywords]   page-specific search terms, added before the site-wide list
  */
 export default function Seo({
   title,
@@ -108,6 +114,7 @@ export default function Seo({
   canonicalUrl = null,
   breadcrumbs = [],
   schema = null,
+  keywords = [],
 }) {
   const { pathname } = useLocation();
 
@@ -145,6 +152,7 @@ export default function Seo({
     document.title = fullTitle;
 
     upsertMeta('name', 'description', desc);
+    upsertMeta('name', 'keywords', [...(keywords || []), ...KEYWORDS].join(', '));
     upsertMeta('name', 'robots', noindex ? 'noindex, nofollow' : 'index, follow');
     upsertLink('canonical', canonical);
 
@@ -191,6 +199,7 @@ export default function Seo({
     override,
     JSON.stringify(breadcrumbs),
     JSON.stringify(schema),
+    JSON.stringify(keywords),
   ]);
 
   return null;
@@ -252,6 +261,7 @@ export function serviceCatalogSchema(category, services = []) {
     serviceType: category.name,
     description: category.tagline || category.intro || DEFAULT_DESCRIPTION,
     provider: { '@id': `${absoluteUrl('/')}#business` },
+    audience: { '@type': 'PeopleAudience', suggestedGender: 'unisex', audienceType: 'women and men' },
     areaServed: BUSINESS.areaServed.map((name) => ({ '@type': 'Place', name })),
     url: absoluteUrl(`/services/${category.slug}`),
     ...(offers.length

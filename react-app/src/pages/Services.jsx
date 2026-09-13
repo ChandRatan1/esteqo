@@ -191,19 +191,19 @@ function TreatmentCard({ service, open, onToggle }) {
 /** Title and description per menu tab — each tab is its own indexed page. */
 const GROUP_SEO = {
   facials: {
-    title: 'Facial Treatments & Prices in Noida',
+    title: 'Facials for Women & Men in Noida — Prices',
     description:
-      'Every ESTEQO facial with prices — HydraFacial, carbon laser, medi-facials, peels, add-on boosters and laser treatments at our Sector 25, Noida clinic.',
+      "Facials for women and men in Noida, with prices — HydraFacial, carbon laser, medi-facials, peels, men's facials and laser treatments in Sector 25.",
   },
   brows: {
     title: 'Brow Services & Prices in Noida',
     description:
-      'Ombré, powder and microblading brows, brow mapping, lamination and tinting with prices — by Senior Brow Artist Seema Nanda in Sector 25, Noida.',
+      'Ombré, powder and microblading brows for women and men, brow mapping, lamination and tinting with prices — by Seema Nanda in Sector 25, Noida.',
   },
   bridal: {
     title: 'Bridal Packages & Prices in Noida',
     description:
-      'Pre-bridal and groom skin packages with prices — 30 and 90-day glow courses, brow design and day-before rituals at ESTEQO, Sector 25, Noida.',
+      'Pre-bridal and pre-groom skin packages with prices — bride and groom glow courses, brow design and day-before rituals at ESTEQO, Sector 25, Noida.',
   },
 };
 
@@ -275,6 +275,11 @@ export default function Services() {
         // reached via the redundant /services/menu/facials for the default
         // group — this stops that from being counted as duplicate content.
         canonicalUrl={absoluteUrl(groupPath(activeGroup))}
+        keywords={
+          group.slug === 'bridal'
+            ? ['pre-groom facial Noida', 'groom skin package Noida']
+            : ["men's facial Noida", 'facial for men Noida', 'skin treatment for men Noida']
+        }
         breadcrumbs={
           group.slug === menuGroups[0].slug
             ? [{ name: 'Services', path: '/services' }]

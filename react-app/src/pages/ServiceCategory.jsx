@@ -41,8 +41,9 @@ export default function ServiceCategory() {
           category.metaDescription ||
           `${category.tagline ? `${category.tagline} ` : ''}${category.serviceCount || ''} ${
             category.serviceCount === 1 ? 'treatment' : 'treatments'
-          } with prices at ESTEQO, Sector 25, Noida.`
+          } for women and men, with prices at ESTEQO, Sector 25, Noida.`
         }
+        keywords={[`${category.name.toLowerCase()} for men Noida`, `${category.name.toLowerCase()} Noida`]}
         image={category.heroImage}
         noindex={category.noindex}
         canonicalUrl={category.canonicalUrl}

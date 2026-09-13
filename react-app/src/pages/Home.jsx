@@ -226,7 +226,8 @@ export default function Home() {
   return (
     <>
       <Seo
-        description="Skin, brow and laser clinic in Sector 25, Noida. HydraFacial, carbon laser, peels, laser hair reduction and permanent brows, clinically planned by Seema Nanda."
+        description="Skin, brow and laser clinic in Sector 25, Noida for women and men. HydraFacial, carbon laser, peels, laser hair reduction and brows by Seema Nanda."
+        keywords={['facial for men Noida', 'skin clinic for men and women Noida', 'HydraFacial for men']}
       />
 
       {/* Hero */}

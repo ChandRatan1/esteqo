@@ -11,9 +11,30 @@ export const SITE_URL = (import.meta.env?.VITE_SITE_URL || 'https://esteqo.com')
 export const SITE_NAME = 'ESTEQO';
 export const DEFAULT_OG_IMAGE = '/services/21324.jpg';
 
+/**
+ * Search terms the clinic wants to be found for. Emitted as the keywords meta
+ * tag and inside the structured data on every page; men's terms are included
+ * because the clinic treats men and women alike.
+ */
+export const KEYWORDS = [
+  'skin clinic Noida',
+  'facial for men Noida',
+  "men's facial Noida",
+  'skin clinic for men Noida',
+  'laser hair removal for men Noida',
+  'HydraFacial Noida',
+  'carbon laser facial Noida',
+  'permanent brows Noida',
+  'microblading Noida',
+  'brow studio Noida',
+  'groom skin treatment Noida',
+  'pre-bridal facial Noida',
+  'skin clinic Sector 25 Noida',
+];
+
 export const DEFAULT_TITLE = 'ESTEQO | Skin, Brows & Laser Clinic in Sector 25, Noida';
 export const DEFAULT_DESCRIPTION =
-  'Skin, brow and laser clinic in Sector 25, Noida. HydraFacial, carbon laser, peels, laser hair reduction and permanent brows, clinically planned by Seema Nanda.';
+  'Skin, brow and laser clinic in Sector 25, Noida for women and men. HydraFacial, carbon laser, peels, laser hair reduction and brows by Seema Nanda.';
 
 /** Absolute URL for a site-relative path. */
 export const absoluteUrl = (path = '/') =>

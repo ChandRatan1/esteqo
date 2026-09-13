@@ -15,7 +15,7 @@
 
 const PRERENDER_SITE_NAME = 'ESTEQO';
 const PRERENDER_DEFAULT_TITLE = 'ESTEQO | Skin, Brows & Laser Clinic in Sector 25, Noida';
-const PRERENDER_DEFAULT_DESCRIPTION = 'Skin, brow and laser clinic in Sector 25, Noida. HydraFacial, carbon laser, peels, laser hair reduction and permanent brows, clinically planned by Seema Nanda.';
+const PRERENDER_DEFAULT_DESCRIPTION = 'Skin, brow and laser clinic in Sector 25, Noida for women and men. HydraFacial, carbon laser, peels, laser hair reduction and brows by Seema Nanda.';
 const PRERENDER_DEFAULT_IMAGE = '/services/21324.jpg';
 
 /** Copy mirrors what each React page passes to <Seo>, kept in sync by hand. */
@@ -25,16 +25,16 @@ const PRERENDER_STATIC_PAGES = [
         'description' => null,
     ],
     '/services' => [
-        'title'       => 'Facial Treatments & Prices in Noida',
-        'description' => 'Every ESTEQO facial with prices — HydraFacial, carbon laser, medi-facials, peels, add-on boosters and laser treatments at our Sector 25, Noida clinic.',
+        'title'       => 'Facials for Women & Men in Noida — Prices',
+        'description' => "Facials for women and men in Noida, with prices — HydraFacial, carbon laser, medi-facials, peels, men's facials and laser treatments in Sector 25.",
     ],
     '/services/menu/brows' => [
         'title'       => 'Brow Services & Prices in Noida',
-        'description' => 'Ombré, powder and microblading brows, brow mapping, lamination and tinting with prices — by Senior Brow Artist Seema Nanda in Sector 25, Noida.',
+        'description' => 'Ombré, powder and microblading brows for women and men, brow mapping, lamination and tinting with prices — by Seema Nanda in Sector 25, Noida.',
     ],
     '/services/menu/bridal' => [
         'title'       => 'Bridal Packages & Prices in Noida',
-        'description' => 'Pre-bridal and groom skin packages with prices — 30 and 90-day glow courses, brow design and day-before rituals at ESTEQO, Sector 25, Noida.',
+        'description' => 'Pre-bridal and pre-groom skin packages with prices — bride and groom glow courses, brow design and day-before rituals at ESTEQO, Sector 25, Noida.',
     ],
     '/values' => [
         'title'       => 'Our Story & FAQ',
