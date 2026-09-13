@@ -359,7 +359,7 @@ function route_admin_service_category_update(int $id): void
 
 /**
  * Deleting a department cascades to every service inside it (see the foreign
- * key in install.sql), so a careless click cannot silently wipe a whole
+ * key in esteqo.sql), so a careless click cannot silently wipe a whole
  * department's treatments — the caller must empty it first.
  */
 function route_admin_service_category_delete(int $id): void

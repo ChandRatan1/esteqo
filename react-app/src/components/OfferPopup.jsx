@@ -73,6 +73,13 @@ export default function OfferPopup({ onOpenChange }) {
     remember('dismissed');
   }, []);
 
+  // The phone action bar (Layout.jsx) opens the form through this event.
+  useEffect(() => {
+    const onOpen = () => openForm('bar');
+    window.addEventListener('esteqo:open-offer', onOpen);
+    return () => window.removeEventListener('esteqo:open-offer', onOpen);
+  }, [openForm]);
+
   // Count only the time the tab is actually visible.
   useEffect(() => {
     if (autoShown.current) return undefined;

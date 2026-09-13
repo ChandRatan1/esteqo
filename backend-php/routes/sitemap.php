@@ -16,8 +16,11 @@ const SITEMAP_STATIC_PAGES = [
     ['/appointment', 0.9, 'monthly'],
     ['/contact', 0.8, 'monthly'],
     ['/blog', 0.8, 'weekly'],
-    ['/about', 0.7, 'monthly'],
-    ['/values', 0.6, 'monthly'],
+    ['/services/menu/brows', 0.9, 'weekly'],
+    ['/services/menu/bridal', 0.9, 'weekly'],
+    ['/values', 0.7, 'monthly'],
+    ['/gift-cards', 0.6, 'monthly'],
+    ['/referral-program', 0.5, 'monthly'],
 ];
 
 function sitemap_escape(string $value): string
@@ -88,6 +91,10 @@ function route_sitemap_xml(array $config): void
 const ROBOTS_DEFAULT = <<<'TXT'
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /*?service=
+Disallow: /*?page=
 TXT;
 
 /**

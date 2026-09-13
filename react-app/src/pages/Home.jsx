@@ -1,6 +1,6 @@
 import { Link, useOutletContext } from 'react-router-dom';
 import { api } from '../api/client';
-import { useApi, usePageMeta } from '../hooks/useApi';
+import { useApi } from '../hooks/useApi';
 import { useSite } from '../context/SiteContext';
 import { PostCard } from '../components/Cards';
 import { CtaBand, Marquee } from '../components/Sections';
@@ -217,10 +217,6 @@ const VALUES = [
 
 export default function Home() {
   const { brand, contact } = useSite();
-  usePageMeta(
-    null,
-    'Clinically planned skin, brow and laser treatments in Sector 25, Noida. Medi-facials, PMU brows, laser hair reduction and body care by Seema Nanda.'
-  );
 
   const { data: posts } = useApi((opts) => api.getPosts({ limit: 3 }, opts), []);
 
@@ -230,7 +226,7 @@ export default function Home() {
   return (
     <>
       <Seo
-        description="Clinically planned skin, brow and laser treatments in Sector 25, Noida. Hydra facials, carbon laser, peels, body polish, threading, waxing and massages."
+        description="Skin, brow and laser clinic in Sector 25, Noida. HydraFacial, carbon laser, peels, laser hair reduction and permanent brows, clinically planned by Seema Nanda."
       />
 
       {/* Hero */}
@@ -342,14 +338,15 @@ export default function Home() {
               <h2>Beauty is personal — every skin deserves tailored care</h2>
               <hr className="rule" />
               <p className="lede">
-                Founded by {brand.founder_name}, ESTEQO blends advanced dermatological science with
-                the artistry of beauty — a space where innovation meets indulgence, with results that
-                go beyond the surface.
+                ESTEQO is a clinical aesthetics studio in Sector 25, Noida, where every treatment
+                starts with a skin analysis — not a menu. HydraFacial, carbon laser facial,
+                medical-grade peels, laser hair reduction and permanent brows are planned around
+                your skin type, your concern and the result you actually want.
               </p>
               <p>
-                With over a decade of hands-on experience, {brand.founder_name} personally leads our
-                brow department, where precision PMU is designed around facial balance and pigment
-                stability.
+                {brand.founder_name}, Clinical Cosmetologist and Senior Brow Artist, leads the team
+                and personally handles every ombré, powder and microblading brow — the reason
+                clients come to us from across Noida, Greater Noida, Ghaziabad and Delhi NCR.
               </p>
               <div className="btn-row" style={{ marginTop: 28 }}>
                 <Link to="/values" className="btn btn--secondary">
@@ -358,7 +355,7 @@ export default function Home() {
               </div>
             </div>
             <div className="feature__media">
-              <Media accent="light-brown" label={brand.founder_name} alt={brand.founder_name} variant="tall" />
+              <Media src="/uploads/Seema/seema-nanda-2.jpg" accent="light-brown" label={brand.founder_name} alt={brand.founder_name} variant="tall" />
             </div>
           </div>
         </div>

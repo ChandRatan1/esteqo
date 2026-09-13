@@ -9,11 +9,10 @@ import Seo from '../seo/Seo';
 /**
  * Gift card request queue at /admin/gift-cards.
  *
- * There is no live payment gateway behind the public /gift-cards page — a
- * visitor pays the clinic's UPI ID by hand and uploads a screenshot as proof.
- * This screen is where that proof gets checked: open a request, look at the
- * screenshot, mark it verified once the payment is confirmed, then type in
- * the gift code you send the buyer and mark it issued.
+ * There is no payment on the public /gift-cards page — the visitor only
+ * leaves their details. This screen is the follow-up: open a request, call the
+ * buyer to take payment, mark it verified, then type in the gift code you
+ * emailed them and mark it issued.
  */
 
 const formatDate = (value) => {

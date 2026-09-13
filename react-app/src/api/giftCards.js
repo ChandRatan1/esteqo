@@ -1,10 +1,9 @@
 /**
- * Public gift card request submission — dummy payment flow.
+ * Public gift card request submission.
  *
- * The visitor picks services, pays the clinic's UPI ID manually, and uploads
- * a screenshot as proof. There is no live payment gateway wired up: this just
- * stores the request (with the screenshot) so a staff member can verify the
- * payment and issue the gift code by hand via /admin/gift-cards.
+ * The visitor picks services and leaves their details. No payment happens on
+ * the site: the clinic calls the buyer to take payment, then emails the gift
+ * code by hand and marks the request issued in /admin/gift-cards.
  */
 
 import { API_ORIGIN } from './apiOrigin';
@@ -22,11 +21,9 @@ export class GiftCardError extends Error {
 
 /**
  * Emails the request to the clinic inboxes (`enquiryRecipients` in site.js)
- * through the same transport the contact and appointment forms use. The
- * screenshot itself is not attached — it is already saved by the backend, so
- * the email carries a link to it instead.
+ * through the same transport the contact and appointment forms use.
  */
-async function emailGiftCardRequest(payload, screenshotPath) {
+async function emailGiftCardRequest(payload) {
   const fields = {
     'Buyer name': payload.buyerName,
     'Buyer mobile': payload.buyerPhone,
@@ -36,9 +33,7 @@ async function emailGiftCardRequest(payload, screenshotPath) {
     Services: payload.services.join('; '),
     ...(payload.amountNote ? { Amount: payload.amountNote } : {}),
     ...(payload.message ? { Message: payload.message } : {}),
-    'Payment screenshot': screenshotPath
-      ? `${GIFT_CARDS_API}${screenshotPath}`
-      : 'Not saved — ask the buyer to resend it on WhatsApp',
+    'Next step': 'Call the buyer to take payment, then email the gift code',
     'Submitted from': window.location.href,
   };
 
@@ -46,8 +41,7 @@ async function emailGiftCardRequest(payload, screenshotPath) {
 }
 
 /**
- * Stores the request via the backend (with the screenshot) and emails it to
- * the clinic. Either destination alone counts as success; the visitor only
+ * Stores the request via the backend and emails it to the clinic. Either destination alone counts as success; the visitor only
  * sees an error when both failed. Validation errors from the backend are
  * surfaced immediately so the highlighted fields can be fixed.
  */
@@ -70,7 +64,7 @@ export async function submitGiftCardRequest(payload) {
 
   let emailSent = false;
   try {
-    await emailGiftCardRequest(payload, stored?.data?.screenshot || null);
+    await emailGiftCardRequest(payload);
     emailSent = true;
   } catch (error) {
     console.warn(`[esteqo] Gift card request was not emailed — ${error.message}`);
@@ -111,12 +105,3 @@ async function storeGiftCardRequest(payload) {
   return result;
 }
 
-/** Reads a File as a base64 data URL, for the payment screenshot. */
-export function fileToDataUrl(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onerror = () => reject(new GiftCardError('Could not read that file.'));
-    reader.onload = () => resolve(String(reader.result));
-    reader.readAsDataURL(file);
-  });
-}

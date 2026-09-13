@@ -9,14 +9,24 @@ import FloatingContact from './FloatingContact';
 import { useContactLinks } from '../context/SiteContext';
 import { useScrollToTop } from '../hooks/useApi';
 
+/**
+ * Phone-only action bar. On phones the floating offer badge and the round
+ * call/WhatsApp buttons are hidden (they covered content at the bottom of
+ * the screen), so the offer opens from here instead — OfferPopup listens
+ * for the event.
+ */
 function StickyBar() {
   const links = useContactLinks();
+  const openOffer = () => window.dispatchEvent(new CustomEvent('esteqo:open-offer'));
   return (
     <div className="sticky-bar">
       <a href={links.tel}>Call</a>
       <a href={links.whatsapp} target="_blank" rel="noreferrer">
         WhatsApp
       </a>
+      <button type="button" className="sticky-bar__offer" onClick={openOffer} aria-haspopup="dialog">
+        ₹500 off
+      </button>
       <Link to="/appointment">Book</Link>
     </div>
   );

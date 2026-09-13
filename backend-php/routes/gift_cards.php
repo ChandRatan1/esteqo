@@ -2,12 +2,11 @@
 /**
  * Gift card requests.
  *
- * A visitor picks services, sees the clinic's UPI ID, pays manually and
- * uploads a screenshot as proof — this is intentionally NOT a live payment
- * integration (no UPI merchant API is wired up). The request just lands in
- * `gift_card_requests` with status 'pending'; a staff member verifies the
- * payment themselves in /admin/gift-cards and sends the gift code to the
- * buyer by hand, then marks it issued.
+ * A visitor picks services and leaves their details — no payment happens on
+ * the site. The request lands in `gift_card_requests` with status 'pending';
+ * a staff member calls the buyer to take payment, emails the gift code by
+ * hand, then marks it issued in /admin/gift-cards. (A payment screenshot is
+ * still accepted if ever sent, but the public form no longer asks for one.)
  */
 
 /** POST /api/gift-cards (public) */
@@ -76,7 +75,7 @@ function route_gift_card_create(array $config): void
             // Public path of the saved screenshot so the front end can link it
             // in the notification email.
             'screenshot' => $screenshotPath,
-            'message'    => 'Thank you — we will verify your payment and send the gift code to you shortly.',
+            'message'    => 'Thank you — we will call you shortly to arrange payment, and email your gift code once it is confirmed.',
         ],
     ], 201);
 }

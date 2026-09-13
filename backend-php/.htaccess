@@ -17,7 +17,7 @@
 # Only index.php should be reachable over HTTP. Everything else in this folder
 # is source, credentials or database dumps — none of it should be downloadable.
 #
-# Without this, https://esteqo.com/api/install.sql would hand anyone the full
+# Without this, https://esteqo.com/api/esteqo.sql would hand anyone the full
 # schema, and config.php would leak the database password.
 <FilesMatch "\.(sql|md|json|lock|example|ini|log|bak)$">
   Require all denied

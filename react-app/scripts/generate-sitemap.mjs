@@ -65,6 +65,23 @@ async function fetchLivePosts() {
   }
 }
 
+/** Active departments from the API, or null when it is unreachable — the
+ * bundled menu still lists departments that were switched off in the DB. */
+async function fetchLiveCategories() {
+  if (!BLOG_API) return null;
+  try {
+    const response = await fetch(`${BLOG_API}/api/categories`, { signal: AbortSignal.timeout(5000) });
+    if (!response.ok) return null;
+    const payload = await response.json();
+    return Array.isArray(payload.data) ? payload.data : null;
+  } catch {
+    return null;
+  }
+}
+
+const liveCategories = await fetchLiveCategories();
+const departments = liveCategories ?? categories;
+
 const livePosts = await fetchLivePosts();
 const posts = livePosts ?? bundledPosts;
 const postSource = livePosts ? `live API (${BLOG_API})` : 'bundled fallback';
@@ -85,7 +102,11 @@ const STATIC = [
   ['/appointment', 0.9, 'monthly'],
   ['/contact', 0.8, 'monthly'],
   ['/blog', 0.8, 'weekly'],
+  ['/services/menu/brows', 0.9, 'weekly'],
+  ['/services/menu/bridal', 0.9, 'weekly'],
   ['/values', 0.7, 'monthly'],
+  ['/gift-cards', 0.6, 'monthly'],
+  ['/referral-program', 0.5, 'monthly'],
 ];
 
 const urls = [];
@@ -93,7 +114,7 @@ const push = (loc, priority, changefreq, lastmod = today) =>
   urls.push({ loc: `${SITE_URL}${loc}`, priority, changefreq, lastmod });
 
 for (const [loc, priority, changefreq] of STATIC) push(loc, priority, changefreq);
-for (const c of categories) push(`/services/${c.slug}`, 0.8, 'monthly');
+for (const c of departments) push(`/services/${c.slug}`, 0.8, 'monthly');
 
 for (const p of posts) {
   // The API returns publishedAt; the bundled file uses the same key.
@@ -131,6 +152,6 @@ if (fs.existsSync(robotsPath)) {
 }
 
 console.log(
-  `sitemap.xml: ${urls.length} URLs — ${STATIC.length} pages, ${categories.length} departments, ` +
+  `sitemap.xml: ${urls.length} URLs — ${STATIC.length} pages, ${departments.length} departments, ` +
     `${posts.length} posts [${postSource}] -> ${SITE_URL}`
 );

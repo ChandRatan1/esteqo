@@ -188,6 +188,25 @@ function TreatmentCard({ service, open, onToggle }) {
   );
 }
 
+/** Title and description per menu tab — each tab is its own indexed page. */
+const GROUP_SEO = {
+  facials: {
+    title: 'Facial Treatments & Prices in Noida',
+    description:
+      'Every ESTEQO facial with prices — HydraFacial, carbon laser, medi-facials, peels, add-on boosters and laser treatments at our Sector 25, Noida clinic.',
+  },
+  brows: {
+    title: 'Brow Services & Prices in Noida',
+    description:
+      'Ombré, powder and microblading brows, brow mapping, lamination and tinting with prices — by Senior Brow Artist Seema Nanda in Sector 25, Noida.',
+  },
+  bridal: {
+    title: 'Bridal Packages & Prices in Noida',
+    description:
+      'Pre-bridal and groom skin packages with prices — 30 and 90-day glow courses, brow design and day-before rituals at ESTEQO, Sector 25, Noida.',
+  },
+};
+
 export default function Services() {
   const { groupSlug } = useParams();
   const navigate = useNavigate();
@@ -247,13 +266,23 @@ export default function Services() {
   return (
     <>
       <Seo
-        title="Treatments & Prices"
-        description="The full ESTEQO treatment menu with prices — facials, brows, bridal packages, body care, threading, waxing and massages in Sector 25, Noida."
+        title={GROUP_SEO[group.slug]?.title || 'Treatments & Prices'}
+        description={
+          GROUP_SEO[group.slug]?.description ||
+          'The full ESTEQO treatment menu with prices — facials, brows, bridal packages, body care, threading, waxing and massages in Sector 25, Noida.'
+        }
         // Every group has exactly one canonical URL (groupPath), even when
         // reached via the redundant /services/menu/facials for the default
         // group — this stops that from being counted as duplicate content.
         canonicalUrl={absoluteUrl(groupPath(activeGroup))}
-        breadcrumbs={[{ name: 'Services', path: '/services' }]}
+        breadcrumbs={
+          group.slug === menuGroups[0].slug
+            ? [{ name: 'Services', path: '/services' }]
+            : [
+                { name: 'Services', path: '/services' },
+                { name: group.name, path: groupPath(group.slug) },
+              ]
+        }
       />
 
       <section className="svc-hero">

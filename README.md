@@ -141,9 +141,9 @@ php -S 127.0.0.1:4143 index.php
 curl http://127.0.0.1:4143/api/health
 ```
 
-Import `install.sql` (schema) then `seed.sql` (content) through phpMyAdmin.
-Both are safe to run on a database that already holds WordPress — no table name
-collides with `wp_*` and nothing is dropped.
+Import `backend-php/esteqo.sql` (schema and content in one file) through
+phpMyAdmin. It is safe to run on a database that already holds WordPress — no
+table name collides with `wp_*` and nothing is dropped.
 
 See [backend-php/README.md](backend-php/README.md) for the full deployment
 guide, endpoint list and security notes.

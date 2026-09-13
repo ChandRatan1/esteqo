@@ -38,13 +38,11 @@ hPanel → **Databases → MySQL Databases** → create a database and user. Not
 prefixed names Hostinger gives you (e.g. `u123456789_esteqo`).
 
 hPanel → **phpMyAdmin** → select that database → **Import** → upload
-`install.sql`.
-
-Then import `seed.sql` the same way. Together they create 12 tables and load
-the full site content: 16 departments, 117 treatments, 6 blog posts, 32 FAQs,
-the team, testimonials and contact settings. **It is safe to run on the database
-that already holds WordPress** — none of the table names collide with `wp_*`,
-and nothing is dropped.
+`esteqo.sql`. That one file creates every table and loads the full site
+content: the departments and treatments shown on the website, 6 blog posts,
+32 FAQs, the team, testimonials and contact settings. **It is safe to run on
+the database that already holds WordPress** — none of the table names collide
+with `wp_*`, and nothing is dropped.
 
 ### 2. Upload the API
 
@@ -117,25 +115,30 @@ blog image and `config.php` holds your database password.
 
 ### The .sql files do NOT run on the server
 
-Just two of them, and nothing on Hostinger executes either — they are
-imported by hand, from your own computer, through **phpMyAdmin -> Import**.
-You never have to upload them.
+Just one, `esteqo.sql`, and nothing on Hostinger executes it — it is imported
+by hand, from your own computer, through **phpMyAdmin -> Import**. You never
+have to upload it.
 
 | File | What it does | When to import | Destructive? |
 | --- | --- | --- | --- |
-| `install.sql` | Creates the database: all 12 tables. | Once, on first setup. Safe to repeat. | No |
-| `seed.sql` | Migrates in the starting content: departments, services, blog posts, FAQs, team, testimonials. | Once, on first setup. Safe to repeat. | No |
+| `esteqo.sql` | Creates every table and loads the site content: departments, services, blog posts, FAQs, team, testimonials, settings. | On first setup, and again whenever the content in it should be pushed to the live database. | No |
 
-Both are written so a second import changes nothing: every CREATE is `IF NOT
-EXISTS` and every INSERT is `INSERT IGNORE`. Re-import them any time without
-risk to your blog posts, services or enquiries.
+It is written so it can be imported repeatedly: every CREATE is `IF NOT
+EXISTS` and every content row is a `REPLACE`, which updates a row that already
+exists and adds one that does not. Enquiries, appointments, gift card requests
+and other visitor data are never touched — they are not in the file at all.
+
+To refresh the file after editing content in `/admin`, dump the schema with
+`mysqldump --no-data --skip-add-drop-table` and the content tables with
+`mysqldump --no-create-info --replace --complete-insert`, then paste both into
+`esteqo.sql` under its header.
 
 Once they have run, the treatment menu no longer lives in a .sql file at all —
 edit departments and services directly at `/admin/services` and the change is
 live immediately, no re-import or redeploy needed.
 
 If you do upload the .sql files with the API folder, `.htaccess` blocks them
-from being downloaded — nobody can fetch `/api/install.sql`.
+from being downloaded — nobody can fetch `/api/esteqo.sql`.
 
 ### A normal deploy, after the first one
 

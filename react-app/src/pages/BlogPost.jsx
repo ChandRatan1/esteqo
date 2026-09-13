@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { api } from '../api/client';
-import { useApi, usePageMeta } from '../hooks/useApi';
+import { useApi } from '../hooks/useApi';
 import Media from '../components/Media';
 import { PostCard } from '../components/Cards';
 import { Breadcrumbs, CtaBand } from '../components/Sections';
@@ -49,7 +49,6 @@ export default function BlogPost() {
     [postSlug]
   );
 
-  usePageMeta(post?.title, post?.excerpt);
 
   if (loading) return <Loading label="Loading article…" />;
   if (error) {

@@ -438,7 +438,8 @@
   background: var(--white);
 }
 
-.sticky-bar a {
+.sticky-bar a,
+.sticky-bar button {
   flex: 1;
   padding: 15px 8px;
   font-size: 0.75rem;
@@ -448,11 +449,19 @@
   text-transform: uppercase;
 }
 
-.sticky-bar a + a {
+.sticky-bar > * + * {
   border-left: 1px solid rgba(30, 42, 94, 0.1);
 }
 
-.sticky-bar a:last-child {
+.sticky-bar button {
+  border: 0;
+  background: none;
+  font-family: inherit;
+  color: var(--gold-deep);
+  cursor: pointer;
+}
+
+.sticky-bar > :last-child {
   background: var(--ink);
   color: var(--cream);
 }
@@ -460,6 +469,12 @@
 @media (max-width: 720px) {
   .sticky-bar {
     display: flex;
+  }
+
+  /* The bar already offers call and WhatsApp — the round buttons only
+     covered content on a phone. */
+  .float-contact {
+    display: none;
   }
 
   body {

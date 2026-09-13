@@ -15,7 +15,7 @@
 
 const PRERENDER_SITE_NAME = 'ESTEQO';
 const PRERENDER_DEFAULT_TITLE = 'ESTEQO | Skin, Brows & Laser Clinic in Sector 25, Noida';
-const PRERENDER_DEFAULT_DESCRIPTION = 'Clinically planned skin, brow and laser treatments in Sector 25, Noida. Hydra facials, carbon laser, peels, body polish, threading, waxing and massages by Seema Nanda.';
+const PRERENDER_DEFAULT_DESCRIPTION = 'Skin, brow and laser clinic in Sector 25, Noida. HydraFacial, carbon laser, peels, laser hair reduction and permanent brows, clinically planned by Seema Nanda.';
 const PRERENDER_DEFAULT_IMAGE = '/services/21324.jpg';
 
 /** Copy mirrors what each React page passes to <Seo>, kept in sync by hand. */
@@ -25,12 +25,28 @@ const PRERENDER_STATIC_PAGES = [
         'description' => null,
     ],
     '/services' => [
-        'title'       => 'Treatments & Prices',
-        'description' => 'The full ESTEQO treatment menu with prices — facials, brows, bridal packages, body care, threading, waxing and massages in Sector 25, Noida.',
+        'title'       => 'Facial Treatments & Prices in Noida',
+        'description' => 'Every ESTEQO facial with prices — HydraFacial, carbon laser, medi-facials, peels, add-on boosters and laser treatments at our Sector 25, Noida clinic.',
+    ],
+    '/services/menu/brows' => [
+        'title'       => 'Brow Services & Prices in Noida',
+        'description' => 'Ombré, powder and microblading brows, brow mapping, lamination and tinting with prices — by Senior Brow Artist Seema Nanda in Sector 25, Noida.',
+    ],
+    '/services/menu/bridal' => [
+        'title'       => 'Bridal Packages & Prices in Noida',
+        'description' => 'Pre-bridal and groom skin packages with prices — 30 and 90-day glow courses, brow design and day-before rituals at ESTEQO, Sector 25, Noida.',
     ],
     '/values' => [
         'title'       => 'Our Story & FAQ',
-        'description' => 'ESTEQO blends advanced dermatological science with the artistry of beauty. Founded by Seema Nanda in Sector 25, Noida — plus answers to the questions we are asked most.',
+        'description' => 'ESTEQO was founded by Seema Nanda, Clinical Cosmetologist and Senior Brow Artist, in Sector 25, Noida. How we work, plus answers to the questions we are asked most.',
+    ],
+    '/gift-cards' => [
+        'title'       => 'Gift Cards',
+        'description' => 'Send a friend or family member the gift of ESTEQO — choose the treatments, send us your details, and we will call you to arrange payment and email a gift code.',
+    ],
+    '/referral-program' => [
+        'title'       => 'Referral Program',
+        'description' => 'Refer a friend to ESTEQO and you both get rewarded once they complete their first visit.',
     ],
     '/blog' => [
         'title'       => 'Blog',

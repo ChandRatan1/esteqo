@@ -13,7 +13,7 @@ export const DEFAULT_OG_IMAGE = '/services/21324.jpg';
 
 export const DEFAULT_TITLE = 'ESTEQO | Skin, Brows & Laser Clinic in Sector 25, Noida';
 export const DEFAULT_DESCRIPTION =
-  'Clinically planned skin, brow and laser treatments in Sector 25, Noida. Hydra facials, carbon laser, peels, body polish, threading, waxing and massages by Seema Nanda.';
+  'Skin, brow and laser clinic in Sector 25, Noida. HydraFacial, carbon laser, peels, laser hair reduction and permanent brows, clinically planned by Seema Nanda.';
 
 /** Absolute URL for a site-relative path. */
 export const absoluteUrl = (path = '/') =>
@@ -23,8 +23,11 @@ export const absoluteUrl = (path = '/') =>
 export const STATIC_ROUTES = [
   { path: '/', priority: 1.0, changefreq: 'weekly' },
   { path: '/services', priority: 0.9, changefreq: 'weekly' },
-  { path: '/about', priority: 0.7, changefreq: 'monthly' },
-  { path: '/values', priority: 0.6, changefreq: 'monthly' },
+  { path: '/services/menu/brows', priority: 0.9, changefreq: 'weekly' },
+  { path: '/services/menu/bridal', priority: 0.9, changefreq: 'weekly' },
+  { path: '/values', priority: 0.7, changefreq: 'monthly' },
+  { path: '/gift-cards', priority: 0.6, changefreq: 'monthly' },
+  { path: '/referral-program', priority: 0.5, changefreq: 'monthly' },
   { path: '/blog', priority: 0.8, changefreq: 'weekly' },
   { path: '/contact', priority: 0.8, changefreq: 'monthly' },
   { path: '/appointment', priority: 0.9, changefreq: 'monthly' },

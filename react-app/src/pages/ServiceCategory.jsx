@@ -1,10 +1,10 @@
 import { Link, useParams } from 'react-router-dom';
 import { api } from '../api/client';
-import { useApi, usePageMeta } from '../hooks/useApi';
+import { useApi } from '../hooks/useApi';
 import Accordion from '../components/Accordion';
 import { Breadcrumbs, CtaBand, FactList, PageHero, Split, TickList } from '../components/Sections';
 import { Loading, ErrorState } from '../components/States';
-import Seo, { faqSchema } from '../seo/Seo';
+import Seo, { faqSchema, serviceCatalogSchema } from '../seo/Seo';
 
 /**
  * A department page: intro banner, then one alternating text/image row per
@@ -18,7 +18,6 @@ export default function ServiceCategory() {
     [categorySlug]
   );
 
-  usePageMeta(category?.name, category?.tagline);
 
   if (loading) return <Loading label="Loading treatments…" />;
   if (error) {
@@ -38,7 +37,12 @@ export default function ServiceCategory() {
     <>
       <Seo
         title={category.metaTitle || `${category.name} in Noida`}
-        description={category.metaDescription || category.tagline}
+        description={
+          category.metaDescription ||
+          `${category.tagline ? `${category.tagline} ` : ''}${category.serviceCount || ''} ${
+            category.serviceCount === 1 ? 'treatment' : 'treatments'
+          } with prices at ESTEQO, Sector 25, Noida.`
+        }
         image={category.heroImage}
         noindex={category.noindex}
         canonicalUrl={category.canonicalUrl}
@@ -46,7 +50,7 @@ export default function ServiceCategory() {
           { name: 'Services', path: '/services' },
           { name: category.name, path: `/services/${category.slug}` },
         ]}
-        schema={faqSchema(category.faqs)}
+        schema={[serviceCatalogSchema(category, category.services), faqSchema(category.faqs)].filter(Boolean)}
       />
 
       <PageHero

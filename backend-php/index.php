@@ -96,7 +96,7 @@ $matches = static function (array $pattern) use ($segments): bool {
 //
 // Also reports whether the live database has every table the code expects, so
 // after a deploy you can confirm the schema in one request instead of guessing
-// whether install.sql still needs importing.
+// whether esteqo.sql still needs importing.
 if ($method === 'GET' && $matches(['health'])) {
     $expected = [
         'service_categories', 'services', 'blog_categories', 'blog_posts',
@@ -127,7 +127,7 @@ if ($method === 'GET' && $matches(['health'])) {
             'missing'  => $missing,
             'rows'     => $counts,
             'action'   => $missing
-                ? 'Import install.sql (and seed.sql if this is a new database).'
+                ? 'Import esteqo.sql (schema and content in one file).'
                 : null,
         ], $missing ? 200 : 200);
     } catch (Throwable $e) {

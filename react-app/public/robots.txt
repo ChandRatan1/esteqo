@@ -4,6 +4,10 @@
 User-agent: *
 Allow: /
 
+# Admin screens and the JSON API are not pages.
+Disallow: /admin/
+Disallow: /api/
+
 # Nothing here is private, but these add no SEO value.
 Disallow: /*?service=
 Disallow: /*?page=

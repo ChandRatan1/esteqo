@@ -1,11 +1,10 @@
 import { Link } from 'react-router-dom';
-import { usePageMeta } from '../hooks/useApi';
+import Seo from '../seo/Seo';
 
 export default function NotFound() {
-  usePageMeta('Page not found');
-
   return (
     <div className="container notfound">
+      <Seo title="Page not found" noindex />
       <div>
         <span className="notfound__code">404</span>
         <h1 style={{ marginBottom: 18 }}>We could not find that page</h1>

@@ -63,7 +63,11 @@ export default function HeroCarousel({ slides }) {
           >
             <div className="hero__body">
               <div className="hero__inner">
-                <h1 className="hero__title">{slide.title}</h1>
+                {index === 0 ? (
+                  <h1 className="hero__title">{slide.title}</h1>
+                ) : (
+                  <h2 className="hero__title">{slide.title}</h2>
+                )}
                 <p className="hero__text">{slide.text}</p>
                 <Link
                   to={`/appointment?service=${slide.serviceSlug || ''}`}

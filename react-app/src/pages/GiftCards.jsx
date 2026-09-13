@@ -1,35 +1,26 @@
 import { useMemo, useState } from 'react';
-import { categoryBySlug, menuGroups, servicesWithCategory, UNGROUPED_DEPARTMENTS } from '../data/menu';
+import { categoryBySlug, menuGroups, servicesWithCategory } from '../data/menu';
 import { PageHero } from '../components/Sections';
 import Field from '../components/Field';
 import Seo from '../seo/Seo';
-import { fileToDataUrl, submitGiftCardRequest, GiftCardError } from '../api/giftCards';
+import { submitGiftCardRequest, GiftCardError } from '../api/giftCards';
 import { sanitizeEmail, sanitizeName, sanitizePhone } from '../utils/validation';
-
-// Dummy for now — no live UPI merchant integration. Replace with the
-// clinic's real UPI ID (and swap in a real QR code image) before go-live.
-const UPI_ID = 'esteqo@upi';
 
 const formatPrice = (value) => `₹${Number(value).toLocaleString('en-IN')}`;
 
 /**
- * The dropdown is grouped the same way the menu is: Facials, Brows and Bridal
- * each collect their own departments, and everything else falls into Others.
+ * The dropdown lists exactly what the Services page lists: the Facials, Brows
+ * and Bridal groups and their departments. Departments outside those groups
+ * (body, hands, feet, waxing, massage) are not offered as gift cards.
  */
-const SERVICE_GROUPS = [
-  ...menuGroups.map((group) => ({
+const SERVICE_GROUPS = menuGroups
+  .map((group) => ({
     label: group.name,
     services: group.departments.flatMap((slug) =>
       servicesWithCategory.filter((s) => s.categorySlug === slug)
     ),
-  })),
-  {
-    label: 'Other treatments',
-    services: UNGROUPED_DEPARTMENTS.flatMap((slug) =>
-      servicesWithCategory.filter((s) => s.categorySlug === slug)
-    ),
-  },
-].filter((group) => group.services.length > 0);
+  }))
+  .filter((group) => group.services.length > 0);
 
 const EMPTY = {
   buyerName: '',
@@ -44,8 +35,6 @@ const EMPTY = {
 export default function GiftCards() {
   const [selected, setSelected] = useState([]);
   const [form, setForm] = useState(EMPTY);
-  const [screenshot, setScreenshot] = useState(null);
-  const [screenshotName, setScreenshotName] = useState('');
   const [status, setStatus] = useState({ state: 'idle' });
   const [errors, setErrors] = useState({});
 
@@ -81,18 +70,6 @@ export default function GiftCards() {
 
   const removeService = (slug) => setSelected((prev) => prev.filter((s) => s !== slug));
 
-  const onScreenshot = async (event) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-    try {
-      const dataUrl = await fileToDataUrl(file);
-      setScreenshot(dataUrl);
-      setScreenshotName(file.name);
-    } catch {
-      setStatus({ state: 'error', message: 'Could not read that file. Try a different image.' });
-    }
-  };
-
   const submit = async (event) => {
     event.preventDefault();
     setErrors({});
@@ -103,7 +80,6 @@ export default function GiftCards() {
     if (!sanitizeName(form.buyerName).trim()) nextErrors.buyerName = 'Please enter your name';
     if (!sanitizePhone(form.buyerPhone)) nextErrors.buyerPhone = 'Please enter your mobile number';
     if (selected.length === 0) nextErrors.services = 'Choose at least one treatment';
-    if (!screenshot) nextErrors.screenshot = 'Upload a screenshot of your UPI payment';
 
     if (Object.keys(nextErrors).length) {
       setErrors(nextErrors);
@@ -126,14 +102,11 @@ export default function GiftCards() {
         services: serviceNames,
         amountNote,
         message: form.message,
-        screenshot,
         website: form.website,
       });
       setStatus({ state: 'done', message: response.data.message });
       setForm(EMPTY);
       setSelected([]);
-      setScreenshot(null);
-      setScreenshotName('');
     } catch (error) {
       if (error instanceof GiftCardError) {
         const fieldErrors = (error.details || []).reduce((acc, detail) => {
@@ -155,14 +128,14 @@ export default function GiftCards() {
     <>
       <Seo
         title="Gift Cards"
-        description="Send a friend or family member the gift of ESTEQO — choose services, pay by UPI, and we'll issue a gift code you can share."
+        description="Send a friend or family member the gift of ESTEQO — choose the treatments, send us your details, and we'll call you to arrange payment and email a gift code to share."
         breadcrumbs={[{ name: 'Gift Cards', path: '/gift-cards' }]}
       />
 
       <PageHero
         eyebrow="Give the gift of great skin"
         title="Gift Cards"
-        text="Choose the treatments, pay by UPI, upload your payment screenshot — we'll verify it and send you a gift code to pass on."
+        text="Choose the treatments and send us your details. We'll call you to arrange payment, then email you a gift code to pass on."
       />
 
       <section className="section">
@@ -247,21 +220,7 @@ export default function GiftCards() {
                 </p>
               )}
 
-              <h2>2. Pay by UPI</h2>
-              <div className="alert" style={{ background: 'var(--light-yellow)', borderColor: 'var(--gold)' }}>
-                <p>
-                  Pay <strong>{amountNote || 'the amount above'}</strong> to our UPI ID:{' '}
-                  <strong>{UPI_ID}</strong>
-                </p>
-                <p style={{ marginTop: 8 }}>Then upload a screenshot of the successful payment below.</p>
-              </div>
-
-              <Field id="gc-screenshot" label="Payment screenshot" error={errors.screenshot}>
-                <input id="gc-screenshot" type="file" accept="image/*" onChange={onScreenshot} />
-                {screenshotName && <p className="form__note" style={{ marginTop: 8 }}>{screenshotName}</p>}
-              </Field>
-
-              <h2>3. Your details</h2>
+              <h2>2. Your details</h2>
               <div className="form__row">
                 <Field id="gc-name" label="Your name" error={errors.buyerName}>
                   <input id="gc-name" type="text" required value={form.buyerName} onChange={(e) => setForm((p) => ({ ...p, buyerName: sanitizeName(e.target.value) }))} />
@@ -274,7 +233,7 @@ export default function GiftCards() {
                 <input id="gc-email" type="email" value={form.buyerEmail} onChange={(e) => setForm((p) => ({ ...p, buyerEmail: sanitizeEmail(e.target.value) }))} />
               </Field>
 
-              <h2>4. Who is this gift for? (optional)</h2>
+              <h2>3. Who is this gift for? (optional)</h2>
               <div className="form__row">
                 <Field id="gc-recipient-name" label="Friend's name">
                   <input id="gc-recipient-name" type="text" value={form.recipientName} onChange={set('recipientName')} />
@@ -297,7 +256,8 @@ export default function GiftCards() {
                 {status.state === 'sending' ? 'Sending…' : 'Submit gift card request'}
               </button>
               <p className="form__note" style={{ marginTop: 14 }}>
-                This is a request, not an instant gift code — we verify the payment and send your code by hand.
+                This is a request, not an instant gift code. We will call you on the number above to arrange
+                payment, and email your gift code as soon as it is confirmed.
               </p>
             </form>
           )}

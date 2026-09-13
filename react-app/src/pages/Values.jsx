@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api } from '../api/client';
-import { useApi, usePageMeta } from '../hooks/useApi';
+import { useApi } from '../hooks/useApi';
 import { useSite } from '../context/SiteContext';
 import Accordion from '../components/Accordion';
 import Media from '../components/Media';
@@ -9,7 +9,7 @@ import PipelineStrip from '../components/PipelineStrip';
 import ScrollSwapImage from '../components/ScrollSwapImage';
 import { CtaBand } from '../components/Sections';
 import { Loading, ErrorState } from '../components/States';
-import Seo, { faqSchema } from '../seo/Seo';
+import Seo, { faqSchema, founderSchema } from '../seo/Seo';
 import { ESTEQO_FAQS } from '../data/faqs';
 
 /** The four areas of care, carried over from the old About page. */
@@ -65,10 +65,6 @@ export default function Values() {
   const { brand, contact, categories } = useSite();
   const [group, setGroup] = useState('general');
 
-  usePageMeta(
-    'Our Story & FAQ',
-    'How ESTEQO works — analysis before treatment, realistic timelines, and answers to the questions we are asked most.'
-  );
 
   const { data: faqs, loading, error, reload } = useApi((opts) => api.getFaqs(undefined, opts), []);
 
@@ -89,9 +85,9 @@ export default function Values() {
     <>
       <Seo
         title="Our Story & FAQ"
-        description="How ESTEQO works — analysis before treatment, realistic timelines, and answers to the questions we are asked most."
+        description="ESTEQO was founded by Seema Nanda, Clinical Cosmetologist and Senior Brow Artist, in Sector 25, Noida. How we work, plus answers to the questions we are asked most."
         breadcrumbs={[{ name: 'Our Story', path: '/values' }]}
-        schema={faqSchema(ESTEQO_FAQS)}
+        schema={[founderSchema(), faqSchema(ESTEQO_FAQS)].filter(Boolean)}
       />
 
       {/* ---------------------------------------------------- Our story */}
@@ -110,7 +106,7 @@ export default function Values() {
         <div className="container story-intro__inner">
           <div className="story-intro__media">
             <Media
-              src="/uploads/facial/premier_contour_facial.jpg"
+              src="/uploads/Seema/seema-nanda-1.jpg"
               alt={brand.founder_name}
               accent="light-blue"
               label={brand.founder_name}
@@ -121,14 +117,18 @@ export default function Values() {
             <span className="eyebrow">A decade in…</span>
             <h2>Founded by {brand.founder_name}</h2>
             <p>
-              ESTEQO blends advanced dermatological science with the artistry of beauty — a space
-              where innovation meets indulgence, and where results are expected to go beyond the
-              surface.
+              {brand.founder_name} is a Clinical Cosmetologist and Senior Brow Artist with more than
+              ten years of hands-on practice. She opened ESTEQO at Modi Mall, Sector 25, Noida to
+              offer what she could not find nearby: medi-facials, dermaplaning, peels and laser
+              treatments delivered under clinical supervision, with honest advice about how many
+              sessions a result really takes.
             </p>
             <p>
-              {brand.founder_name} brings over a decade of hands-on experience and personally leads
-              the brow department, where precision PMU is designed around facial balance and pigment
-              stability.
+              Brows are her signature. Every ombré brow, powder brow and microblading appointment
+              is mapped to the face and carried out by Seema herself, with pigments chosen for how
+              they settle and fade over time — not just how they look on day one. Over 500 Google
+              reviews, rated 5.0, come from clients across Noida, Greater Noida, Ghaziabad and Delhi
+              NCR who trusted her with their skin and brows.
             </p>
           </div>
         </div>

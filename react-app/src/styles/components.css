@@ -1155,6 +1155,14 @@
   opacity: 0.8;
 }
 
+/* On phones the offer lives in the sticky action bar instead (see
+   StickyBar in Layout.jsx), so the floating badge is hidden there. */
+@media (max-width: 720px) {
+  .offer-badge {
+    display: none;
+  }
+}
+
 /* Icon only on small screens, and clear of the sticky action bar. */
 @media (max-width: 720px) {
   .offer-badge {

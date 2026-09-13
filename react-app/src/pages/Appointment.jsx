@@ -1,5 +1,4 @@
 import { useSearchParams } from 'react-router-dom';
-import { usePageMeta } from '../hooks/useApi';
 import { useContactLinks, useSite } from '../context/SiteContext';
 import EnquiryForm from '../components/EnquiryForm';
 import { PageHero } from '../components/Sections';
@@ -10,10 +9,6 @@ export default function Appointment() {
   const { contact } = useSite();
   const links = useContactLinks();
 
-  usePageMeta(
-    'Book an Appointment',
-    'Request an appointment at ESTEQO, Sector 25 Noida. Every service begins with a detailed skin consultation.'
-  );
 
   return (
     <>

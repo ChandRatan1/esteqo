@@ -175,8 +175,10 @@
    buttons are lifted clear of it at exactly the same breakpoint — otherwise
    they would float above a bar that is not there. */
 @media (max-width: 720px) {
+  /* The sticky bar already offers call and WhatsApp on phones, so the round
+     floating buttons are hidden — they only covered content. */
   .float-contact {
-    bottom: calc(74px + env(safe-area-inset-bottom, 0px));
+    display: none;
   }
 
   .float-contact__btn {

@@ -213,6 +213,53 @@ export function articleSchema(post) {
   };
 }
 
+/** The founder as a Person — used on Our Story. */
+export function founderSchema() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    '@id': `${absoluteUrl('/values')}#founder`,
+    name: 'Seema Nanda',
+    jobTitle: 'Clinical Cosmetologist & Senior Brow Artist',
+    description:
+      'Founder of ESTEQO, Sector 25, Noida. Over ten years of hands-on practice in medi-facials, dermaplaning, peels, laser treatments and permanent brows.',
+    worksFor: { '@id': `${absoluteUrl('/')}#business` },
+    url: absoluteUrl('/values'),
+    image: absoluteUrl('/uploads/Seema/seema-nanda-1.jpg'),
+    sameAs: BUSINESS.sameAs,
+  };
+}
+
+/**
+ * A department as a Service with its treatments as priced offers — gives
+ * search engines the menu and prices for pages like /services/facials.
+ */
+export function serviceCatalogSchema(category, services = []) {
+  if (!category) return null;
+  const offers = (services || [])
+    .filter((item) => item?.name)
+    .map((item) => ({
+      '@type': 'Offer',
+      itemOffered: { '@type': 'Service', name: item.name },
+      ...(item.price != null && item.price !== '' ? { price: String(item.price), priceCurrency: 'INR' } : {}),
+      availability: 'https://schema.org/InStock',
+      url: absoluteUrl(`/services/${category.slug}`),
+    }));
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: `${category.name} — ESTEQO, Sector 25, Noida`,
+    serviceType: category.name,
+    description: category.tagline || category.intro || DEFAULT_DESCRIPTION,
+    provider: { '@id': `${absoluteUrl('/')}#business` },
+    areaServed: BUSINESS.areaServed.map((name) => ({ '@type': 'Place', name })),
+    url: absoluteUrl(`/services/${category.slug}`),
+    ...(offers.length
+      ? { hasOfferCatalog: { '@type': 'OfferCatalog', name: `${category.name} menu`, itemListElement: offers } }
+      : {}),
+  };
+}
+
 /** FAQ rich-result schema. */
 export function faqSchema(faqs = []) {
   if (!faqs.length) return null;

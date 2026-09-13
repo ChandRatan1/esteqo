@@ -1,4 +1,3 @@
-import { usePageMeta } from '../hooks/useApi';
 import { useContactLinks, useSite } from '../context/SiteContext';
 import EnquiryForm from '../components/EnquiryForm';
 import { PageHero } from '../components/Sections';
@@ -8,10 +7,6 @@ export default function Contact() {
   const { contact, social } = useSite();
   const links = useContactLinks();
 
-  usePageMeta(
-    'Contact',
-    'ESTEQO, Shop No. 209, First Floor, Modi Mall, Sector 25, Noida. Call +91 8010135135 or send us a message.'
-  );
 
   return (
     <>

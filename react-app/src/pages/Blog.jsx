@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { api } from '../api/client';
-import { useApi, usePageMeta } from '../hooks/useApi';
+import { useApi } from '../hooks/useApi';
 import { PostCard } from '../components/Cards';
 import { CtaBand, PageHero } from '../components/Sections';
 import { CardSkeletons, EmptyState, ErrorState } from '../components/States';
@@ -12,10 +12,6 @@ export default function Blog() {
   const [category, setCategory] = useState('');
   const [page, setPage] = useState(1);
 
-  usePageMeta(
-    'Blog',
-    'Treatment guides, skin science and aftercare from the ESTEQO team in Noida.'
-  );
 
   const { data: categories } = useApi((opts) => api.getBlogCategories(opts), []);
   const {
