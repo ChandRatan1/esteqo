@@ -13,7 +13,7 @@
 
 export const bridalCategory = {
   slug: 'bridal',
-  name: 'Bridal Services',
+  name: 'Bridal & Groom',
   tagline: 'Planned backwards from your wedding date, not booked in a panic.',
   intro:
     'Bridal skin is a schedule, not a single appointment. These packages combine treatments from across the menu into a plan that starts months before and finishes the week of the wedding — for the bride, the groom and the family.',

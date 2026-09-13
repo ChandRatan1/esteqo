@@ -83,7 +83,7 @@ export default function Footer() {
           <div className="footer__brand">
             <img className="brand__logo" src="/logo-light.svg" alt={brand.site_name} width="170" height="51" />
             <p className="footer__blurb">
-              {brand.site_tagline} Clinically planned skin, brow and laser treatments led by{' '}
+              Clinically planned skin, brow and laser treatments for women and men, led by{' '}
               {brand.founder_name} in Sector 25, Noida.
             </p>
             <div className="footer__social">

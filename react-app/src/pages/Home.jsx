@@ -15,7 +15,7 @@ const HERO_SLIDES = [
   {
     eyebrow: 'Signature facial',
     title: 'Lift. Define. Glow.',
-    text: 'A 90-minute facial designed to firm and refresh the skin, while enhancing the natural contours of your face for a visibly lifted, sculpted look.',
+    text: 'A 90-minute facial designed to firm and refresh the skin, while enhancing the natural contours of your face for a visibly lifted, sculpted look. For women and men.',
     serviceSlug: 'premier-contour-facial',
     focus: 'center',
     image: '/uploads/facial/premier_contour_facial.jpg',
@@ -242,6 +242,8 @@ export default function Home() {
           'Body Bleach & Polish',
           'Threading & Waxing',
           'Relaxing Massages',
+          "Men's Facials",
+          'Laser for Men',
         ]}
       />
 
@@ -369,7 +371,8 @@ export default function Home() {
             <h2>New to ESTEQO?</h2>
             <p className="lede">
               Every visit starts with a consultation, so your treatment is planned around your skin
-              rather than a fixed menu. These three are where most people begin.
+              rather than a fixed menu. Whether you are a woman or a man, the plan is built around
+              your skin. These three are where most people begin.
             </p>
           </div>
 

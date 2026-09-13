@@ -7,7 +7,7 @@
 export const settings = {
   brand: {
     site_name: 'ESTEQO',
-    site_tagline: 'Brows | Lasers | Skin',
+    site_tagline: 'Brows | Lasers | Skin — for women & men',
     hero_subtitle:
       'Clinically planned treatments for visible results and long-term skin confidence.',
     founder_name: 'Seema Nanda',
@@ -434,6 +434,7 @@ export const faqs = {
     { id: 'g3', question: 'What happens during the first consultation?', answer: 'Your specialist analyses your skin type, concerns and history before recommending anything. We plan treatments after analysis, not around trends.' },
     { id: 'g4', question: 'Do you serve areas outside Noida?', answer: 'Clients travel to us from across Noida, Greater Noida, Ghaziabad and Delhi NCR. Tell us your area when you enquire and we will suggest the easiest time to reach Sector 25.' },
     { id: 'g5', question: 'How do I reschedule?', answer: 'Call +91 8010135135, WhatsApp +91 9958066388, or email Info.esteqo@gmail.com. Please give us at least 24 hours notice so we can offer the slot to someone else.' },
+    { id: 'g6', question: 'Do you treat men?', answer: 'Yes — every treatment on the menu is for women and men alike. Men most often come to us for the Just for Men Facial, HydraFacial, carbon laser facial, laser hair reduction for the face, chest and back, and brow shaping. The consultation is the same: we plan around your skin, not a template.' },
   ],
   'medi-facials': [
     { id: 'm1', question: 'What is the difference between Hydra Clean Up and Hydra Facial?', answer: 'The Hydra Clean Up (30 mins, ₹2,000) is a focused cleansing treatment for sensitive or acne-prone skin. The Hydra Facial (80 mins, ₹3,000) adds serum infusion, cryo therapy, ultrasound and LED for a full multi-step result.' },

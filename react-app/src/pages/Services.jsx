@@ -25,6 +25,7 @@ const GROUP_HERO = {
     focus: 'center',
     points: [
       'Every facial built around your skin, not a fixed script',
+      'Treatments for men and women alike',
       'Clinical-grade technology behind every session',
       'Honest guidance to shape a routine that lasts',
     ],
@@ -41,7 +42,7 @@ const GROUP_HERO = {
     ],
   },
   bridal: {
-    title: 'Bridal Services',
+    title: 'Bridal & Groom',
     image: '/uploads/bridal/bridal-party-group-booking.jpg',
     focus: 'center',
     points: [

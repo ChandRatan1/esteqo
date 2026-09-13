@@ -21,7 +21,7 @@ export default function Appointment() {
       <PageHero
         eyebrow="Appointments"
         title="Book your consultation"
-        text="Tell us what you would like to work on and when suits you. We will confirm your slot by your preferred contact method."
+        text="Women and men welcome. Tell us what you would like to work on and when suits you. We will confirm your slot by your preferred contact method."
         accent="cream"
       />
 

@@ -37,7 +37,7 @@ export const categories = [
     name: 'Facials',
     tagline: 'Target your concerns with facials that heal, balance and brighten.',
     intro:
-      'Our classic facial menu — from gentle organic masks to anti-ageing protocols, each chosen for your skin type after consultation.',
+      'Our classic facial menu — from gentle organic masks to anti-ageing protocols, each chosen for your skin type after consultation. Men are welcome across the whole menu, and Just for Men Facial is designed specifically for male skin.',
     accent: 'light-pink',
     sortOrder: 3,
   },
@@ -930,7 +930,7 @@ export const menuGroups = [
   },
   {
     slug: 'bridal',
-    name: 'Bridal Services',
+    name: 'Bridal & Groom',
     tagline: 'Planned backwards from your wedding date.',
     intro:
       'Bridal skin is a schedule, not a single appointment. These packages combine treatments from across the menu into a plan for the bride, the groom and the family — with a package saving against booking each treatment separately.',
