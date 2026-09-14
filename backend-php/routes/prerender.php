@@ -139,6 +139,22 @@ function prerender_resolve(string $path, array $config): array
     ];
 }
 
+/**
+ * Site-wide head tags — Search Console verification and the Google Analytics
+ * tag. These live in react-app/index.html, so every page the real build serves
+ * (including route_render_shell, which injects into that same file) already
+ * carries them. They are repeated here only for route_prerender, which builds
+ * its own bare page and never reads index.html — so there is no risk of the
+ * analytics tag being emitted twice on one response.
+ */
+function prerender_site_head_html(): string
+{
+    return '<meta name="google-site-verification" content="yO_PAEnT98nlRWQw3gTK_3rgP8v9Fd5NBF36QR6UMXU">'
+        . '<script async src="https://www.googletagmanager.com/gtag/js?id=G-V13S4Y7ER3"></script>'
+        . '<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}'
+        . "gtag('js',new Date());gtag('config','G-V13S4Y7ER3');</script>";
+}
+
 /** The <head> tags themselves, shared by both the bot fallback and the real shell. */
 function prerender_tags_html(array $r): string
 {
@@ -174,6 +190,7 @@ function route_prerender(array $config): void
     header('Cache-Control: public, max-age=1800');
 
     echo '<!doctype html><html lang="en"><head><meta charset="utf-8">';
+    echo prerender_site_head_html();
     echo prerender_tags_html($r);
     echo '</head><body>';
     echo '<h1>' . prerender_escape($r['rawTitle'] ?: PRERENDER_SITE_NAME) . '</h1>';
